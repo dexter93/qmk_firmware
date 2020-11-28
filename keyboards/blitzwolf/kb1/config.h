@@ -23,12 +23,12 @@
 #define PRODUCT_ID      0x024F
 #define DEVICE_VER      0x0001
 #define MANUFACTURER    "BlitzWolf"
-#define PRODUCT         "BW-KB1"
-#define DESCRIPTION     "QMK keyboard firmware with ChibiOS"
+#define PRODUCT         "KB1"
+#define DESCRIPTION     "BlitzWolf BW-KB1 QMK keyboard firmware with ChibiOS"
 
 /* key matrix size */
-#define MATRIX_ROWS 6
-#define MATRIX_COLS 21
+#define MATRIX_ROWS 5
+#define MATRIX_COLS 14
 
 #define ZONES_COUNT 1
 
@@ -46,8 +46,11 @@
 
 #define DIODE_DIRECTION COL2ROW
 
-#define MATRIX_COL_PINS { A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, B0, B1, B2, B3, B4, B5 }
-#define MATRIX_ROW_PINS { C15, D11, D10, D9, D8, D7 }
+//#define MATRIX_COL_PINS { A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, B0, B1, B2, B3, B4, B5 }
+//#define MATRIX_ROW_PINS { C15, D11, D10, D9, D8, D7 }
+
+#define MATRIX_COL_PINS { A8, A9, A10, A11, A12, A13, A14, A15, B0, B1, B2, B3, B4, B5 }
+#define MATRIX_ROW_PINS { D11, D10, D9, D8, D7 }
 
 /* Debounce reduces chatter (unintended double-presses) - set 0 if debouncing is not needed */
 #define DEBOUNCE 0
@@ -63,16 +66,18 @@
  */
 #define BACKLIGHT_LEVELS 8
 
-#define LED_MATRIX_ROWS 6
+#define LED_MATRIX_ROWS 5
 #define LED_MATRIX_ROW_CHANNELS 3
 #define LED_MATRIX_ROWS_HW (LED_MATRIX_ROWS * LED_MATRIX_ROW_CHANNELS)
-#define LED_MATRIX_ROW_PINS { C0, C1, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, B6, B7, B8, B9, B10, B11 }
+//#define LED_MATRIX_ROW_PINS { C0, C1, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, B6, B7, B8, B9, B10, B11 }
+#define LED_MATRIX_ROW_PINS { B7, B8, B9, B10, B11 }
 
-#define LED_MATRIX_COLS 21
+#define LED_MATRIX_COLS 14
 #define LED_MATRIX_COLUMNS LED_MATRIX_COLS
-#define LED_MATRIX_COL_PINS { A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, B0, B1, B2, B3, B4, B5 }
+//#define LED_MATRIX_COL_PINS { A0, A1, A2, A3, A4, A5, A6, A7, A8, A9, A10, A11, A12, A13, A14, B0, B1, B2, B3, B4, B5 }
+#define LED_MATRIX_COL_PINS { A8, A9, A10, A11, A12, A13, A14, A15, B0, B1, B2, B3, B4, B5 }
 
-#define DRIVER_LED_TOTAL (6*21)
+#define DRIVER_LED_TOTAL (LED_MATRIX_ROWS * LED_MATRIX_COLS)
 
 /*
  * Force NKRO

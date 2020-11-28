@@ -80,41 +80,17 @@ const led_matrix_config_t g_led_matrix_config =
 {
     {"Keyboard"},
     {ZONE_TYPE_MATRIX},
-    {126},
+    {70},
     {
-        { 0,       1,       2,       3,       4,       5,       6,       7,       8,       9,      10,       11,       12,       13,       14,       15,     16,     17,     18,     19,     20 },
-        { 21,      22,     23,      24,      25,      26,      27,      28,      29,      30,      31,       32,       33,       34,       35,       36,     37,     38,     39,     40,     41 },
-        { 42,      43,     44,      45,      46,      47,      48,      49,      50,      51,      52,       53,       54,       55,       56,       57,     58,     59,     60,     61,     62 },
-        { 63,      64,     65,      66,      67,      68,      69,      70,      71,      72,      73,       74,       75,       76,       77,       78,     79,     80,     81,     82,     83 },
-        { 84,      85,     86,      87,      88,      89,      90,      91,      92,      93,      94,       95,       96,       97,       98,       99,    100,    101,    102,    103,    104 },
-        { 105,     106,   107,     108,     109,     110,     111,     112,     113,     114,     115,      116,      117,      118,      119,      120,    121,    122,    123,    124,    125 },
-    },
+        {   0,   1,   2,   3,   4,   5,   6,   7,   8,   9,  10,  11,  12,  13 },
+        {  14,  15,  16,  17,  18,  19,  20,  21,  22,  23,  24,  25,  26,  27 },
+        {  28,  29,  30,  31,  32,  33,  34,  35,  36,  37,  38,  39,  40,  41 },
+        {  42,  43,  44,  45,  46,  47,  48,  49,  50,  51,  52,  53,  54,  55 },
+        {  56,  57,  58,  59,  60,  61,  62,  63,  64,  65,  66,  67,  68,  69 },
+},
     {
         // Row 0
         "Key: Escape",
-        "Reserved",
-        "Key: F1",
-        "Key: F2",
-        "Key: F3",
-        "Key: F4",
-        "Key: F5",
-        "Key: F6",
-        "Key: F7",
-        "Key: F8",
-        "Key: F9",
-        "Key: F10",
-        "Key: F11",
-        "Key: F12",
-        "Key: Print Screen",
-        "Key: Scroll Lock",
-        "Key: Pause/Break",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-
-        // Row 1
-        "Key: ~",
         "Key: 1",
         "Key: 2",
         "Key: 3",
@@ -128,15 +104,9 @@ const led_matrix_config_t g_led_matrix_config =
         "Key: -",
         "Key: +",
         "Key: Backspace"
-        "Key: Insert",
-        "Key: Home",
-        "Key: Page Up",
-        "Key: Num Lock",
-        "Key: Number Pad /",
-        "Key: Number Pad *",
-        "Key: Number Pad -",
 
-        // Row 2
+
+        // Row 1
         "Key: Tab",
         "Key: Q",
         "Key: W",
@@ -151,16 +121,9 @@ const led_matrix_config_t g_led_matrix_config =
         "Key: [",
         "Key: ]",
         "Key: \\ (ANSI)",
-        "Key: Delete",
-        "Key: End",
-        "Key: Page Down",
-        "Key: Number Pad 7",
-        "Key: Number Pad 8",
-        "Key: Number Pad 9",
-        "Key: Number Pad +",
 
-        // Row 3
-        "Key: Caps Lock",
+        // Row 2
+                "Key: Caps Lock",
         "Key: A",
         "Key: S",
         "Key: D",
@@ -172,18 +135,13 @@ const led_matrix_config_t g_led_matrix_config =
         "Key: L",
         "Key: ;",
         "Key: '",
+        "Reserved",
         "Key: Enter",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Reserved",
-        "Key: Number Pad 4",
-        "Key: Number Pad 5",
-        "Key: Number Pad 6",
-        "Reserved",
 
-        // Row 5
+        // Row 3
+
         "Key: Left Shift",
+        "Reserved",
         "Key: Z",
         "Key: X",
         "Key: C",
@@ -193,19 +151,12 @@ const led_matrix_config_t g_led_matrix_config =
         "Key: M",
         "Key: ,",
         "Key: .",
-        "Key: /",
         "Key: Right Shift",
-        "Reserved",
-        "Reserved",
-        "Reserved",
         "Key: Up Arrow",
-        "Reserved",
-        "Key: Number Pad 1",
-        "Key: Number Pad 2",
-        "Key: Number Pad 3",
-        "Key: Number Pad Enter",
+        "Key: /",
 
-        // Row 6
+        // Row 5
+
         "Key: Left Control",
         "Key: Left Windows",
         "Key: Left Alt",
@@ -215,17 +166,11 @@ const led_matrix_config_t g_led_matrix_config =
         "Key: Space",
         "Reserved",
         "Reserved",
-        "Reserved",
         "Key: Right Alt",
         "Key: Right Fn",
-        "Key: Menu",
-        "Key: Right Control",
         "Key: Left Arrow",
         "Key: Down Arrow",
         "Key: Right Arrow",
-        "Key: Number Pad 0",
-        "Reserved",
-        "Key: Number Pad .",
-        "Reserved",
+
     },
 };
