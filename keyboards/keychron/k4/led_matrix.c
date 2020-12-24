@@ -63,7 +63,7 @@ const rgb_matrix_driver_t rgb_matrix_driver = {
     .set_color     = set_color,
     .set_color_all = set_color_all,
 };
-
+/*
 // byte order: R,B,G
 static uint8_t caps_lock_color[3] = { 0x00, 0x00, 0xFF };
 
@@ -75,3 +75,4 @@ void led_set(uint8_t usb_led) {
         set_color(11, 0x00, 0x00, 0x00);
     }
 }
+*/
