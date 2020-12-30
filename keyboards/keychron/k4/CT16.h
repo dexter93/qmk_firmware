@@ -472,15 +472,15 @@ Base Address: 0x4000 0000 (CT16B0)
 #define	CT16_EM18								1		//[18:18] CT16Bn PWM18 drive state
 #define mskCT16_EM18							(CT16_EM18<<8)
 #define	CT16_EM19								1		//[19:19] CT16Bn PWM19 drive state
-#define mskCT16_EM19							(CT16_EM19<<9)
+#define mskCT16_EM19							(CT16_EM19<<19)
 #define	CT16_EM20								1		//[20:20] CT16Bn PWM20 drive state
-#define mskCT16_EM20							(CT16_EM20<<0)
+#define mskCT16_EM20							(CT16_EM20<<20)
 #define	CT16_EM21								1		//[21:21] CT16Bn PWM21 drive state
-#define mskCT16_EM21							(CT16_EM21<<1)
+#define mskCT16_EM21							(CT16_EM21<<21)
 #define	CT16_EM22								1		//[22:22] CT16Bn PWM22 drive state
-#define mskCT16_EM22							(CT16_EM22<<2)
+#define mskCT16_EM22							(CT16_EM22<<22)
 #define	CT16_EM23								1		//[23:23] CT16Bn PWM23 drive state
-#define mskCT16_EM23							(CT16_EM23<<3)
+#define mskCT16_EM23							(CT16_EM23<<23)
 
 /* CT16Bn External Match Control register <CT16Bn_EMC> (0x8C) */
 																//[1:0]CT16Bn PWM0 functionality
@@ -1103,13 +1103,13 @@ Base Address: 0x4000 0000 (CT16B0)
 #define	CT16_PWM22EN_EN						1	// CT16Bn PWM22 is enabled for PWM mode.
 #define	CT16_PWM22EN_EM22					0 // CT16Bn PWM22 is controlled by EM22.
 #define mskCT16_PWM22EN_EN				(CT16_PWM22EN_EN<<22)
-#define mskCT16_PWM22EN_EM22			(CT16_PWM22EN_EM2<<22)
+#define mskCT16_PWM22EN_EM22			(CT16_PWM22EN_EM22<<22)
 
 																	//[23:23] CT16Bn PWM23 enable.
 #define	CT16_PWM23EN_EN						1	// CT16Bn PWM23 is enabled for PWM mode.
 #define	CT16_PWM23EN_EM23					0 // CT16Bn PWM23 is controlled by EM23.
 #define mskCT16_PWM23EN_EN				(CT16_PWM23EN_EN<<23)
-#define mskCT16_PWM23EN_EM23			(CT16_PWM23EN_EM3<<23)
+#define mskCT16_PWM23EN_EM23			(CT16_PWM23EN_EM23<<23)
 
 /* CT16Bn PWM IO Enable register <CT16Bn_PWMIOENB> (0xA0) */
 																	//[0:0] CT16Bn PWM0 IO selection.
