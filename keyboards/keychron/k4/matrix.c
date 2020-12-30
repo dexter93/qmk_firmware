@@ -97,19 +97,14 @@ void matrix_init(void) {
     // Enable Timer Clock
     SN_SYS1->AHBCLKEN_b.CT16B1CLKEN = 1;
 
-    // PFPA - Map all PWM outputs to their PWM A pins
-    SN_PFPA->CT16B1 = 0xFF;
+    // PFPA - Map most PWM outputs to their PWM A pins
+    SN_PFPA->CT16B1 = 0x0000000F;
 
     // Enable PWM function, IOs and select the PWM modes
-    // Enable PWM0-PWM23
+    // Enable PWM0-PWM3, PWM8-23
     SN_CT16B1->PWMENB   =   (mskCT16_PWM0EN_EN  \
                             |mskCT16_PWM1EN_EN  \
                             |mskCT16_PWM2EN_EN  \
-                            |mskCT16_PWM3EN_EN  \
-                            |mskCT16_PWM4EN_EN  \
-                            |mskCT16_PWM5EN_EN  \
-                            |mskCT16_PWM6EN_EN  \
-                            |mskCT16_PWM7EN_EN  \
                             |mskCT16_PWM8EN_EN  \
                             |mskCT16_PWM9EN_EN  \
                             |mskCT16_PWM10EN_EN \
@@ -127,15 +122,10 @@ void matrix_init(void) {
                             |mskCT16_PWM22EN_EN \
                             |mskCT16_PWM23EN_EN);
 
-    // Enable PWM0-PWM3, PWM8-PWM20 IO (except PWM10)
-    SN_CT16B1->PWMIOENB =   (mskCT16_PWM0EN_EN  \
+    // Enable PWM0-PWM3, PWM8-PWM23 IO
+    SN_CT16B1->PWMIOENB   = (mskCT16_PWM0EN_EN  \
                             |mskCT16_PWM1EN_EN  \
                             |mskCT16_PWM2EN_EN  \
-                            |mskCT16_PWM3EN_EN  \
-                            |mskCT16_PWM4EN_EN  \
-                            |mskCT16_PWM5EN_EN  \
-                            |mskCT16_PWM6EN_EN  \
-                            |mskCT16_PWM7EN_EN  \
                             |mskCT16_PWM8EN_EN  \
                             |mskCT16_PWM9EN_EN  \
                             |mskCT16_PWM10EN_EN \
@@ -241,97 +231,77 @@ OSAL_IRQ_HANDLER(Vector80) {
 
     if(current_row % 3 == 0)
     {
-        SN_CT16B1->MR0  = led_state[row_ofst + 0 ].b | 1;
-        SN_CT16B1->MR1  = led_state[row_ofst + 1 ].b | 1;
-        SN_CT16B1->MR2  = led_state[row_ofst + 2 ].b | 1;
-        SN_CT16B1->MR3  = led_state[row_ofst + 3 ].b | 1;
-        SN_CT16B1->MR4  = led_state[row_ofst + 4 ].b | 1;
-        SN_CT16B1->MR5  = led_state[row_ofst + 5 ].b | 1;
-        SN_CT16B1->MR6  = led_state[row_ofst + 6 ].b | 1;
-        SN_CT16B1->MR7  = led_state[row_ofst + 7 ].b | 1;
-        SN_CT16B1->MR8  = led_state[row_ofst + 8 ].b | 1;
-        SN_CT16B1->MR9  = led_state[row_ofst + 9 ].b | 1;
-        SN_CT16B1->MR10 = led_state[row_ofst + 10].b | 1;
-        SN_CT16B1->MR11 = led_state[row_ofst + 11].b | 1;
-        SN_CT16B1->MR12 = led_state[row_ofst + 12].b | 1;
-        SN_CT16B1->MR13 = led_state[row_ofst + 13].b | 1;
-        SN_CT16B1->MR14 = led_state[row_ofst + 14].b | 1;
-        SN_CT16B1->MR15 = led_state[row_ofst + 15].b | 1;
-        SN_CT16B1->MR16 = led_state[row_ofst + 16].b | 1;
-        SN_CT16B1->MR17 = led_state[row_ofst + 17].b | 1;
-        SN_CT16B1->MR18 = led_state[row_ofst + 18].b | 1;
-        SN_CT16B1->MR19 = led_state[row_ofst + 19].b | 1;
-        SN_CT16B1->MR20 = led_state[row_ofst + 20].b | 1;
-        SN_CT16B1->MR21 = led_state[row_ofst + 21].b | 1;
-        SN_CT16B1->MR22 = led_state[row_ofst + 22].b | 1;
-        SN_CT16B1->MR23 = led_state[row_ofst + 23].b | 1;
+        SN_CT16B1->MR8  = led_state[row_ofst + 0 ].b | 1;
+        SN_CT16B1->MR9  = led_state[row_ofst + 1 ].b | 1;
+        SN_CT16B1->MR10 = led_state[row_ofst + 2 ].b | 1;
+        SN_CT16B1->MR11 = led_state[row_ofst + 3 ].b | 1;
+        SN_CT16B1->MR12 = led_state[row_ofst + 4 ].b | 1;
+        SN_CT16B1->MR13 = led_state[row_ofst + 5 ].b | 1;
+        SN_CT16B1->MR14 = led_state[row_ofst + 6 ].b | 1;
+        SN_CT16B1->MR15 = led_state[row_ofst + 7 ].b | 1;
+        SN_CT16B1->MR16 = led_state[row_ofst + 8 ].b | 1;
+        SN_CT16B1->MR17 = led_state[row_ofst + 9 ].b | 1;
+        SN_CT16B1->MR18 = led_state[row_ofst + 10].b | 1;
+        SN_CT16B1->MR19 = led_state[row_ofst + 11].b | 1;
+        SN_CT16B1->MR20 = led_state[row_ofst + 12].b | 1;
+        SN_CT16B1->MR21 = led_state[row_ofst + 13].b | 1;
+        SN_CT16B1->MR22 = led_state[row_ofst + 14].b | 1;
+        SN_CT16B1->MR23 = led_state[row_ofst + 15].b | 1;
+        SN_CT16B1->MR0  = led_state[row_ofst + 16].b | 1;
+        SN_CT16B1->MR1  = led_state[row_ofst + 17].b | 1;
+        SN_CT16B1->MR2  = led_state[row_ofst + 18].b | 1;
     }
 
     if(current_row % 3 == 1)
     {
-        SN_CT16B1->MR0  = led_state[row_ofst + 0 ].g  | 1;
-        SN_CT16B1->MR1  = led_state[row_ofst + 1 ].g  | 1;
-        SN_CT16B1->MR2  = led_state[row_ofst + 2 ].g  | 1;
-        SN_CT16B1->MR3  = led_state[row_ofst + 3 ].g  | 1;
-        SN_CT16B1->MR4  = led_state[row_ofst + 4 ].g  | 1;
-        SN_CT16B1->MR5  = led_state[row_ofst + 5 ].g  | 1;
-        SN_CT16B1->MR6  = led_state[row_ofst + 6 ].g  | 1;
-        SN_CT16B1->MR7  = led_state[row_ofst + 7 ].g  | 1;
-        SN_CT16B1->MR8  = led_state[row_ofst + 8 ].g  | 1;
-        SN_CT16B1->MR9  = led_state[row_ofst + 9 ].g  | 1;
-        SN_CT16B1->MR10 = led_state[row_ofst + 10].g  | 1;
-        SN_CT16B1->MR11 = led_state[row_ofst + 11].g  | 1;
-        SN_CT16B1->MR12 = led_state[row_ofst + 12].g  | 1;
-        SN_CT16B1->MR13 = led_state[row_ofst + 13].g  | 1;
-        SN_CT16B1->MR14 = led_state[row_ofst + 14].g  | 1;
-        SN_CT16B1->MR15 = led_state[row_ofst + 15].g  | 1;
-        SN_CT16B1->MR16 = led_state[row_ofst + 16].g  | 1;
-        SN_CT16B1->MR17 = led_state[row_ofst + 17].g  | 1;
-        SN_CT16B1->MR18 = led_state[row_ofst + 18].g  | 1;
-        SN_CT16B1->MR19 = led_state[row_ofst + 19].g  | 1;
-        SN_CT16B1->MR20 = led_state[row_ofst + 20].g  | 1;
-        SN_CT16B1->MR21 = led_state[row_ofst + 21].g  | 1;
-        SN_CT16B1->MR22 = led_state[row_ofst + 22].g  | 1;
-        SN_CT16B1->MR23 = led_state[row_ofst + 23].g  | 1;
+        SN_CT16B1->MR8  = led_state[row_ofst + 0 ].g | 1;
+        SN_CT16B1->MR9  = led_state[row_ofst + 1 ].g | 1;
+        SN_CT16B1->MR10 = led_state[row_ofst + 2 ].g | 1;
+        SN_CT16B1->MR11 = led_state[row_ofst + 3 ].g | 1;
+        SN_CT16B1->MR12 = led_state[row_ofst + 4 ].g | 1;
+        SN_CT16B1->MR13 = led_state[row_ofst + 5 ].g | 1;
+        SN_CT16B1->MR14 = led_state[row_ofst + 6 ].g | 1;
+        SN_CT16B1->MR15 = led_state[row_ofst + 7 ].g | 1;
+        SN_CT16B1->MR16 = led_state[row_ofst + 8 ].g | 1;
+        SN_CT16B1->MR17 = led_state[row_ofst + 9 ].g | 1;
+        SN_CT16B1->MR18 = led_state[row_ofst + 10].g | 1;
+        SN_CT16B1->MR19 = led_state[row_ofst + 11].g | 1;
+        SN_CT16B1->MR20 = led_state[row_ofst + 12].g | 1;
+        SN_CT16B1->MR21 = led_state[row_ofst + 13].g | 1;
+        SN_CT16B1->MR22 = led_state[row_ofst + 14].g | 1;
+        SN_CT16B1->MR23 = led_state[row_ofst + 15].g | 1;
+        SN_CT16B1->MR0  = led_state[row_ofst + 16].g | 1;
+        SN_CT16B1->MR1  = led_state[row_ofst + 17].g | 1;
+        SN_CT16B1->MR2  = led_state[row_ofst + 18].g | 1;
     }
 
     if(current_row % 3 == 2)
     {
-        SN_CT16B1->MR0  = led_state[row_ofst + 0 ].r | 1;
-        SN_CT16B1->MR1  = led_state[row_ofst + 1 ].r | 1;
-        SN_CT16B1->MR2  = led_state[row_ofst + 2 ].r | 1;
-        SN_CT16B1->MR3  = led_state[row_ofst + 3 ].r | 1;
-        SN_CT16B1->MR4  = led_state[row_ofst + 4 ].r | 1;
-        SN_CT16B1->MR5  = led_state[row_ofst + 5 ].r | 1;
-        SN_CT16B1->MR6  = led_state[row_ofst + 6 ].r | 1;
-        SN_CT16B1->MR7  = led_state[row_ofst + 7 ].r | 1;
-        SN_CT16B1->MR8  = led_state[row_ofst + 8 ].r | 1;
-        SN_CT16B1->MR9  = led_state[row_ofst + 9 ].r | 1;
-        SN_CT16B1->MR10 = led_state[row_ofst + 10].r | 1;
-        SN_CT16B1->MR11 = led_state[row_ofst + 11].r | 1;
-        SN_CT16B1->MR12 = led_state[row_ofst + 12].r | 1;
-        SN_CT16B1->MR13 = led_state[row_ofst + 13].r | 1;
-        SN_CT16B1->MR14 = led_state[row_ofst + 14].r | 1;
-        SN_CT16B1->MR15 = led_state[row_ofst + 15].r | 1;
-        SN_CT16B1->MR16 = led_state[row_ofst + 16].r | 1;
-        SN_CT16B1->MR17 = led_state[row_ofst + 17].r | 1;
-        SN_CT16B1->MR18 = led_state[row_ofst + 18].r | 1;
-        SN_CT16B1->MR19 = led_state[row_ofst + 19].r | 1;
-        SN_CT16B1->MR20 = led_state[row_ofst + 20].r | 1;
-        SN_CT16B1->MR21 = led_state[row_ofst + 21].r | 1;
-        SN_CT16B1->MR22 = led_state[row_ofst + 22].r | 1;
-        SN_CT16B1->MR23 = led_state[row_ofst + 23].r | 1;
+        SN_CT16B1->MR8  = led_state[row_ofst + 0 ].r | 1;
+        SN_CT16B1->MR9  = led_state[row_ofst + 1 ].r | 1;
+        SN_CT16B1->MR10 = led_state[row_ofst + 2 ].r | 1;
+        SN_CT16B1->MR11 = led_state[row_ofst + 3 ].r | 1;
+        SN_CT16B1->MR12 = led_state[row_ofst + 4 ].r | 1;
+        SN_CT16B1->MR13 = led_state[row_ofst + 5 ].r | 1;
+        SN_CT16B1->MR14 = led_state[row_ofst + 6 ].r | 1;
+        SN_CT16B1->MR15 = led_state[row_ofst + 7 ].r | 1;
+        SN_CT16B1->MR16 = led_state[row_ofst + 8 ].r | 1;
+        SN_CT16B1->MR17 = led_state[row_ofst + 9 ].r | 1;
+        SN_CT16B1->MR18 = led_state[row_ofst + 10].r | 1;
+        SN_CT16B1->MR19 = led_state[row_ofst + 11].r | 1;
+        SN_CT16B1->MR20 = led_state[row_ofst + 12].r | 1;
+        SN_CT16B1->MR21 = led_state[row_ofst + 13].r | 1;
+        SN_CT16B1->MR22 = led_state[row_ofst + 14].r | 1;
+        SN_CT16B1->MR23 = led_state[row_ofst + 15].r | 1;
+        SN_CT16B1->MR0  = led_state[row_ofst + 16].r | 1;
+        SN_CT16B1->MR1  = led_state[row_ofst + 17].r | 1;
+        SN_CT16B1->MR2  = led_state[row_ofst + 18].r | 1;
     }
 
     // Enable PWM outputs on column pins
-    SN_CT16B1->PWMIOENB =   (mskCT16_PWM0EN_EN  \
+    SN_CT16B1->PWMIOENB   = (mskCT16_PWM0EN_EN  \
                             |mskCT16_PWM1EN_EN  \
                             |mskCT16_PWM2EN_EN  \
-                            |mskCT16_PWM3EN_EN  \
-                            |mskCT16_PWM4EN_EN  \
-                            |mskCT16_PWM5EN_EN  \
-                            |mskCT16_PWM6EN_EN  \
-                            |mskCT16_PWM7EN_EN  \
                             |mskCT16_PWM8EN_EN  \
                             |mskCT16_PWM9EN_EN  \
                             |mskCT16_PWM10EN_EN \
