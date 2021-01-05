@@ -34,7 +34,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                 {   KC_LCTL,   KC_LGUI,   KC_LALT,   KC_NO,   KC_NO,   KC_NO,   KC_SPC,   KC_NO,   KC_NO,   KC_NO,     KC_RALT,   MO(1),     KC_RCTL,   KC_LEFT,   KC_DOWN,   KC_RGHT,   KC_P0,     KC_PDOT,   KC_NO   }
               }
 };
-
+void dip_switch_update_user(uint8_t index, bool active){
+  switch(index){
+    case 0:
+      if(active){ //BT mode
+// do stuff
+      }
+      else{ //Cable mode
+// do stuff
+      }
+      break;
+    case 1:
+      if(active){ // Win/Android mode
+// do stuff
+      }
+      else{ // Mac/iOS mode
+// do stuff
+      }
+      break;
+  }
+}
 void keyboard_post_init_user(void) {
   // Customise these values to desired behaviour
   debug_enable=true;
