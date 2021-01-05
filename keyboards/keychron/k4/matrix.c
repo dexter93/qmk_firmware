@@ -98,7 +98,8 @@ void matrix_init(void) {
     SN_SYS1->AHBCLKEN_b.CT16B1CLKEN = 1;
 
     // PFPA - Map most PWM outputs to their PWM A pins
-    SN_PFPA->CT16B1 = 0x0000000F;
+    // Keep PWM0-3 as B pins
+    SN_PFPA->CT16B1 = 0x00000007;
 
     // Enable PWM function, IOs and select the PWM modes
     // Enable PWM0-PWM3, PWM8-23
