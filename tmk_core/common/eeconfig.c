@@ -5,7 +5,7 @@
 #include "action_layer.h"
 
 #ifdef STM32_EEPROM_ENABLE
-#    include "hal.h"
+#    include <hal.h>
 #    include "eeprom_stm32.h"
 #endif
 
@@ -16,6 +16,10 @@
 
 #if defined(EEPROM_DRIVER)
 #    include "eeprom_driver.h"
+#endif
+
+#if defined(HAPTIC_ENABLE)
+#    include "haptic.h"
 #endif
 
 /** \brief eeconfig enable
@@ -71,6 +75,15 @@ void eeconfig_init_quantum(void) {
 #elif defined INIT_EE_HANDS_RIGHT
 #    pragma message "Faking EE_HANDS for right hand"
     eeprom_update_byte(EECONFIG_HANDEDNESS, 0);
+#endif
+
+#if defined(HAPTIC_ENABLE)
+    haptic_reset();
+#else
+    // this is used in case haptic is disabled, but we still want sane defaults
+    // in the haptic configuration eeprom. All zero will trigger a haptic_reset
+    // when a haptic-enabled firmware is loaded onto the keyboard.
+    eeprom_update_dword(EECONFIG_HAPTIC, 0);
 #endif
 
     eeconfig_init_kb();
