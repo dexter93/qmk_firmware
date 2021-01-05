@@ -41,6 +41,7 @@ matrix_row_t matrix[MATRIX_ROWS]; //debounced values
 
 static bool matrix_changed = false;
 static uint8_t current_row = 0;
+static uint8_t current_led_row =0;
 
 extern volatile LED_TYPE led_state[DRIVER_LED_TOTAL];
 
@@ -199,7 +200,7 @@ OSAL_IRQ_HANDLER(Vector80) {
     SN_CT16B1->TMRCTRL = CT16_CRST;
 
     // Turn the selected LED row off
-    writePinLow(led_row_pins[current_row]);
+    writePinLow(led_row_pins[current_led_row]);
 
     // Enable current matrix row
     writePinLow(row_pins[current_row]);
@@ -226,12 +227,14 @@ OSAL_IRQ_HANDLER(Vector80) {
     writePinHigh(row_pins[current_row]);
 
     // Turn the next row on
-    current_row = (current_row + 1) % LED_MATRIX_ROWS_HW;
+    current_led_row = (current_led_row + 1) % LED_MATRIX_ROWS_HW;
     
-    uint8_t row_idx = hw_row_to_matrix_row[current_row];
+    current_row = (current_row + 1) % MATRIX_ROWS;
+
+    uint8_t row_idx = hw_row_to_matrix_row[current_led_row];
     uint16_t row_ofst = row_ofsts[row_idx];
 
-    if(current_row % 3 == 0)
+    if(current_led_row % 3 == 0)
     {
         SN_CT16B1->MR8  = led_state[row_ofst + 0 ].b | 1;
         SN_CT16B1->MR9  = led_state[row_ofst + 1 ].b | 1;
@@ -254,7 +257,7 @@ OSAL_IRQ_HANDLER(Vector80) {
         SN_CT16B1->MR2  = led_state[row_ofst + 18].b | 1;
     }
 
-    if(current_row % 3 == 1)
+    if(current_led_row % 3 == 1)
     {
         SN_CT16B1->MR8  = led_state[row_ofst + 0 ].g | 1;
         SN_CT16B1->MR9  = led_state[row_ofst + 1 ].g | 1;
@@ -276,7 +279,7 @@ OSAL_IRQ_HANDLER(Vector80) {
         SN_CT16B1->MR1  = led_state[row_ofst + 17].g | 1;
         SN_CT16B1->MR2  = led_state[row_ofst + 18].g | 1;
     }
-    if(current_row % 3 == 2)
+    if(current_led_row % 3 == 2)
     {
         SN_CT16B1->MR8  = led_state[row_ofst + 0 ].r | 1;
         SN_CT16B1->MR9  = led_state[row_ofst + 1 ].r | 1;
@@ -323,7 +326,7 @@ OSAL_IRQ_HANDLER(Vector80) {
     SN_CT16B1->IC = SN_CT16B1->RIS;  // Clear all for now
     SN_CT16B1->TMRCTRL = CT16_CEN_EN;
 
-    writePinHigh(led_row_pins[current_row]);
+    writePinHigh(led_row_pins[current_led_row]);
 
     OSAL_IRQ_EPILOGUE();
 }
