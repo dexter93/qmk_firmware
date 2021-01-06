@@ -2,10 +2,11 @@
 
 K6 ISO Nordic RGB
 
-Keyboard Maintainer: [Dimitris Mantzouranis](https://github.com/dexter93)
-Based on Redragon K566 by: [Adam Honse](https://github.com/CalcProgrammer1), Kemove DK63 by: [Stephen Peery](https://github.com/smp4488) and Keychron K4 by: [dexter93](https://github.com/dexter93)
+Layout by: [Alexander Frank](https://github.com/jedifindtrick)
+Based on Redragon K566 by: [Adam Honse](https://github.com/CalcProgrammer1), Kemove DK63 by: [Stephen Peery](https://github.com/smp4488) and Keychron K4 by: [Dimitris Mantzouranis](https://github.com/dexter93)
 Hardware Supported: SN32F248BF
 
+This is by no means any original work, only a poor attempt to adapt the work done by the people listed above and I therefore take no credit for their work.
 
 Make example for this keyboard (after setting up your build environment):
 
