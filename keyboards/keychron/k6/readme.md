@@ -2,7 +2,8 @@
 
 K6 ISO Nordic RGB
 
-Layout by: [Alexander Frank](https://github.com/jedifindtrick)
+Layout by: [Alexander Frank](https://github.com/jedifindtrick) 
+
 Based on Redragon K566 by: [Adam Honse](https://github.com/CalcProgrammer1), Kemove DK63 by: [Stephen Peery](https://github.com/smp4488) and Keychron K4 by: [Dimitris Mantzouranis](https://github.com/dexter93)
 Hardware Supported: SN32F248BF
 
