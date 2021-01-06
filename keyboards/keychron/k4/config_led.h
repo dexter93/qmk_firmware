@@ -32,6 +32,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DRIVER_LED_TOTAL (LED_MATRIX_ROWS * LED_MATRIX_COLS)
 
 #ifdef OPENRGB_ENABLE
+#define RAW_EPSIZE 64
 #define OPENRGB_ZONES_COUNT 1
 #define OPENRGB_USE_CUSTOM_MATRIX_MAP
 #ifdef OPENRGB_USE_CUSTOM_MATRIX_MAP

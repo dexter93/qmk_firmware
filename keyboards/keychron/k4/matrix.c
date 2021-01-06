@@ -29,6 +29,7 @@ Ported to QMK by Stephen Peery <https://github.com/smp4488/>
 #include "matrix.h"
 #include "debounce.h"
 #include "quantum.h"
+#include <color.h>
 
 static const pin_t row_pins[MATRIX_ROWS] = MATRIX_ROW_PINS;
 static const pin_t col_pins[MATRIX_COLS] = MATRIX_COL_PINS;

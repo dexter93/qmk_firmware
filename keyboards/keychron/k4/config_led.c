@@ -3,6 +3,7 @@
 #include "rgb_matrix.h"
 #include "config_led.h"
 
+
 led_config_t g_led_config = { {
   {  0,      1,  2,      3,      4,      5,   6,      7,      8,      9,  10,  11,     12,  13,  14,  15,  16,  17,     18 },
   { 19,     20, 21,     22,     23,     24,  25,     26,     27,     28,  29,  30,     31,  32,  33,  34,  35,  36,     37 },
@@ -36,7 +37,7 @@ const openrgb_config_t g_openrgb_config =
     {OPENRGB_ZONE_TYPE_MATRIX},
 
     // Zones sizes
-    {67},
+    {103},
 
 /* This servers as an example - the alt doesn't actually need this, only keyboards where their  
 //  g_led_config.matrix_co and layout doesn't actually represnet the true physical form of the keyboard 
