@@ -56,6 +56,7 @@
 #endif
 #ifdef SN32_EEPROM_ENABLE
 #    include "eeprom_sn32.h"
+#endif
 #ifdef EEPROM_DRIVER
 #    include "eeprom_driver.h"
 #endif
