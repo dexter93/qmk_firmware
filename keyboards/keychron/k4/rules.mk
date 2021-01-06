@@ -60,3 +60,5 @@ DIP_SWITCH_ENABLE = yes
 
 # Custom RGB matrix handling
 RGB_MATRIX_ENABLE = custom
+
+EXTRAFLAGS += --specs=nosys.specs
