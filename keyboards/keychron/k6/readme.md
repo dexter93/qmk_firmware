@@ -1,5 +1,6 @@
 # Keychron K6
-THIS IS A WORK IN PROGRESS, DO NOT TRY TO FLASH IT!
+# THIS IS A WORK IN PROGRESS, DO NOT TRY TO FLASH IT!
+
 K6 ISO Nordic RGB
 
 Layout by: [Alexander Frank](https://github.com/jedifindtrick) 
