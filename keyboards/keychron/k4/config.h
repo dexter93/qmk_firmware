@@ -24,9 +24,9 @@
 #define PRODUCT_ID      0x024F
 #define DEVICE_VER      0x0001
 
-#define MANUFACTURER    Keychron
-#define PRODUCT         K4
-#define DESCRIPTION     K4 v1
+#define MANUFACTURER    "Keychron"
+#define PRODUCT         "K4"
+#define DESCRIPTION     "K4 RGB v1"
 
 /* key matrix size */
 #define MATRIX_ROWS 6
