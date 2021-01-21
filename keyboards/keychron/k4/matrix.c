@@ -330,3 +330,7 @@ OSAL_IRQ_HANDLER(Vector80) {
 
     OSAL_IRQ_EPILOGUE();
 }
+
+void HardFault_Handler(void) {
+	NVIC_SystemReset();
+}
