@@ -163,8 +163,7 @@ void matrix_init(void) {
     // Let TC start counting.
     SN_CT16B1->TMRCTRL |= mskCT16_CEN_EN;
 
-    NVIC_ClearPendingIRQ(CT16B1_IRQn);
-    nvicEnableVector(CT16B1_IRQn, 4);
+    CT16B1_NvicEnable();
 }
 
 uint8_t matrix_scan(void) {
@@ -189,15 +188,12 @@ uint8_t hw_row_to_matrix_row[18] = { 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5
  *
  * @isr
  */
-OSAL_IRQ_HANDLER(Vector80) {
+OSAL_IRQ_HANDLER(SN32_CT16B1_HANDLER) {
 
     OSAL_IRQ_PROLOGUE();
 
     // Disable PWM outputs on column pins
     SN_CT16B1->PWMIOENB = 0;
-
-    SN_CT16B1->IC = mskCT16_MR24IC; // Clear match interrupt status
-    SN_CT16B1->TMRCTRL = CT16_CRST;
 
     // Turn the selected LED row off
     writePinLow(led_row_pins[current_led_row]);
@@ -323,11 +319,8 @@ OSAL_IRQ_HANDLER(Vector80) {
                             |mskCT16_PWM22EN_EN \
                             |mskCT16_PWM23EN_EN);
 
-    SN_CT16B1->IC = SN_CT16B1->RIS;  // Clear all for now
-    SN_CT16B1->TMRCTRL = CT16_CEN_EN;
-
     writePinHigh(led_row_pins[current_led_row]);
-
+    CT16B1_IRQHandler();
     OSAL_IRQ_EPILOGUE();
 }
 
