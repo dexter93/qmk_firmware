@@ -55,6 +55,11 @@ __attribute__((weak)) void matrix_scan_user(void) {}
 
 inline matrix_row_t matrix_get_row(uint8_t row) { return matrix[row]; }
 
+void sn32_wait_x10us(uint32_t n) {
+    n*=21;
+    while(n--);
+}
+
 void matrix_print(void) {}
 
 static void init_pins(void) {
@@ -197,9 +202,12 @@ OSAL_IRQ_HANDLER(SN32_CT16B1_HANDLER) {
 
     // Turn the selected LED row off
     writePinLow(led_row_pins[current_led_row]);
-
+    // Wait to stabilize
+    sn32_wait_x10us(1);
     // Enable current matrix row
     writePinLow(row_pins[current_row]);
+    // Wait to stabilize
+    sn32_wait_x10us(5);
 
     // Read the key matrix
     for (uint8_t col_index = 0; col_index < MATRIX_COLS; col_index++) {
