@@ -207,6 +207,9 @@ void matrix_init(void) {
 uint8_t matrix_scan(void) {
     bool changed = false;
 
+    // Disable PWM outputs on column pins
+    SN_CT16B1->PWMIOENB = 0;
+
     // Set row, read cols
     for (uint8_t current_row = 0; current_row < MATRIX_ROWS; current_row++) {
         changed |= read_cols_on_row(raw_matrix, current_row);
@@ -215,6 +218,27 @@ uint8_t matrix_scan(void) {
     debounce(raw_matrix, matrix, MATRIX_ROWS, changed);
 
     matrix_scan_quantum();
+    // Enable PWM outputs on column pins
+    SN_CT16B1->PWMIOENB   = (mskCT16_PWM0EN_EN  \
+                            |mskCT16_PWM1EN_EN  \
+                            |mskCT16_PWM2EN_EN  \
+                            |mskCT16_PWM8EN_EN  \
+                            |mskCT16_PWM9EN_EN  \
+                            |mskCT16_PWM10EN_EN \
+                            |mskCT16_PWM11EN_EN \
+                            |mskCT16_PWM12EN_EN \
+                            |mskCT16_PWM13EN_EN \
+                            |mskCT16_PWM14EN_EN \
+                            |mskCT16_PWM15EN_EN \
+                            |mskCT16_PWM16EN_EN \
+                            |mskCT16_PWM17EN_EN \
+                            |mskCT16_PWM18EN_EN \
+                            |mskCT16_PWM19EN_EN \
+                            |mskCT16_PWM20EN_EN \
+                            |mskCT16_PWM21EN_EN \
+                            |mskCT16_PWM22EN_EN \
+                            |mskCT16_PWM23EN_EN);
+
     return (uint8_t)changed;
 
 }
@@ -229,13 +253,8 @@ OSAL_IRQ_HANDLER(SN32_CT16B1_HANDLER) {
 
     OSAL_IRQ_PROLOGUE();
 
-    // Disable PWM outputs on column pins
-   // SN_CT16B1->PWMIOENB = 0;
-
     // Turn the selected LED row off
     writePinLow(led_row_pins[current_led_row]);
-    // Wait to stabilize
-    sn32_wait_x10us(1);
     // Turn the next row on
     current_led_row = (current_led_row + 1) % LED_MATRIX_ROWS_HW;
     uint8_t row_idx = hw_row_to_matrix_row[current_led_row];
@@ -309,27 +328,6 @@ OSAL_IRQ_HANDLER(SN32_CT16B1_HANDLER) {
         SN_CT16B1->MR2  = led_state[row_ofst + 18].r | 1;
     }
 
-    // Enable PWM outputs on column pins
-    /*SN_CT16B1->PWMIOENB   = (mskCT16_PWM0EN_EN  \
-                            |mskCT16_PWM1EN_EN  \
-                            |mskCT16_PWM2EN_EN  \
-                            |mskCT16_PWM8EN_EN  \
-                            |mskCT16_PWM9EN_EN  \
-                            |mskCT16_PWM10EN_EN \
-                            |mskCT16_PWM11EN_EN \
-                            |mskCT16_PWM12EN_EN \
-                            |mskCT16_PWM13EN_EN \
-                            |mskCT16_PWM14EN_EN \
-                            |mskCT16_PWM15EN_EN \
-                            |mskCT16_PWM16EN_EN \
-                            |mskCT16_PWM17EN_EN \
-                            |mskCT16_PWM18EN_EN \
-                            |mskCT16_PWM19EN_EN \
-                            |mskCT16_PWM20EN_EN \
-                            |mskCT16_PWM21EN_EN \
-                            |mskCT16_PWM22EN_EN \
-                            |mskCT16_PWM23EN_EN);
-	*/
     writePinHigh(led_row_pins[current_led_row]);
     CT16B1_IRQHandler();
     OSAL_IRQ_EPILOGUE();
