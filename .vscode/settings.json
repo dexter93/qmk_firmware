@@ -23,5 +23,6 @@
         "editor.trimAutoWhitespace": false,
         "files.trimTrailingWhitespace": false
     },
-    "C_Cpp.dimInactiveRegions": false
+    "C_Cpp.dimInactiveRegions": false,
+    "C_Cpp.errorSquiggles": "Disabled"
 }
