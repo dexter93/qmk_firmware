@@ -81,21 +81,26 @@ static void init_pins(void) {
 }
 
 static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row) {
-	// Store last value of row prior to reading
+    // Store last value of row prior to reading
     matrix_row_t last_row_value = current_matrix[current_row];
     // Clear data in matrix row
     current_matrix[current_row] = 0;
+    // Disable LED row output in all three channels
+    writePinLow(led_row_pins[current_row]);
+    writePinLow(led_row_pins[current_row + 1]);
+    writePinLow(led_row_pins[current_row + 2]);
 
     // Enable current matrix row
     writePinLow(row_pins[current_row]);
     // Wait to stabilize
-    sn32_wait_x10us(5);
+    sn32_wait_x10us(1);
 
     // Read the key matrix
     for (uint8_t col_index = 0; col_index < MATRIX_COLS; col_index++) {
-        // Enable the column
+        // Disable PWM outputs on column pins
+        SN_CT16B1->PWMIOENB = 0;
+        // Enable the column        
         writePinHigh(col_pins[col_index]);
-
         // Check col pin state
         if (readPin(col_pins[col_index]) == 0) {
             // Pin LO, set col bit
@@ -107,12 +112,33 @@ static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
 
         // Disable the column
         writePinLow(col_pins[col_index]);
+
+        // Enable PWM outputs on column pins
+        SN_CT16B1->PWMIOENB   = (mskCT16_PWM0EN_EN  \
+                                |mskCT16_PWM1EN_EN  \
+                                |mskCT16_PWM2EN_EN  \
+                                |mskCT16_PWM8EN_EN  \
+                                |mskCT16_PWM9EN_EN  \
+                                |mskCT16_PWM10EN_EN \
+                                |mskCT16_PWM11EN_EN \
+                                |mskCT16_PWM12EN_EN \
+                                |mskCT16_PWM13EN_EN \
+                                |mskCT16_PWM14EN_EN \
+                                |mskCT16_PWM15EN_EN \
+                                |mskCT16_PWM16EN_EN \
+                                |mskCT16_PWM17EN_EN \
+                                |mskCT16_PWM18EN_EN \
+                                |mskCT16_PWM19EN_EN \
+                                |mskCT16_PWM20EN_EN \
+                                |mskCT16_PWM21EN_EN \
+                                |mskCT16_PWM22EN_EN \
+                                |mskCT16_PWM23EN_EN);
+
     }
 
     // Disable current matrix row
-    writePinHigh(row_pins[current_row]);
+    writePinHigh(row_pins[current_row]);    
     return (last_row_value != current_matrix[current_row]);
-   // current_row = (current_row + 1) % MATRIX_ROWS;
 }
 
 void matrix_init(void) {
@@ -190,7 +216,7 @@ void matrix_init(void) {
     SN_CT16B1->MR24 = 0xFF;
 
     // Set prescale value
-    SN_CT16B1->PRE = 0x1F;
+    SN_CT16B1->PRE = 0x08;
 
     //Set CT16B1 as the up-counting mode.
     SN_CT16B1->TMRCTRL = (mskCT16_CRST);
@@ -207,38 +233,13 @@ void matrix_init(void) {
 uint8_t matrix_scan(void) {
     bool changed = false;
 
-    // Disable PWM outputs on column pins
-    SN_CT16B1->PWMIOENB = 0;
-
     // Set row, read cols
     for (uint8_t current_row = 0; current_row < MATRIX_ROWS; current_row++) {
         changed |= read_cols_on_row(raw_matrix, current_row);
+
     }
-
     debounce(raw_matrix, matrix, MATRIX_ROWS, changed);
-
     matrix_scan_quantum();
-    // Enable PWM outputs on column pins
-    SN_CT16B1->PWMIOENB   = (mskCT16_PWM0EN_EN  \
-                            |mskCT16_PWM1EN_EN  \
-                            |mskCT16_PWM2EN_EN  \
-                            |mskCT16_PWM8EN_EN  \
-                            |mskCT16_PWM9EN_EN  \
-                            |mskCT16_PWM10EN_EN \
-                            |mskCT16_PWM11EN_EN \
-                            |mskCT16_PWM12EN_EN \
-                            |mskCT16_PWM13EN_EN \
-                            |mskCT16_PWM14EN_EN \
-                            |mskCT16_PWM15EN_EN \
-                            |mskCT16_PWM16EN_EN \
-                            |mskCT16_PWM17EN_EN \
-                            |mskCT16_PWM18EN_EN \
-                            |mskCT16_PWM19EN_EN \
-                            |mskCT16_PWM20EN_EN \
-                            |mskCT16_PWM21EN_EN \
-                            |mskCT16_PWM22EN_EN \
-                            |mskCT16_PWM23EN_EN);
-
     return (uint8_t)changed;
 
 }
@@ -252,7 +253,6 @@ uint8_t hw_row_to_matrix_row[18] = { 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5
 OSAL_IRQ_HANDLER(SN32_CT16B1_HANDLER) {
 
     OSAL_IRQ_PROLOGUE();
-
     // Turn the selected LED row off
     writePinLow(led_row_pins[current_led_row]);
     // Turn the next row on
@@ -334,5 +334,5 @@ OSAL_IRQ_HANDLER(SN32_CT16B1_HANDLER) {
 }
 
 void HardFault_Handler(void) {
-	NVIC_SystemReset();
+    NVIC_SystemReset();
 }
