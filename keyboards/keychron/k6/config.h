@@ -33,9 +33,10 @@
 #define MATRIX_COLS 16
 
 #define DIODE_DIRECTION COL2ROW
-
+// #define MATRIX_COL_PINS { A8, A9, A10, A11, A12, A13, A14, A15, B0, B1, B2, B3, B4, B5, B6, B7, B8, B9, B10 }
 #define MATRIX_COL_PINS { A8, A9, A10, A11, A12, A13, A14, A15, B0, B1, B2, B3, B4, B5, B6, B7 }
-#define MATRIX_ROW_PINS { C15, D11, D10, D9, D8 }
+// #define MATRIX_ROW_PINS { C15, D11, D10, D9, D8, D7 }
+#define MATRIX_ROW_PINS { D11, D10, D9, D8, D7 }
 
 // Connects each switch in the dip switch to the GPIO pin of the MCU
 #define DIP_SWITCH_PINS { D5, D6 }
