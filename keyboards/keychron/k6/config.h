@@ -45,3 +45,5 @@
 #define DEBOUNCE 0
 
 #include "config_led.h"
+
+#define RGBLIGHT_SLEEP
