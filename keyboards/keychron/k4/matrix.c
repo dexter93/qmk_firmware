@@ -80,6 +80,12 @@ static void init_pins(void) {
    }
 }
 
+static void unselect_led_rows(void) {
+	for (uint8_t x = 0; x < LED_MATRIX_ROWS_HW; x++) {
+        writePinLow(led_row_pins[x]);
+   }
+}
+
 static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row) {
     // Store last value of row prior to reading
     matrix_row_t last_row_value = current_matrix[current_row];
@@ -88,11 +94,8 @@ static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
     // Disable PWM outputs on column pins
     SN_CT16B1->PWMIOENB = 0;
     CT16B1_NvicDisable();
-    // Disable LED row output in all three channels
-    writePinLow(led_row_pins[current_row]);
-    writePinLow(led_row_pins[current_row + 1]);
-    writePinLow(led_row_pins[current_row + 2]);
-
+    // Disable LED row output
+    unselect_led_rows();
     // Enable current matrix row
     writePinLow(row_pins[current_row]);
     // Wait to stabilize
