@@ -21,11 +21,11 @@
 
 /* USB Device descriptor parameter */
 #define VENDOR_ID       0x05AC
-#define PRODUCT_ID      0x0250
+#define PRODUCT_ID      0x024f
 #define DEVICE_VER      0x0001
 
 #define MANUFACTURER    Keychron
-#define PRODUCT         K6
+#define PRODUCT         Keychron K6
 #define DESCRIPTION     K6 ISO Nordic
 
 /* key matrix size */
@@ -45,5 +45,5 @@
 #define DEBOUNCE 0
 
 #include "config_led.h"
-
+#define RGBLIGHT_EFFECT_STATIC_GRADIENT
 #define RGBLIGHT_SLEEP
