@@ -45,5 +45,3 @@
 #define DEBOUNCE 0
 
 #include "config_led.h"
-#define RGBLIGHT_EFFECT_STATIC_GRADIENT
-#define RGBLIGHT_SLEEP
