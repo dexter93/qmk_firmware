@@ -86,91 +86,52 @@ static void unselect_led_rows(void) {
    }
 }
 
-static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row) {
-    // Store last value of row prior to reading
-    matrix_row_t last_row_value = current_matrix[current_row];
-    // Clear data in matrix row
-    current_matrix[current_row] = 0;
+static void disable_rgb_matrix(void) {
     // Disable PWM outputs on column pins
+    // Enable GPIO control on colun pins
     SN_CT16B1->PWMIOENB = 0;
+    // Disable the LED interrupts
     CT16B1_NvicDisable();
     // Disable LED row output
     unselect_led_rows();
-    // Enable current matrix row
-    writePinLow(row_pins[current_row]);
-    // Wait to stabilize
-    sn32_wait_x10us(2);
-
-    // Read the key matrix
-    for (uint8_t col_index = 0; col_index < MATRIX_COLS; col_index++) {
-        // Enable the column        
-        writePinHigh(col_pins[col_index]);
-        // Check col pin state
-        if (readPin(col_pins[col_index]) == 0) {
-            // Pin LO, set col bit
-            current_matrix[current_row] |= (MATRIX_ROW_SHIFTER << col_index);
-        } else {
-            // Pin HI, clear col bit
-            current_matrix[current_row] &= ~(MATRIX_ROW_SHIFTER << col_index);
-        }
-
-        // Disable the column
-        writePinLow(col_pins[col_index]);
-    }
-
-    // Disable current matrix row
-    writePinHigh(row_pins[current_row]);
-        // Enable PWM outputs on column pins
-        SN_CT16B1->PWMIOENB   = (mskCT16_PWM0EN_EN  \
-                                |mskCT16_PWM1EN_EN  \
-                                |mskCT16_PWM2EN_EN  \
-                                |mskCT16_PWM8EN_EN  \
-                                |mskCT16_PWM9EN_EN  \
-                                |mskCT16_PWM10EN_EN \
-                                |mskCT16_PWM11EN_EN \
-                                |mskCT16_PWM12EN_EN \
-                                |mskCT16_PWM13EN_EN \
-                                |mskCT16_PWM14EN_EN \
-                                |mskCT16_PWM15EN_EN \
-                                |mskCT16_PWM16EN_EN \
-                                |mskCT16_PWM17EN_EN \
-                                |mskCT16_PWM18EN_EN \
-                                |mskCT16_PWM19EN_EN \
-                                |mskCT16_PWM20EN_EN \
-                                |mskCT16_PWM21EN_EN \
-                                |mskCT16_PWM22EN_EN \
-                                |mskCT16_PWM23EN_EN);
-
-    CT16B1_NvicEnable();
-    return (last_row_value != current_matrix[current_row]);
 }
 
-void matrix_init(void) {
-    // initialize key pins
-    init_pins();
-
-    // initialize matrix state: all keys off
-    for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
-        raw_matrix[i] = 0;
-        matrix[i]     = 0;
-    }
-
+static void enable_rgb_matrix(void) {
+   // Enable PWM outputs on column pins
+    SN_CT16B1->PWMIOENB   = (mskCT16_PWM0EN_EN  \
+                            |mskCT16_PWM1EN_EN  \
+                            |mskCT16_PWM2EN_EN  \
+                            |mskCT16_PWM8EN_EN  \
+                            |mskCT16_PWM9EN_EN  \
+                            |mskCT16_PWM10EN_EN \
+                            |mskCT16_PWM11EN_EN \
+                            |mskCT16_PWM12EN_EN \
+                            |mskCT16_PWM13EN_EN \
+                            |mskCT16_PWM14EN_EN \
+                            |mskCT16_PWM15EN_EN \
+                            |mskCT16_PWM16EN_EN \
+                            |mskCT16_PWM17EN_EN \
+                            |mskCT16_PWM18EN_EN \
+                            |mskCT16_PWM19EN_EN \
+                            |mskCT16_PWM20EN_EN \
+                            |mskCT16_PWM21EN_EN \
+                            |mskCT16_PWM22EN_EN \
+                            |mskCT16_PWM23EN_EN);
+    // Enable the LED interrupts
+    CT16B1_NvicEnable();
+}
+static void init_rgb_matrix(void) {
+    // Calculate the row offsets
     for (uint8_t i = 0; i < LED_MATRIX_ROWS; i++) {
         row_ofsts[i] = i * LED_MATRIX_COLS;
     }
 
-    debounce_init(MATRIX_ROWS);
-
-    matrix_init_quantum();
-
-    // Enable Timer Clock
-    SN_SYS1->AHBCLKEN_b.CT16B1CLKEN = 1;
-
     // PFPA - Map most PWM outputs to their PWM A pins
+    // PWM0-2 is B for the k4
     SN_PFPA->CT16B1 = 0x00000007;
 
     // Enable PWM function, IOs and select the PWM modes
-    // Enable PWM0-PWM3, PWM8-23
+    // Enable PWM0-PWM2, PWM8-23
     SN_CT16B1->PWMENB   =   (mskCT16_PWM0EN_EN  \
                             |mskCT16_PWM1EN_EN  \
                             |mskCT16_PWM2EN_EN  \
@@ -191,28 +152,7 @@ void matrix_init(void) {
                             |mskCT16_PWM22EN_EN \
                             |mskCT16_PWM23EN_EN);
 
-    // Enable PWM0-PWM3, PWM8-PWM23 IO
-    SN_CT16B1->PWMIOENB   = (mskCT16_PWM0EN_EN  \
-                            |mskCT16_PWM1EN_EN  \
-                            |mskCT16_PWM2EN_EN  \
-                            |mskCT16_PWM8EN_EN  \
-                            |mskCT16_PWM9EN_EN  \
-                            |mskCT16_PWM10EN_EN \
-                            |mskCT16_PWM11EN_EN \
-                            |mskCT16_PWM12EN_EN \
-                            |mskCT16_PWM13EN_EN \
-                            |mskCT16_PWM14EN_EN \
-                            |mskCT16_PWM15EN_EN \
-                            |mskCT16_PWM16EN_EN \
-                            |mskCT16_PWM17EN_EN \
-                            |mskCT16_PWM18EN_EN \
-                            |mskCT16_PWM19EN_EN \
-                            |mskCT16_PWM20EN_EN \
-                            |mskCT16_PWM21EN_EN \
-                            |mskCT16_PWM22EN_EN \
-                            |mskCT16_PWM23EN_EN);
-
-    // Set match interrupts and TC rest
+    // Set match interrupts and TC reset
     SN_CT16B1->MCTRL3 = (mskCT16_MR24IE_EN);
     SN_CT16B1->MCTRL3_b.MR24RST = 1;
 
@@ -230,8 +170,58 @@ void matrix_init(void) {
 
     // Let TC start counting.
     SN_CT16B1->TMRCTRL |= mskCT16_CEN_EN;
+	enable_rgb_matrix();
+}
 
-    CT16B1_NvicEnable();
+static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row) {
+    // Store last value of row prior to reading
+    matrix_row_t last_row_value = current_matrix[current_row];
+    // Clear data in matrix row
+    current_matrix[current_row] = 0;
+    disable_rgb_matrix();
+    // Enable current matrix row
+    writePinLow(row_pins[current_row]);
+    // Wait to stabilize
+    sn32_wait_x10us(2);
+
+    // Read the key matrix
+    for (uint8_t col_index = 0; col_index < MATRIX_COLS; col_index++) {
+        // Enable the column
+        writePinHigh(col_pins[col_index]);
+        // Check col pin state
+        if (readPin(col_pins[col_index]) == 0) {
+            // Pin LO, set col bit
+            current_matrix[current_row] |= (MATRIX_ROW_SHIFTER << col_index);
+        } else {
+            // Pin HI, clear col bit
+            current_matrix[current_row] &= ~(MATRIX_ROW_SHIFTER << col_index);
+        }
+
+        // Disable the column
+        writePinLow(col_pins[col_index]);
+    }
+
+    // Disable current matrix row
+    writePinHigh(row_pins[current_row]);
+    enable_rgb_matrix();
+    return (last_row_value != current_matrix[current_row]);
+}
+
+void matrix_init(void) {
+    // initialize key pins
+    init_pins();
+
+    // initialize matrix state: all keys off
+    for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
+        raw_matrix[i] = 0;
+        matrix[i]     = 0;
+    }
+
+    debounce_init(MATRIX_ROWS);
+
+    matrix_init_quantum();
+    // initialize the rgb matrix
+    init_rgb_matrix();
 }
 
 uint8_t matrix_scan(void) {
