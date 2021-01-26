@@ -253,6 +253,9 @@ uint8_t hw_row_to_matrix_row[18] = { 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5
 OSAL_IRQ_HANDLER(SN32_CT16B1_HANDLER) {
 
     OSAL_IRQ_PROLOGUE();
+    // Turn the selected LED row on
+    // This is to minimize dead time
+    writePinHigh(led_row_pins[current_led_row]);    
     // Turn the selected LED row off
     writePinLow(led_row_pins[current_led_row]);
     // Turn the next row on
