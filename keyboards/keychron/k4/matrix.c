@@ -209,6 +209,11 @@ static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
 }
 
 void matrix_init(void) {
+    // Enable GPIO Clock
+    SN_SYS1->AHBCLKEN_b.P0CLKEN = 1;
+    SN_SYS1->AHBCLKEN_b.P1CLKEN = 1;
+    SN_SYS1->AHBCLKEN_b.P2CLKEN = 1;
+    SN_SYS1->AHBCLKEN_b.P3CLKEN = 1;	
     // initialize key pins
     init_pins();
 
