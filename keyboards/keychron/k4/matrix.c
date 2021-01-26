@@ -76,7 +76,7 @@ static void init_pins(void) {
 
    for (uint8_t x = 0; x < LED_MATRIX_ROWS_HW; x++) {
         setPinOutput(led_row_pins[x]);
-        writePinHigh(led_row_pins[x]);
+        writePinLow(led_row_pins[x]);
    }
 }
 
