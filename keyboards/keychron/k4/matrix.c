@@ -90,6 +90,10 @@ static void disable_rgb_matrix(void) {
     // Disable PWM outputs on column pins
     // Enable GPIO control on colun pins
     SN_CT16B1->PWMIOENB = 0;
+    // Clear match interrupt status
+    SN_CT16B1->IC = mskCT16_MR24IC;
+    // Reset the counter
+    SN_CT16B1->TMRCTRL = CT16_CRST;
     // Disable the LED interrupts
     CT16B1_NvicDisable();
     // Disable LED row output
@@ -117,6 +121,13 @@ static void enable_rgb_matrix(void) {
                             |mskCT16_PWM21EN_EN \
                             |mskCT16_PWM22EN_EN \
                             |mskCT16_PWM23EN_EN);
+
+    //Set CT16B1 as the up-counting mode.
+    SN_CT16B1->TMRCTRL = (mskCT16_CRST);
+    // Wait until timer reset done.
+    while (SN_CT16B1->TMRCTRL & mskCT16_CRST);
+    // Let TC start counting.
+    SN_CT16B1->TMRCTRL |= mskCT16_CEN_EN;
     // Enable the LED interrupts
     CT16B1_NvicEnable();
 }
@@ -163,14 +174,6 @@ static void init_rgb_matrix(void) {
     // Set prescale value
     SN_CT16B1->PRE = 0x04;
 
-    //Set CT16B1 as the up-counting mode.
-    SN_CT16B1->TMRCTRL = (mskCT16_CRST);
-
-    // Wait until timer reset done.
-    while (SN_CT16B1->TMRCTRL & mskCT16_CRST);
-
-    // Let TC start counting.
-    SN_CT16B1->TMRCTRL |= mskCT16_CEN_EN;
 	enable_rgb_matrix();
 }
 
