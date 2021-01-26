@@ -179,7 +179,6 @@ static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
     matrix_row_t last_row_value = current_matrix[current_row];
     // Clear data in matrix row
     current_matrix[current_row] = 0;
-    disable_rgb_matrix();
     // Enable current matrix row
     writePinLow(row_pins[current_row]);
     // Wait to stabilize
@@ -187,6 +186,7 @@ static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
 
     // Read the key matrix
     for (uint8_t col_index = 0; col_index < MATRIX_COLS; col_index++) {
+    	disable_rgb_matrix();
         // Enable the column
         writePinHigh(col_pins[col_index]);
         // Check col pin state
@@ -200,11 +200,11 @@ static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
 
         // Disable the column
         writePinLow(col_pins[col_index]);
+        enable_rgb_matrix();
     }
 
     // Disable current matrix row
     writePinHigh(row_pins[current_row]);
-    enable_rgb_matrix();
     return (last_row_value != current_matrix[current_row]);
 }
 
