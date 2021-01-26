@@ -98,15 +98,12 @@ void matrix_init(void) {
     // Enable Timer Clock
     SN_SYS1->AHBCLKEN_b.CT16B1CLKEN = 1;
 
-    // PFPA - Map most PWM outputs to their PWM A pins
-    SN_PFPA->CT16B1 = 0x00000007;
+    // PFPA - Map PWM outputs to their PWM A pins
+    SN_PFPA->CT16B1 = 0x00000000;
 
     // Enable PWM function, IOs and select the PWM modes
-    // Enable PWM0-PWM3, PWM8-23
-    SN_CT16B1->PWMENB   =   (mskCT16_PWM0EN_EN  \
-                            |mskCT16_PWM1EN_EN  \
-                            |mskCT16_PWM2EN_EN  \
-                            |mskCT16_PWM8EN_EN  \
+    // Enable PWM8-23
+    SN_CT16B1->PWMENB   =   (mskCT16_PWM8EN_EN  \
                             |mskCT16_PWM9EN_EN  \
                             |mskCT16_PWM10EN_EN \
                             |mskCT16_PWM11EN_EN \
@@ -124,10 +121,7 @@ void matrix_init(void) {
                             |mskCT16_PWM23EN_EN);
 
     // Enable PWM0-PWM3, PWM8-PWM23 IO
-    SN_CT16B1->PWMIOENB   = (mskCT16_PWM0EN_EN  \
-                            |mskCT16_PWM1EN_EN  \
-                            |mskCT16_PWM2EN_EN  \
-                            |mskCT16_PWM8EN_EN  \
+    SN_CT16B1->PWMIOENB   = (mskCT16_PWM8EN_EN  \
                             |mskCT16_PWM9EN_EN  \
                             |mskCT16_PWM10EN_EN \
                             |mskCT16_PWM11EN_EN \
@@ -183,7 +177,7 @@ uint8_t matrix_scan(void) {
     return matrix_changed;
 }
 
-uint8_t hw_row_to_matrix_row[18] = { 0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 5, 5 };
+uint8_t hw_row_to_matrix_row[15] = { 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 0 };
 /**
  * @brief   MR1 interrupt handler.
  *
@@ -252,9 +246,6 @@ OSAL_IRQ_HANDLER(Vector80) {
         SN_CT16B1->MR21 = led_state[row_ofst + 13].b | 1;
         SN_CT16B1->MR22 = led_state[row_ofst + 14].b | 1;
         SN_CT16B1->MR23 = led_state[row_ofst + 15].b | 1;
-        SN_CT16B1->MR0  = led_state[row_ofst + 16].b | 1;
-        SN_CT16B1->MR1  = led_state[row_ofst + 17].b | 1;
-        SN_CT16B1->MR2  = led_state[row_ofst + 18].b | 1;
     }
 
     if(current_led_row % 3 == 1)
@@ -275,9 +266,6 @@ OSAL_IRQ_HANDLER(Vector80) {
         SN_CT16B1->MR21 = led_state[row_ofst + 13].g | 1;
         SN_CT16B1->MR22 = led_state[row_ofst + 14].g | 1;
         SN_CT16B1->MR23 = led_state[row_ofst + 15].g | 1;
-        SN_CT16B1->MR0  = led_state[row_ofst + 16].g | 1;
-        SN_CT16B1->MR1  = led_state[row_ofst + 17].g | 1;
-        SN_CT16B1->MR2  = led_state[row_ofst + 18].g | 1;
     }
     if(current_led_row % 3 == 2)
     {
@@ -297,16 +285,10 @@ OSAL_IRQ_HANDLER(Vector80) {
         SN_CT16B1->MR21 = led_state[row_ofst + 13].r | 1;
         SN_CT16B1->MR22 = led_state[row_ofst + 14].r | 1;
         SN_CT16B1->MR23 = led_state[row_ofst + 15].r | 1;
-        SN_CT16B1->MR0  = led_state[row_ofst + 16].r | 1;
-        SN_CT16B1->MR1  = led_state[row_ofst + 17].r | 1;
-        SN_CT16B1->MR2  = led_state[row_ofst + 18].r | 1;
     }
 
     // Enable PWM outputs on column pins
-    SN_CT16B1->PWMIOENB   = (mskCT16_PWM0EN_EN  \
-                            |mskCT16_PWM1EN_EN  \
-                            |mskCT16_PWM2EN_EN  \
-                            |mskCT16_PWM8EN_EN  \
+    SN_CT16B1->PWMIOENB   = (mskCT16_PWM8EN_EN  \
                             |mskCT16_PWM9EN_EN  \
                             |mskCT16_PWM10EN_EN \
                             |mskCT16_PWM11EN_EN \
