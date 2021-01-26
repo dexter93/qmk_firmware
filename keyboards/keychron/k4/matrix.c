@@ -161,7 +161,7 @@ static void init_rgb_matrix(void) {
     SN_CT16B1->MR24 = 0xFF;
 
     // Set prescale value
-    SN_CT16B1->PRE = 0x08;
+    SN_CT16B1->PRE = 0x01;
 
     //Set CT16B1 as the up-counting mode.
     SN_CT16B1->TMRCTRL = (mskCT16_CRST);
