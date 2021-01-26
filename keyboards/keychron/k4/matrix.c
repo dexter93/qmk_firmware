@@ -125,7 +125,8 @@ static void init_rgb_matrix(void) {
     for (uint8_t i = 0; i < LED_MATRIX_ROWS; i++) {
         row_ofsts[i] = i * LED_MATRIX_COLS;
     }
-
+    // Enable Timer Clock
+    SN_SYS1->AHBCLKEN_b.CT16B1CLKEN = 1;
     // PFPA - Map most PWM outputs to their PWM A pins
     // PWM0-2 is B for the k4
     SN_PFPA->CT16B1 = 0x00000007;
