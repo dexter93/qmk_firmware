@@ -172,7 +172,7 @@ static void init_rgb_matrix(void) {
     SN_CT16B1->MR24 = 0xFF;
 
     // Set prescale value
-    SN_CT16B1->PRE = 0x04;
+    SN_CT16B1->PRE = 0x03;
 
 	enable_rgb_matrix();
 }
