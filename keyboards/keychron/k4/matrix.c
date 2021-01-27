@@ -87,6 +87,8 @@ static void unselect_led_rows(void) {
 }
 
 static void disable_rgb_matrix(void) {
+    // Disable LED row output
+    unselect_led_rows();
     // Disable PWM outputs on column pins
     // Enable GPIO control on colun pins
     SN_CT16B1->PWMIOENB = 0;
@@ -96,8 +98,6 @@ static void disable_rgb_matrix(void) {
     SN_CT16B1->TMRCTRL = CT16_CRST;
     // Disable the LED interrupts
     CT16B1_NvicDisable();
-    // Disable LED row output
-    unselect_led_rows();
 }
 
 static void enable_rgb_matrix(void) {
