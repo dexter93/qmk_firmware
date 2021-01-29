@@ -80,15 +80,9 @@ static void init_pins(void) {
    }
 }
 
-static void unselect_led_rows(void) {
-	for (uint8_t x = 0; x < LED_MATRIX_ROWS_HW; x++) {
-        writePinLow(led_row_pins[x]);
-   }
-}
-
 static void disable_rgb_matrix(void) {
     // Disable LED row output
-    unselect_led_rows();
+    writePinLow(led_row_pins[current_led_row]);
     // Disable PWM outputs on column pins
     // Enable GPIO control on colun pins
     SN_CT16B1->PWMIOENB = 0;
@@ -96,6 +90,8 @@ static void disable_rgb_matrix(void) {
     SN_CT16B1->IC = mskCT16_MR24IC;
     // Reset the counter
     SN_CT16B1->TMRCTRL = CT16_CRST;
+    // Wait until timer reset done.
+    while (SN_CT16B1->TMRCTRL & mskCT16_CRST);
     // Disable the LED interrupts
     CT16B1_NvicDisable();
 }
@@ -130,6 +126,7 @@ static void enable_rgb_matrix(void) {
     SN_CT16B1->TMRCTRL |= mskCT16_CEN_EN;
     // Enable the LED interrupts
     CT16B1_NvicEnable();
+
 }
 static void init_rgb_matrix(void) {
     // Calculate the row offsets
@@ -173,7 +170,6 @@ static void init_rgb_matrix(void) {
 
     // Set prescale value
     SN_CT16B1->PRE = 0x03;
-
 	enable_rgb_matrix();
 }
 
@@ -256,17 +252,18 @@ uint8_t hw_row_to_matrix_row[18] = { 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5
 OSAL_IRQ_HANDLER(SN32_CT16B1_HANDLER) {
 
     OSAL_IRQ_PROLOGUE();
-    // Turn the selected LED row on
-    // This is to minimize dead time
-    writePinHigh(led_row_pins[current_led_row]);    
+    uint8_t led_row = current_led_row;
     // Turn the selected LED row off
-    writePinLow(led_row_pins[current_led_row]);
+    writePinLow(led_row_pins[led_row]);
     // Turn the next row on
-    current_led_row = (current_led_row + 1) % LED_MATRIX_ROWS_HW;
-    uint8_t row_idx = hw_row_to_matrix_row[current_led_row];
+    led_row = (led_row +1) % LED_MATRIX_ROWS_HW;
+    // Update the led status
+    current_led_row = led_row;
+
+    uint8_t row_idx = hw_row_to_matrix_row[led_row];
     uint16_t row_ofst = row_ofsts[row_idx];
 
-    if(current_led_row % 3 == 0)
+    if(led_row % 3 == 0)
     {
         SN_CT16B1->MR8  = led_state[row_ofst + 0 ].b | 1;
         SN_CT16B1->MR9  = led_state[row_ofst + 1 ].b | 1;
@@ -289,7 +286,7 @@ OSAL_IRQ_HANDLER(SN32_CT16B1_HANDLER) {
         SN_CT16B1->MR2  = led_state[row_ofst + 18].b | 1;
     }
 
-    if(current_led_row % 3 == 1)
+    if(led_row % 3 == 1)
     {
         SN_CT16B1->MR8  = led_state[row_ofst + 0 ].g | 1;
         SN_CT16B1->MR9  = led_state[row_ofst + 1 ].g | 1;
@@ -311,7 +308,7 @@ OSAL_IRQ_HANDLER(SN32_CT16B1_HANDLER) {
         SN_CT16B1->MR1  = led_state[row_ofst + 17].g | 1;
         SN_CT16B1->MR2  = led_state[row_ofst + 18].g | 1;
     }
-    if(current_led_row % 3 == 2)
+    if(led_row % 3 == 2)
     {
         SN_CT16B1->MR8  = led_state[row_ofst + 0 ].r | 1;
         SN_CT16B1->MR9  = led_state[row_ofst + 1 ].r | 1;
@@ -333,8 +330,7 @@ OSAL_IRQ_HANDLER(SN32_CT16B1_HANDLER) {
         SN_CT16B1->MR1  = led_state[row_ofst + 17].r | 1;
         SN_CT16B1->MR2  = led_state[row_ofst + 18].r | 1;
     }
-
-    writePinHigh(led_row_pins[current_led_row]);
+    writePinHigh(led_row_pins[led_row]);
     CT16B1_IRQHandler();
     OSAL_IRQ_EPILOGUE();
 }
