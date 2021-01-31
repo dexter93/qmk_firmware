@@ -176,7 +176,7 @@ static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
     // Enable current matrix row
     writePinLow(row_pins[current_row]);
     // Wait to stabilize
-    wait_us(20);
+    wait_us(10);
 
     // Read the key matrix
     for (uint8_t col_index = 0; col_index < MATRIX_COLS; col_index++) {
