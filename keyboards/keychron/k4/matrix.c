@@ -53,11 +53,6 @@ __attribute__((weak)) void matrix_scan_user(void) {}
 
 inline matrix_row_t matrix_get_row(uint8_t row) { return matrix[row]; }
 
-void sn32_wait_x10us(uint32_t n) {
-    n*=21;
-    while(n--);
-}
-
 void matrix_print(void) {}
 
 static void init_pins(void) {
@@ -181,7 +176,7 @@ static bool read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
     // Enable current matrix row
     writePinLow(row_pins[current_row]);
     // Wait to stabilize
-    sn32_wait_x10us(2);
+    wait_us(20);
 
     // Read the key matrix
     for (uint8_t col_index = 0; col_index < MATRIX_COLS; col_index++) {
