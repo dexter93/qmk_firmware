@@ -76,6 +76,7 @@ static void init_pins(void) {
 }
 
 static void disable_rgb_matrix(void) {
+    syssts_t sts = chSysGetStatusAndLockX();
     // Disable LED row output
     writePinLow(led_row_pins[current_led_row]);
     // Disable PWM outputs on column pins
@@ -85,9 +86,11 @@ static void disable_rgb_matrix(void) {
     SN_CT16B1->IC = mskCT16_MR24IC;
     // Disable the LED interrupts
     CT16B1_NvicDisable();
+    chSysRestoreStatusX(sts);
 }
 
 static void enable_rgb_matrix(void) {
+    syssts_t sts = chSysGetStatusAndLockX();
     // Set match interrupts and TC stop
     SN_CT16B1->MCTRL3 = (mskCT16_MR24IE_EN | mskCT16_MR24STOP_EN);
 
@@ -126,6 +129,7 @@ static void enable_rgb_matrix(void) {
     SN_CT16B1->TMRCTRL |= mskCT16_CEN_EN;
     // Enable the LED interrupts
     CT16B1_NvicEnable();
+    chSysRestoreStatusX(sts);
 
 }
 static void init_rgb_matrix(void) {
