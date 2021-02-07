@@ -256,70 +256,70 @@ OSAL_IRQ_HANDLER(SN32_CT16B1_HANDLER) {
 
     if(led_row % 3 == 0)
     {
-        SN_CT16B1->MR8  = led_state[row_ofst + 0 ].b | 1;
-        SN_CT16B1->MR9  = led_state[row_ofst + 1 ].b | 1;
-        SN_CT16B1->MR10 = led_state[row_ofst + 2 ].b | 1;
-        SN_CT16B1->MR11 = led_state[row_ofst + 3 ].b | 1;
-        SN_CT16B1->MR12 = led_state[row_ofst + 4 ].b | 1;
-        SN_CT16B1->MR13 = led_state[row_ofst + 5 ].b | 1;
-        SN_CT16B1->MR14 = led_state[row_ofst + 6 ].b | 1;
-        SN_CT16B1->MR15 = led_state[row_ofst + 7 ].b | 1;
-        SN_CT16B1->MR16 = led_state[row_ofst + 8 ].b | 1;
-        SN_CT16B1->MR17 = led_state[row_ofst + 9 ].b | 1;
-        SN_CT16B1->MR18 = led_state[row_ofst + 10].b | 1;
-        SN_CT16B1->MR19 = led_state[row_ofst + 11].b | 1;
-        SN_CT16B1->MR20 = led_state[row_ofst + 12].b | 1;
-        SN_CT16B1->MR21 = led_state[row_ofst + 13].b | 1;
-        SN_CT16B1->MR22 = led_state[row_ofst + 14].b | 1;
-        SN_CT16B1->MR23 = led_state[row_ofst + 15].b | 1;
-        SN_CT16B1->MR0  = led_state[row_ofst + 16].b | 1;
-        SN_CT16B1->MR1  = led_state[row_ofst + 17].b | 1;
-        SN_CT16B1->MR2  = led_state[row_ofst + 18].b | 1;
+        SN_CT16B1->MR8  = led_state[row_ofst + 0 ].b;
+        SN_CT16B1->MR9  = led_state[row_ofst + 1 ].b;
+        SN_CT16B1->MR10 = led_state[row_ofst + 2 ].b;
+        SN_CT16B1->MR11 = led_state[row_ofst + 3 ].b;
+        SN_CT16B1->MR12 = led_state[row_ofst + 4 ].b;
+        SN_CT16B1->MR13 = led_state[row_ofst + 5 ].b;
+        SN_CT16B1->MR14 = led_state[row_ofst + 6 ].b;
+        SN_CT16B1->MR15 = led_state[row_ofst + 7 ].b;
+        SN_CT16B1->MR16 = led_state[row_ofst + 8 ].b;
+        SN_CT16B1->MR17 = led_state[row_ofst + 9 ].b;
+        SN_CT16B1->MR18 = led_state[row_ofst + 10].b;
+        SN_CT16B1->MR19 = led_state[row_ofst + 11].b;
+        SN_CT16B1->MR20 = led_state[row_ofst + 12].b;
+        SN_CT16B1->MR21 = led_state[row_ofst + 13].b;
+        SN_CT16B1->MR22 = led_state[row_ofst + 14].b;
+        SN_CT16B1->MR23 = led_state[row_ofst + 15].b;
+        SN_CT16B1->MR0  = led_state[row_ofst + 16].b;
+        SN_CT16B1->MR1  = led_state[row_ofst + 17].b;
+        SN_CT16B1->MR2  = led_state[row_ofst + 18].b;
     }
 
     if(led_row % 3 == 1)
     {
-        SN_CT16B1->MR8  = led_state[row_ofst + 0 ].g | 1;
-        SN_CT16B1->MR9  = led_state[row_ofst + 1 ].g | 1;
-        SN_CT16B1->MR10 = led_state[row_ofst + 2 ].g | 1;
-        SN_CT16B1->MR11 = led_state[row_ofst + 3 ].g | 1;
-        SN_CT16B1->MR12 = led_state[row_ofst + 4 ].g | 1;
-        SN_CT16B1->MR13 = led_state[row_ofst + 5 ].g | 1;
-        SN_CT16B1->MR14 = led_state[row_ofst + 6 ].g | 1;
-        SN_CT16B1->MR15 = led_state[row_ofst + 7 ].g | 1;
-        SN_CT16B1->MR16 = led_state[row_ofst + 8 ].g | 1;
-        SN_CT16B1->MR17 = led_state[row_ofst + 9 ].g | 1;
-        SN_CT16B1->MR18 = led_state[row_ofst + 10].g | 1;
-        SN_CT16B1->MR19 = led_state[row_ofst + 11].g | 1;
-        SN_CT16B1->MR20 = led_state[row_ofst + 12].g | 1;
-        SN_CT16B1->MR21 = led_state[row_ofst + 13].g | 1;
-        SN_CT16B1->MR22 = led_state[row_ofst + 14].g | 1;
-        SN_CT16B1->MR23 = led_state[row_ofst + 15].g | 1;
-        SN_CT16B1->MR0  = led_state[row_ofst + 16].g | 1;
-        SN_CT16B1->MR1  = led_state[row_ofst + 17].g | 1;
-        SN_CT16B1->MR2  = led_state[row_ofst + 18].g | 1;
+        SN_CT16B1->MR8  = led_state[row_ofst + 0 ].g;
+        SN_CT16B1->MR9  = led_state[row_ofst + 1 ].g;
+        SN_CT16B1->MR10 = led_state[row_ofst + 2 ].g;
+        SN_CT16B1->MR11 = led_state[row_ofst + 3 ].g;
+        SN_CT16B1->MR12 = led_state[row_ofst + 4 ].g;
+        SN_CT16B1->MR13 = led_state[row_ofst + 5 ].g;
+        SN_CT16B1->MR14 = led_state[row_ofst + 6 ].g;
+        SN_CT16B1->MR15 = led_state[row_ofst + 7 ].g;
+        SN_CT16B1->MR16 = led_state[row_ofst + 8 ].g;
+        SN_CT16B1->MR17 = led_state[row_ofst + 9 ].g;
+        SN_CT16B1->MR18 = led_state[row_ofst + 10].g;
+        SN_CT16B1->MR19 = led_state[row_ofst + 11].g;
+        SN_CT16B1->MR20 = led_state[row_ofst + 12].g;
+        SN_CT16B1->MR21 = led_state[row_ofst + 13].g;
+        SN_CT16B1->MR22 = led_state[row_ofst + 14].g;
+        SN_CT16B1->MR23 = led_state[row_ofst + 15].g;
+        SN_CT16B1->MR0  = led_state[row_ofst + 16].g;
+        SN_CT16B1->MR1  = led_state[row_ofst + 17].g;
+        SN_CT16B1->MR2  = led_state[row_ofst + 18].g;
     }
     if(led_row % 3 == 2)
     {
-        SN_CT16B1->MR8  = led_state[row_ofst + 0 ].r | 1;
-        SN_CT16B1->MR9  = led_state[row_ofst + 1 ].r | 1;
-        SN_CT16B1->MR10 = led_state[row_ofst + 2 ].r | 1;
-        SN_CT16B1->MR11 = led_state[row_ofst + 3 ].r | 1;
-        SN_CT16B1->MR12 = led_state[row_ofst + 4 ].r | 1;
-        SN_CT16B1->MR13 = led_state[row_ofst + 5 ].r | 1;
-        SN_CT16B1->MR14 = led_state[row_ofst + 6 ].r | 1;
-        SN_CT16B1->MR15 = led_state[row_ofst + 7 ].r | 1;
-        SN_CT16B1->MR16 = led_state[row_ofst + 8 ].r | 1;
-        SN_CT16B1->MR17 = led_state[row_ofst + 9 ].r | 1;
-        SN_CT16B1->MR18 = led_state[row_ofst + 10].r | 1;
-        SN_CT16B1->MR19 = led_state[row_ofst + 11].r | 1;
-        SN_CT16B1->MR20 = led_state[row_ofst + 12].r | 1;
-        SN_CT16B1->MR21 = led_state[row_ofst + 13].r | 1;
-        SN_CT16B1->MR22 = led_state[row_ofst + 14].r | 1;
-        SN_CT16B1->MR23 = led_state[row_ofst + 15].r | 1;
-        SN_CT16B1->MR0  = led_state[row_ofst + 16].r | 1;
-        SN_CT16B1->MR1  = led_state[row_ofst + 17].r | 1;
-        SN_CT16B1->MR2  = led_state[row_ofst + 18].r | 1;
+        SN_CT16B1->MR8  = led_state[row_ofst + 0 ].r;
+        SN_CT16B1->MR9  = led_state[row_ofst + 1 ].r;
+        SN_CT16B1->MR10 = led_state[row_ofst + 2 ].r;
+        SN_CT16B1->MR11 = led_state[row_ofst + 3 ].r;
+        SN_CT16B1->MR12 = led_state[row_ofst + 4 ].r;
+        SN_CT16B1->MR13 = led_state[row_ofst + 5 ].r;
+        SN_CT16B1->MR14 = led_state[row_ofst + 6 ].r;
+        SN_CT16B1->MR15 = led_state[row_ofst + 7 ].r;
+        SN_CT16B1->MR16 = led_state[row_ofst + 8 ].r;
+        SN_CT16B1->MR17 = led_state[row_ofst + 9 ].r;
+        SN_CT16B1->MR18 = led_state[row_ofst + 10].r;
+        SN_CT16B1->MR19 = led_state[row_ofst + 11].r;
+        SN_CT16B1->MR20 = led_state[row_ofst + 12].r;
+        SN_CT16B1->MR21 = led_state[row_ofst + 13].r;
+        SN_CT16B1->MR22 = led_state[row_ofst + 14].r;
+        SN_CT16B1->MR23 = led_state[row_ofst + 15].r;
+        SN_CT16B1->MR0  = led_state[row_ofst + 16].r;
+        SN_CT16B1->MR1  = led_state[row_ofst + 17].r;
+        SN_CT16B1->MR2  = led_state[row_ofst + 18].r;
     }
     writePinHigh(led_row_pins[led_row]);
     CT16B1_IRQHandler();
