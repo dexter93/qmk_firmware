@@ -83,15 +83,20 @@ static void disable_rgb_matrix(void) {
     SN_CT16B1->PWMIOENB = 0;
     // Clear match interrupt status
     SN_CT16B1->IC = mskCT16_MR24IC;
-    // Reset the counter
-    SN_CT16B1->TMRCTRL = CT16_CRST;
-    // Wait until timer reset done.
-    while (SN_CT16B1->TMRCTRL & mskCT16_CRST);
     // Disable the LED interrupts
     CT16B1_NvicDisable();
 }
 
 static void enable_rgb_matrix(void) {
+    // Set match interrupts and TC stop
+    SN_CT16B1->MCTRL3 = (mskCT16_MR24IE_EN | mskCT16_MR24STOP_EN);
+
+    // COL match register
+    SN_CT16B1->MR24 = 0xFF;
+
+    // Set prescale value
+    SN_CT16B1->PRE = 0x03;
+
    // Enable PWM outputs on column pins
     SN_CT16B1->PWMIOENB   = (mskCT16_PWM0EN_EN  \
                             |mskCT16_PWM1EN_EN  \
@@ -156,15 +161,6 @@ static void init_rgb_matrix(void) {
                             |mskCT16_PWM22EN_EN \
                             |mskCT16_PWM23EN_EN);
 
-    // Set match interrupts and TC reset
-    SN_CT16B1->MCTRL3 = (mskCT16_MR24IE_EN);
-    SN_CT16B1->MCTRL3_b.MR24RST = 1;
-
-    // COL match register
-    SN_CT16B1->MR24 = 0xFF;
-
-    // Set prescale value
-    SN_CT16B1->PRE = 0x03;
 	enable_rgb_matrix();
 }
 
