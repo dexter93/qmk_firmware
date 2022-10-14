@@ -18,11 +18,10 @@ WAIT_FOR_USB      = no
 DIP_SWITCH_ENABLE = yes
 
 # Custom RGB matrix handling
-# RGB_MATRIX_ENABLE = yes
-# RGB_MATRIX_DRIVER = SN32F24xB
+ RGB_MATRIX_ENABLE = yes
+ RGB_MATRIX_DRIVER = SN32F24xB
 
 # # project specific files
-# SRC = ../../../drivers/led/sn32/matrix_sn32f24xx.c
-
+CUSTOM_MATRIX = shared
 # Build ansi by default
 # DEFAULT_FOLDER = keychron/k14/rgb/ansi
