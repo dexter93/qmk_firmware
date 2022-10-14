@@ -294,10 +294,11 @@ void shared_matrix_rgb_disable_leds(void) {
 }
 
 void update_pwm_channels(PWMDriver *pwmp) {
-    for(uint8_t col_idx = 0; col_idx < LED_MATRIX_COLS; col_idx++) {
+    matrix_row_t row_shifter = MATRIX_ROW_SHIFTER;
+    for(uint8_t col_idx = 0; col_idx < LED_MATRIX_COLS; col_idx++, row_shifter <<= 1) {
         #if(DIODE_DIRECTION == ROW2COL)
             // Scan the key matrix column
-            matrix_scan_keys(raw_matrix,col_idx);
+            matrix_read_rows_on_col(curr_matrix,col_idx,row_shifter);
         #endif
         uint8_t led_index = g_led_config.matrix_co[row_idx][col_idx];
         // Check if we need to enable RGB output
@@ -323,7 +324,7 @@ void update_pwm_channels(PWMDriver *pwmp) {
 void rgb_callback(PWMDriver *pwmp) {
     // Disable the interrupt
     pwmDisablePeriodicNotification(pwmp);
-    // Advance to the next LED RGB channel
+    // Advance to the next LED RGB channels
     current_row++;
     if(current_row >= LED_MATRIX_ROWS_HW) current_row = 0;
     // Advance to the next key matrix row
@@ -333,9 +334,10 @@ void rgb_callback(PWMDriver *pwmp) {
     // Disable LED output before scanning the key matrix
     shared_matrix_rgb_disable_leds();
     shared_matrix_rgb_disable_pwm();
+    matrix_row_t curr_matrix[MATRIX_ROWS] = {0};
     #if(DIODE_DIRECTION == COL2ROW)
         // Scan the key matrix row
-        matrix_scan_keys(raw_matrix, row_idx);
+        matrix_read_cols_on_row(curr_matrix, row_idx);
     #endif
     update_pwm_channels(pwmp);
     if(enable_pwm) writePinHigh(led_row_pins[current_row]);
@@ -384,4 +386,19 @@ void SN32F24xB_set_color_all(uint8_t r, uint8_t g, uint8_t b) {
     for (int i=0; i<DRIVER_LED_TOTAL; i++) {
         SN32F24xB_set_color(i, r, g, b);
     }
+}
+
+bool matrix_scan_custom(matrix_row_t current_matrix[]) {
+
+    bool changed = memcmp(raw_matrix, curr_matrix, sizeof(curr_matrix)) != 0;
+    if (changed) memcpy(raw_matrix, curr_matrix, sizeof(curr_matrix));
+
+#ifdef SPLIT_KEYBOARD
+    changed = debounce(raw_matrix, matrix + thisHand, ROWS_PER_HAND, changed) | matrix_post_scan();
+#else
+    changed = debounce(raw_matrix, matrix, ROWS_PER_HAND, changed);
+    matrix_scan_quantum();
+#endif
+    return (uint8_t)changed;
+
 }
