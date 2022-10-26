@@ -63,15 +63,15 @@ static uint8_t row_idx                         = 0;   // key row scan counter
 #ifdef MATRIX_NO_SCAN
 extern matrix_row_t raw_matrix[MATRIX_ROWS];    // raw values
 extern matrix_row_t matrix[MATRIX_ROWS];        // debounced values
-matrix_row_t        shared_matrix[MATRIX_ROWS]; // scan values
-bool                matrix_locked  = false;     // matrix update check
-bool                matrix_scanned = false;
+static matrix_row_t shared_matrix[MATRIX_ROWS]; // scan values
+static bool         matrix_locked  = false;     // matrix update check
+static bool         matrix_scanned = false;
 #endif
 static const uint32_t periodticks                      = 256;
 static const uint32_t freq                             = (RGB_MATRIX_HUE_STEP * RGB_MATRIX_SAT_STEP * RGB_MATRIX_VAL_STEP * RGB_MATRIX_SPD_STEP * RGB_MATRIX_LED_PROCESS_LIMIT);
 static const pin_t    led_row_pins[LED_MATRIX_ROWS_HW] = LED_MATRIX_ROW_PINS; // We expect a R,B,G order here
 static const pin_t    led_col_pins[LED_MATRIX_COLS]    = LED_MATRIX_COL_PINS;
-RGB                   led_state[RGB_MATRIX_LED_COUNT]; // led state buffer
+static RGB            led_state[RGB_MATRIX_LED_COUNT]; // led state buffer
 bool                  enable_pwm = false;
 #ifdef UNDERGLOW_RBG // handle underglow with flipped B,G channels
 static const uint8_t underglow_leds[UNDERGLOW_LEDS] = UNDERGLOW_IDX;
@@ -96,7 +96,7 @@ static PWMConfig pwmcfg = {
     0 /* HW dependent part.*/
 };
 
-void rgb_ch_ctrl(PWMConfig *cfg) {
+static void rgb_ch_ctrl(PWMConfig *cfg) {
     /* Enable PWM function, IOs and select the PWM modes for the LED column pins */
     for (uint8_t i = 0; i < LED_MATRIX_COLS; i++) {
         switch (led_col_pins[i]) {
@@ -271,28 +271,28 @@ void rgb_ch_ctrl(PWMConfig *cfg) {
         }
     }
 }
-void rgb_callback(PWMDriver *pwmp);
+static void rgb_callback(PWMDriver *pwmp);
 
-void shared_matrix_rgb_enable(void) {
+static void shared_matrix_rgb_enable(void) {
     pwmcfg.callback = rgb_callback;
     pwmEnablePeriodicNotification(&PWMD1);
 }
 
-void shared_matrix_rgb_disable_pwm(void) {
+static void shared_matrix_rgb_disable_pwm(void) {
     // Disable PWM outputs on column pins
     for (uint8_t y = 0; y < LED_MATRIX_COLS; y++) {
         pwmDisableChannelI(&PWMD1, chan_col_order[y]);
     }
 }
 
-void shared_matrix_rgb_disable_leds(void) {
+static void shared_matrix_rgb_disable_leds(void) {
     // Disable LED outputs on RGB channel pins
     for (uint8_t x = 0; x < LED_MATRIX_ROWS_HW; x++) {
         writePinLow(led_row_pins[x]);
     }
 }
 
-void update_pwm_channels(PWMDriver *pwmp) {
+static void update_pwm_channels(PWMDriver *pwmp) {
     matrix_row_t row_shifter = MATRIX_ROW_SHIFTER;
     for (uint8_t col_idx = 0; col_idx < LED_MATRIX_COLS; col_idx++, row_shifter <<= 1) {
 #ifdef MATRIX_NO_SCAN
@@ -321,7 +321,7 @@ void update_pwm_channels(PWMDriver *pwmp) {
         }
     }
 }
-void rgb_callback(PWMDriver *pwmp) {
+static void rgb_callback(PWMDriver *pwmp) {
     chSysLockFromISR();
     // Disable the interrupt
     pwmDisablePeriodicNotificationI(pwmp);
