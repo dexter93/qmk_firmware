@@ -365,7 +365,7 @@ void rgb_callback(PWMDriver *pwmp) {
             matrix_read_cols_on_row(shared_matrix, row_idx);
         }
 
-        if(!current_row) { // Assume we have finished scanning the matrix
+        if(last_row_idx > row_idx) { // Assume we have finished scanning the matrix
             matrix_scanned = true;
         }
 
@@ -435,19 +435,13 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
 
     matrix_locked = true;
 
-    wait_us(MATRIX_IO_DELAY);
     bool changed = memcmp(raw_matrix, shared_matrix, sizeof(shared_matrix)) != 0;
     if (changed) memcpy(raw_matrix, shared_matrix, sizeof(shared_matrix));
 
-    //raw_matrix = shared_matrix;
     matrix_locked = false;
     matrix_scanned = false;
 
     chSysUnlock();
-
-    changed = debounce(raw_matrix, matrix, ROWS_PER_HAND, changed);
-    matrix_scan_quantum();
-
-    return (uint8_t)changed;
+    return changed;
 }
 #endif
