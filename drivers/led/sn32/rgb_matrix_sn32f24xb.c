@@ -431,8 +431,6 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
 
     if(!matrix_scanned) return false; // Nothing to process until we have the matrix scanned
 
-    chSysLock();
-
     matrix_locked = true;
 
     bool changed = memcmp(raw_matrix, shared_matrix, sizeof(shared_matrix)) != 0;
@@ -441,7 +439,6 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     matrix_locked = false;
     matrix_scanned = false;
 
-    chSysUnlock();
     return changed;
 }
 #endif
