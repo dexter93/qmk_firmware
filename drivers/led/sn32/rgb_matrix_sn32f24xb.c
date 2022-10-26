@@ -281,7 +281,7 @@ void shared_matrix_rgb_enable(void) {
 void shared_matrix_rgb_disable_pwm(void) {
     // Disable PWM outputs on column pins
     for (uint8_t y = 0; y < LED_MATRIX_COLS; y++) {
-        pwmDisableChannel(&PWMD1, chan_col_order[y]);
+        pwmDisableChannelI(&PWMD1, chan_col_order[y]);
     }
 }
 
@@ -299,8 +299,8 @@ void update_pwm_channels(PWMDriver *pwmp) {
 #    if (DIODE_DIRECTION == ROW2COL)
         // Scan the key matrix column
         matrix_read_rows_on_col(shared_matrix, col_idx, row_shifter);
-#    endif
-#endif
+#    endif // DIODE_DIRECTION == ROW2COL
+#endif     // MATRIX_NO_SCAN
         uint8_t led_index = g_led_config.matrix_co[row_idx][col_idx];
         // Check if we need to enable RGB output
         if (led_state[led_index].b != 0) enable_pwm |= true;
@@ -322,8 +322,9 @@ void update_pwm_channels(PWMDriver *pwmp) {
     }
 }
 void rgb_callback(PWMDriver *pwmp) {
+    chSysLockFromISR();
     // Disable the interrupt
-    pwmDisablePeriodicNotification(pwmp);
+    pwmDisablePeriodicNotificationI(pwmp);
     // Advance to the next LED RGB channels
     current_row++;
     if (current_row >= LED_MATRIX_ROWS_HW) current_row = 0;
@@ -331,12 +332,9 @@ void rgb_callback(PWMDriver *pwmp) {
     // Advance to the next key matrix row
     if (current_row % LED_MATRIX_ROW_CHANNELS == 2) row_idx++;
     if (row_idx >= LED_MATRIX_ROWS) row_idx = 0;
-
-    chSysLockFromISR();
     // Disable LED output before scanning the key matrix
     shared_matrix_rgb_disable_leds();
     shared_matrix_rgb_disable_pwm();
-
 #ifdef MATRIX_NO_SCAN
 #    if (DIODE_DIRECTION == COL2ROW)
     // Scan the key matrix row
@@ -344,22 +342,20 @@ void rgb_callback(PWMDriver *pwmp) {
         matrix_read_cols_on_row(shared_matrix, row_idx);
     }
 #    endif // DIODE_DIRECTION == COL2ROW
-#endif
-
+#endif     // MATRIX_NO_SCAN
     update_pwm_channels(pwmp);
 #ifdef MATRIX_NO_SCAN
-    if (last_row_idx > row_idx) { // Assume we have finished scanning the matrix
+    // Assume we have finished scanning the matrix
+    if (last_row_idx > row_idx) {
         matrix_scanned = true;
     }
-#endif
+#endif // MATRIX_NO_SCAN
     if (enable_pwm) writePinHigh(led_row_pins[current_row]);
-
-    chSysUnlockFromISR();
-
     // Advance the timer to just before the wrap-around, that will start a new PWM cycle
     pwm_lld_change_counter(pwmp, 0xFFFF);
     // Enable the interrupt
-    pwmEnablePeriodicNotification(pwmp);
+    pwmEnablePeriodicNotificationI(pwmp);
+    chSysUnlockFromISR();
 }
 
 void SN32F24xB_init(void) {
@@ -374,7 +370,7 @@ void SN32F24xB_init(void) {
     for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
         shared_matrix[i] = 0;
     }
-#endif
+#endif // MATRIX_NO_SCAN
     pwmStart(&PWMD1, &pwmcfg);
     shared_matrix_rgb_enable();
 }
@@ -392,13 +388,13 @@ void SN32F24xB_set_color(int index, uint8_t r, uint8_t g, uint8_t b) {
         led_state[index].b = g;
         led_state[index].g = b;
     } else {
-#endif
+#endif // UNDERGLOW_RBG
         led_state[index].r = r;
         led_state[index].b = b;
         led_state[index].g = g;
 #ifdef UNDERGLOW_RBG
     }
-#endif
+#endif // UNDERGLOW_RBG
 }
 
 void SN32F24xB_set_color_all(uint8_t r, uint8_t g, uint8_t b) {
@@ -420,4 +416,4 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
 
     return changed;
 }
-#endif
+#endif // MATRIX_NO_SCAN
