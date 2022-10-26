@@ -1,6 +1,5 @@
 #include "rgb_matrix.h"
 #include "sn32f24xb.h"
-#include "debounce.h"
 
 #if !defined(RGB_MATRIX_HUE_STEP)
 #    define RGB_MATRIX_HUE_STEP 8
@@ -83,7 +82,8 @@ void matrix_output_unselect_delay(uint8_t line, bool key_pressed) {
         __asm__ volatile("" ::: "memory");
     }
 }
-#endif
+#endif // MATRIX_NO_SCAN
+
 /* PWM configuration structure. We use timer CT16B1 with 24 channels. */
 static PWMConfig pwmcfg = {
     freq,        /* PWM clock frequency. */
