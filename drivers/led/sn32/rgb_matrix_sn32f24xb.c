@@ -82,6 +82,9 @@ void matrix_output_unselect_delay(uint8_t line, bool key_pressed) {
         __asm__ volatile("" ::: "memory");
     }
 }
+bool is_matrix_locked(void) {
+    return matrix_locked;
+}
 #endif // MATRIX_NO_SCAN
 
 /* PWM configuration structure. We use timer CT16B1 with 24 channels. */
@@ -298,7 +301,10 @@ static void update_pwm_channels(PWMDriver *pwmp) {
 #ifdef MATRIX_NO_SCAN
 #    if (DIODE_DIRECTION == ROW2COL)
         // Scan the key matrix column
-        matrix_read_rows_on_col(shared_matrix, col_idx, row_shifter);
+        if (!matrix_scanned) {
+            matrix_locked = true;
+            matrix_read_rows_on_col(shared_matrix, col_idx, row_shifter);
+        }
 #    endif // DIODE_DIRECTION == ROW2COL
 #endif     // MATRIX_NO_SCAN
         uint8_t led_index = g_led_config.matrix_co[row_idx][col_idx];
@@ -338,7 +344,8 @@ static void rgb_callback(PWMDriver *pwmp) {
 #ifdef MATRIX_NO_SCAN
 #    if (DIODE_DIRECTION == COL2ROW)
     // Scan the key matrix row
-    if (!matrix_scanned && !matrix_locked) {
+    if (!matrix_scanned) {
+        matrix_locked = true;
         matrix_read_cols_on_row(shared_matrix, row_idx);
     }
 #    endif // DIODE_DIRECTION == COL2ROW
@@ -348,6 +355,7 @@ static void rgb_callback(PWMDriver *pwmp) {
     // Assume we have finished scanning the matrix
     if (last_row_idx > row_idx) {
         matrix_scanned = true;
+        matrix_locked  = false;
     }
 #endif // MATRIX_NO_SCAN
     if (enable_pwm) writePinHigh(led_row_pins[current_row]);
@@ -406,12 +414,9 @@ void SN32F24xB_set_color_all(uint8_t r, uint8_t g, uint8_t b) {
 bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     if (!matrix_scanned) return false; // Nothing to process until we have the matrix scanned
 
-    matrix_locked = true;
-
     bool changed = memcmp(raw_matrix, shared_matrix, sizeof(shared_matrix)) != 0;
     if (changed) memcpy(raw_matrix, shared_matrix, sizeof(shared_matrix));
 
-    matrix_locked  = false;
     matrix_scanned = false;
 
     return changed;
