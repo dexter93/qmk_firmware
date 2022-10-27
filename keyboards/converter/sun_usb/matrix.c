@@ -149,7 +149,7 @@ uint8_t matrix_scan(void)
     }
 
     matrix_scan_quantum();
-    return if(code);
+    return code;
 }
 
 inline

@@ -85,7 +85,7 @@ uint8_t matrix_scan(void) {
   ret |= i2c_read_hand(LEFT);
   ret |= i2c_read_hand(RIGHT);
   matrix_scan_quantum();
-  return if(ret);
+  return ret;
 }
 
 inline
