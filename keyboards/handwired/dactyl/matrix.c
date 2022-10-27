@@ -222,7 +222,7 @@ void init_expander(void) {
     expander_status = i2c_writeReg(I2C_ADDR, GPPUA, pullup, 2, I2C_TIMEOUT);
 }
 
-bool matrix_scan(void)
+uint8_t matrix_scan(void)
 {
     if (expander_status) { // if there was an error
         if (++expander_reset_loop == 0) {

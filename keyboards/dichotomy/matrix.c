@@ -96,7 +96,7 @@ void matrix_init(void) {
     uart_init(1000000);
 }
 
-bool matrix_scan(void)
+uint8_t matrix_scan(void)
 {
     uint32_t timeout = 0;
 

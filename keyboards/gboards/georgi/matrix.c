@@ -176,7 +176,7 @@ matrix_row_t debounce_read_cols(uint8_t row) {
   return (cols & mask) | (matrix[row] & ~mask);;
 }
 
-bool matrix_scan(void)
+uint8_t matrix_scan(void)
 {
   // Then the keyboard
   if (mcp23018_status) { // if there was an error

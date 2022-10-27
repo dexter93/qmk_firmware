@@ -116,7 +116,7 @@ void matrix_init(void) {
     osalSysUnlock();
 }
 
-bool matrix_scan(void) {
+uint8_t matrix_scan(void) {
     switch_buffer = ((uint32_t)(porta_buffer & 0x7FF)) | ((uint32_t)(portb_buffer & 0x3F8) << 8);
 
     switch (switch_buffer) {

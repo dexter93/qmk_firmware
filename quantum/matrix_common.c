@@ -165,7 +165,7 @@ __attribute__((weak)) void matrix_init(void) {
     matrix_init_quantum();
 }
 
-__attribute__((weak)) bool matrix_scan(void) {
+__attribute__((weak)) uint8_t matrix_scan(void) {
     bool changed = matrix_scan_custom(raw_matrix);
 
 #ifdef SPLIT_KEYBOARD

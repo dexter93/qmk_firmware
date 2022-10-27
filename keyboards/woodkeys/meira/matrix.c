@@ -151,7 +151,7 @@ uint8_t _matrix_scan(void)
 	return 1;
 }
 
-bool matrix_scan(void)
+uint8_t matrix_scan(void)
 {
 	bool ret = _matrix_scan();
 	matrix_scan_quantum();

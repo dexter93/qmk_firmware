@@ -114,7 +114,7 @@ void matrix_init(void) {
     matrix_init_quantum();
 }
 
-bool matrix_scan(void)
+uint8_t matrix_scan(void)
 {
     // Set row, read cols
     for (uint8_t current_row = 0; current_row < MATRIX_ROWS; current_row++) {

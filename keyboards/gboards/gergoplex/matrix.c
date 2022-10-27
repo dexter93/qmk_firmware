@@ -107,7 +107,7 @@ static inline bool store_raw_matrix_row(uint8_t index) {
     }
     return false;
 }
-bool matrix_scan(void) {
+uint8_t matrix_scan(void) {
     if (mcp23018_status) {  // if there was an error
         if (++mcp23018_reset_loop == 0) {
             // if (++mcp23018_reset_loop >= 1300) {

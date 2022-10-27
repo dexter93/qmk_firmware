@@ -89,7 +89,7 @@ void matrix_init(void)
 
 }
 
-bool matrix_scan(void)
+uint8_t matrix_scan(void)
 {
     matrix_stage[0] = (PINC&(1<<7) ? 0 : (1<<0)) | (PINB&(1<<7) ? 0 : (1<<1)) | (PINB&(1<<5) ? 0 : (1<<2));
     matrix_stage[1] = (PIND&(1<<6) ? 0 : (1<<0)) | (PIND&(1<<1) ? 0 : (1<<1)) | (PIND&(1<<4) ? 0 : (1<<2));

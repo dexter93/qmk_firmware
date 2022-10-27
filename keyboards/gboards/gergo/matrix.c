@@ -181,7 +181,7 @@ static inline bool store_raw_matrix_row(uint8_t index) {
 
 
 
-bool matrix_scan(void) {
+uint8_t matrix_scan(void) {
     // TODO: Find what is trashing interrupts
     enableInterrupts();
 
