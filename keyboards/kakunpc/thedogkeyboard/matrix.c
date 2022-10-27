@@ -264,5 +264,5 @@ bool matrix_scan(void)
   debounce(raw_matrix, matrix, MATRIX_ROWS, changed);
 
   matrix_scan_quantum();
-  return (uint8_t)changed;
+  return changed;
 }

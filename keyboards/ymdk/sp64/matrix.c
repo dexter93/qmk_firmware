@@ -135,7 +135,7 @@ bool matrix_scan(void)
       if (matrix_is_on(r, c)) xprintf("r:%d c:%d \n", r, c);
 #endif
 
-  return (uint8_t)changed;
+  return changed;
 }
 
 inline

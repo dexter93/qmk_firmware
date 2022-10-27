@@ -85,7 +85,7 @@ bool matrix_scan(void) {
   ret |= i2c_read_hand(LEFT);
   ret |= i2c_read_hand(RIGHT);
   matrix_scan_quantum();
-  return ret;
+  return if(ret);
 }
 
 inline

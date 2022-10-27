@@ -205,5 +205,5 @@ bool matrix_scan(void) {
 
   matrix_scan_quantum();
 
-  return (uint8_t)changed;
+  return changed;
 }

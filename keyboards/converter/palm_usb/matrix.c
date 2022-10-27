@@ -349,7 +349,7 @@ bool matrix_scan(void)
     }
 
     matrix_scan_quantum();
-    return code;
+    return if(code);
 }
 
 inline
