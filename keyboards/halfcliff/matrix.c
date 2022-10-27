@@ -250,7 +250,7 @@ bool matrix_post_scan(void) {
     return changed;
 }
 
-uint8_t matrix_scan(void) {
+bool matrix_scan(void) {
     bool local_changed = false;
     static matrix_row_t temp_raw_matrix[MATRIX_ROWS];  // temp raw values
 

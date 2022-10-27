@@ -45,7 +45,7 @@ void matrix_setup(void);
 /* intialize matrix for scaning. */
 void matrix_init(void);
 /* scan all key states on matrix */
-uint8_t matrix_scan(void);
+bool matrix_scan(void);
 /* whether a switch is on */
 bool matrix_is_on(uint8_t row, uint8_t col);
 /* matrix state on row */

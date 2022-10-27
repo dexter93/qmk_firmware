@@ -62,7 +62,7 @@ void matrix_init(void) {
   matrix_init_quantum();
 }
 
-uint8_t matrix_scan(void) {
+bool matrix_scan(void) {
   for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
     select_row(row);
     /* The default hardware works down to at least 100us, but I have a replacement

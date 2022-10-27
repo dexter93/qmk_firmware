@@ -185,7 +185,7 @@ void matrix_init(void)
     matrix_init_quantum();
 }
 
-uint8_t matrix_scan(void)
+bool matrix_scan(void)
 {
     for (uint8_t col = 0; col < MATRIX_COLS; col++) {  // 0-7
         pull_column(col);   // output hi on theline

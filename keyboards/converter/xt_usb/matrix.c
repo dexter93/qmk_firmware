@@ -96,7 +96,7 @@ static uint8_t move_e0code(uint8_t code) {
     return 0x00;
 }
 
-uint8_t matrix_scan(void) {
+bool matrix_scan(void) {
     static enum {
         XT_STATE_INIT,
         XT_STATE_E0,

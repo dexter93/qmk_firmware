@@ -223,7 +223,7 @@ out:
     i2c_stop();
 }
 
-uint8_t matrix_scan(void)
+bool matrix_scan(void)
 {
     if (expander_status) { // if there was an error
         if (++expander_reset_loop == 0) {

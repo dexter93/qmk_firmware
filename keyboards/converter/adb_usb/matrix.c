@@ -150,7 +150,7 @@ void adb_mouse_task(void)
 }
 #endif
 
-uint8_t matrix_scan(void)
+bool matrix_scan(void)
 {
     /* extra_key is volatile and more convoluted than necessary because gcc refused
     to generate valid code otherwise. Making extra_key uint8_t and constructing codes

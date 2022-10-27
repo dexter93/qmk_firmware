@@ -194,7 +194,7 @@ void matrix_init(void) {
     matrix_init_quantum();
 }
 
-uint8_t matrix_scan(void) {
+bool matrix_scan(void) {
     bool changed = false;
 
     for (uint8_t current_col = 0; current_col < MATRIX_COLS; current_col++) {

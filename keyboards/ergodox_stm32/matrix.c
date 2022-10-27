@@ -97,7 +97,7 @@ matrix_row_t debounce_read_cols(uint8_t row) {
   return (cols & mask) | (matrix[row] & ~mask);;
 }
 
-uint8_t matrix_scan(void) {
+bool matrix_scan(void) {
   if (mcp23017_status) {
     if (++mcp23017_reset_loop == 0) {
       mcp23017_status = init_mcp23017();

@@ -207,7 +207,7 @@ void matrix_init(void) {
 }
 
 // modified for per col read matrix scan
-uint8_t matrix_scan(void)
+bool matrix_scan(void)
 {
     bool changed = false;
 
@@ -222,7 +222,7 @@ uint8_t matrix_scan(void)
 }
 
 /*
-uint8_t matrix_scan(void)
+bool matrix_scan(void)
 {
   bool changed = false;
 

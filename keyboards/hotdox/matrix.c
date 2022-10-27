@@ -118,7 +118,7 @@ void debounce_report(matrix_row_t change, uint8_t row) {
   }
 }
 
-uint8_t matrix_scan(void)
+bool matrix_scan(void)
 {
   left_scan();
 

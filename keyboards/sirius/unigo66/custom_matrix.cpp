@@ -115,7 +115,7 @@ extern "C"
         }
     }
 
-    uint8_t matrix_scan(void) {
+    bool matrix_scan(void) {
         static uint16_t last_time_stamp1 = 0;
         static uint16_t last_time_stamp2 = 0;
         static uint16_t last_time_stamp3 = 0;

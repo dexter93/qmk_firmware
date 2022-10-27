@@ -82,7 +82,7 @@ __attribute__((weak)) void matrix_init_user(void) {}
 
 __attribute__((weak)) void matrix_scan_user(void) {}
 
-uint8_t matrix_scan(void)
+bool matrix_scan(void)
 {
     uint8_t *tmp;
 
