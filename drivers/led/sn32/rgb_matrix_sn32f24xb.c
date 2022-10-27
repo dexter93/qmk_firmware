@@ -63,8 +63,8 @@ static uint8_t row_idx                         = 0;   // key row scan counter
 extern matrix_row_t raw_matrix[MATRIX_ROWS];    // raw values
 extern matrix_row_t matrix[MATRIX_ROWS];        // debounced values
 static matrix_row_t shared_matrix[MATRIX_ROWS]; // scan values
-static bool         matrix_locked  = false;     // matrix update check
-static bool         matrix_scanned = false;
+static volatile bool matrix_locked  = false;     // matrix update check
+static volatile bool matrix_scanned = false;
 #endif
 static const uint32_t periodticks                      = 256;
 static const uint32_t freq                             = (RGB_MATRIX_HUE_STEP * RGB_MATRIX_SAT_STEP * RGB_MATRIX_VAL_STEP * RGB_MATRIX_SPD_STEP * RGB_MATRIX_LED_PROCESS_LIMIT);
@@ -82,8 +82,8 @@ void matrix_output_unselect_delay(uint8_t line, bool key_pressed) {
         __asm__ volatile("" ::: "memory");
     }
 }
-bool is_matrix_locked(void) {
-    return matrix_locked;
+bool matrix_available(void) {
+    return matrix_scanned;
 }
 #endif // MATRIX_NO_SCAN
 
@@ -93,7 +93,7 @@ static PWMConfig pwmcfg = {
     periodticks, /* PWM period (in ticks) 1S (1/10kHz=0.1mS 0.1ms*10000 ticks=1S) */
     NULL,        /* RGB Callback */
     {
-        /* Default all channels to disabled - Channels will be configured durring init */
+        /* Default all channels to disabled - Channels will be configured during init */
         [0 ... 23] = {PWM_OUTPUT_DISABLED, NULL, 0},
     },
     0 /* HW dependent part.*/
@@ -326,6 +326,13 @@ static void update_pwm_channels(PWMDriver *pwmp) {
             default:;
         }
     }
+#ifdef MATRIX_NO_SCAN
+#    if (DIODE_DIRECTION == ROW2COL)
+        // The whole matrix has been scanned
+        matrix_locked = false;
+        matrix_scanned = true;
+#    endif // DIODE_DIRECTION == ROW2COL
+#endif     // MATRIX_NO_SCAN
 }
 static void rgb_callback(PWMDriver *pwmp) {
     chSysLockFromISR();
@@ -344,20 +351,24 @@ static void rgb_callback(PWMDriver *pwmp) {
 #ifdef MATRIX_NO_SCAN
 #    if (DIODE_DIRECTION == COL2ROW)
     // Scan the key matrix row
+    static uint8_t first_scanned_row;
     if (!matrix_scanned) {
-        matrix_locked = true;
-        matrix_read_cols_on_row(shared_matrix, row_idx);
+        if (!matrix_locked) {
+            matrix_locked = true;
+            first_scanned_row = row_idx;
+        } else {
+            if ((last_row_idx != row_idx) && (row_idx == first_scanned_row)) {
+                matrix_locked = false;
+                matrix_scanned = true;
+            }
+        }
+        if (matrix_locked) {
+            matrix_read_cols_on_row(shared_matrix, row_idx);
+        }
     }
 #    endif // DIODE_DIRECTION == COL2ROW
 #endif     // MATRIX_NO_SCAN
     update_pwm_channels(pwmp);
-#ifdef MATRIX_NO_SCAN
-    // Assume we have finished scanning the matrix
-    if (last_row_idx > row_idx) {
-        matrix_scanned = true;
-        matrix_locked  = false;
-    }
-#endif // MATRIX_NO_SCAN
     if (enable_pwm) writePinHigh(led_row_pins[current_row]);
     // Advance the timer to just before the wrap-around, that will start a new PWM cycle
     pwm_lld_change_counter(pwmp, 0xFFFF);
