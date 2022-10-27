@@ -18,15 +18,7 @@
 
 #include "config_common.h"
 
-/* USB Device descriptor parameter */
-#define VENDOR_ID       0x0C45
-#define PRODUCT_ID      0x5004
-#define DEVICE_VER      0x0001
-
-#define MANUFACTURER    Redragon
-#define PRODUCT         K556
-#define DESCRIPTION     K556 Devarajas
-
+#define DEBUG_MATRIX_SCAN_RATE
 /* key matrix size */
 #define MATRIX_ROWS 6
 #define MATRIX_COLS 21
@@ -40,19 +32,29 @@
 #define DEBOUNCE 5
 
 /* Enable NKRO - Up to 248 keys at the same time. */
-#define FORCE_NKRO
+//#define FORCE_NKRO
 
-/* Mechanical locking support. Use KC_LCAP, KC_LNUM or KC_LSCR instead in keymap */
-//#define LOCKING_SUPPORT_ENABLE
-/* Locking resynchronize hack */
-//#define LOCKING_RESYNC_ENABLE
-
+/* LED Status indicators */
 #define LED_NUM_LOCK_PIN    B13
 #define LED_CAPS_LOCK_PIN   B14
 #define LED_SCROLL_LOCK_PIN B15
 #define LED_PIN_ON_STATE    0
 
-/* RGB Non-Reactive Effects */
+/* RGB Matrix Effect */
+#define LED_MATRIX_ROWS MATRIX_ROWS
+#define LED_MATRIX_ROW_CHANNELS 3
+#define LED_MATRIX_ROWS_HW (LED_MATRIX_ROWS * LED_MATRIX_ROW_CHANNELS)
+#define LED_MATRIX_ROW_PINS { C0, C1, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, B6, B7, B8, B9, B10, B11 }
+
+#define LED_MATRIX_COLS MATRIX_COLS
+#define LED_MATRIX_COL_PINS MATRIX_COL_PINS
+/* RGB LED Config */
+#define RGB_MATRIX_LED_COUNT (106)
+
+/* RGB Matrix Effects */
+#define RGB_MATRIX_FRAMEBUFFER_EFFECTS
+#define RGB_MATRIX_KEYPRESSES
+
 #define ENABLE_RGB_MATRIX_ALPHAS_MODS
 #define ENABLE_RGB_MATRIX_GRADIENT_UP_DOWN
 #define ENABLE_RGB_MATRIX_GRADIENT_LEFT_RIGHT
@@ -79,17 +81,12 @@
 #define ENABLE_RGB_MATRIX_HUE_BREATHING
 #define ENABLE_RGB_MATRIX_HUE_PENDULUM
 #define ENABLE_RGB_MATRIX_HUE_WAVE
-#define ENABLE_RGB_MATRIX_PIXEL_FRACTAL
 #define ENABLE_RGB_MATRIX_PIXEL_RAIN
+#define ENABLE_RGB_MATRIX_PIXEL_FRACTAL
+
 #define ENABLE_RGB_MATRIX_TYPING_HEATMAP
 #define ENABLE_RGB_MATRIX_DIGITAL_RAIN
 
-/* RGB Reactive Effects Toggle */
-#define RGB_MATRIX_FRAMEBUFFER_EFFECTS
-#define RGB_MATRIX_KEYPRESSES
-//#define RGB_MATRIX_KEYRELEASES
-
-/* RGB Reactive Effects */
 #define ENABLE_RGB_MATRIX_SOLID_REACTIVE_SIMPLE
 #define ENABLE_RGB_MATRIX_SOLID_REACTIVE
 #define ENABLE_RGB_MATRIX_SOLID_REACTIVE_WIDE
@@ -103,7 +100,5 @@
 #define ENABLE_RGB_MATRIX_SOLID_SPLASH
 #define ENABLE_RGB_MATRIX_SOLID_MULTISPLASH
 
-#include "config_led.h"
-
 /* Enable RGB sleep */
-#define RGB_DISABLE_WHEN_USB_SUSPENDED true
+//#define RGB_DISABLE_WHEN_USB_SUSPENDED true
