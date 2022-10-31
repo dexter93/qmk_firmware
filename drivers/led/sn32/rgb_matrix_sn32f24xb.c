@@ -67,7 +67,7 @@ static const uint32_t periodticks                      = 256;
 static const uint32_t freq                             = (RGB_MATRIX_HUE_STEP * RGB_MATRIX_SAT_STEP * RGB_MATRIX_VAL_STEP * RGB_MATRIX_SPD_STEP * RGB_MATRIX_LED_PROCESS_LIMIT);
 static const pin_t    led_row_pins[LED_MATRIX_ROWS_HW] = LED_MATRIX_ROW_PINS; // We expect a R,B,G order here
 static const pin_t    led_col_pins[LED_MATRIX_COLS]    = LED_MATRIX_COL_PINS;
-static RGB            led_state[RGB_MATRIX_LED_COUNT]; // led state buffer
+static RGB            led_state[RGB_MATRIX_LED_COUNT];     // led state buffer
 static RGB            led_state_buf[RGB_MATRIX_LED_COUNT]; // led state buffer
 bool                  enable_pwm = false;
 #ifdef UNDERGLOW_RBG // handle underglow with flipped B,G channels
@@ -385,7 +385,7 @@ void SN32F24xB_init(void) {
 }
 
 void SN32F24xB_flush(void) {
-    memcpy(led_state,led_state_buf,sizeof(RGB)*RGB_MATRIX_LED_COUNT);
+    memcpy(led_state, led_state_buf, sizeof(RGB) * RGB_MATRIX_LED_COUNT);
 }
 
 void SN32F24xB_set_color(int index, uint8_t r, uint8_t g, uint8_t b) {
