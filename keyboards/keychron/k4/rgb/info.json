@@ -1,0 +1,26 @@
+{
+    "keyboard_name": "Keychron K4",
+    "manufacturer": "Keychron",
+    "url": "https://www.keychron.com/products/keychron-k4-wireless-mechanical-keyboard",
+    "processor": "SN32F248BF",
+    "maintainer": "dexter93",
+    "bootloader": "sn32-dfu",
+    "debounce": 1,
+    "diode_direction": "COL2ROW",
+    "features": {
+        "rgb_matrix": true,
+        "bootmagic": true,
+        "command": false,
+        "console": true,
+        "extrakey": true,
+        "mousekey": false,
+        "nkro": true
+    },
+    "matrix_pins": {
+        "cols": ["A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10"],
+        "rows": ["C15", "D11", "D10", "D9", "D8", "D7"]
+    },
+    "usb": {
+        "vid": "0x3434",
+    }
+}

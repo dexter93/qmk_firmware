@@ -1,4 +1,5 @@
- /* Copyright 2021 Dimitris Mantzouranis <d3xter93@gmail.com>
+/* Copyright 2020 Adam Honse <calcprogrammer1@gmail.com>
+ * Copyright 2020 Dimitris Mantzouranis <d3xter93@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -14,5 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define MANUFACTURER    Keychron
-#define PRODUCT         K4v1 RGB
+#pragma once
+
+#define RGB_MATRIX_LED_COUNT (100)
