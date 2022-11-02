@@ -18,6 +18,7 @@
 #pragma once
 
 #include "config_common.h"
+#define DEBUG_MATRIX_SCAN_RATE
 
 // Connects each switch in the dip switch to the GPIO pin of the MCU
 #define DIP_SWITCH_PINS { D5, D6 }
