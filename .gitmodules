@@ -4,7 +4,7 @@
 	branch = master
 [submodule "lib/chibios-contrib"]
 	path = lib/chibios-contrib
-	url = https://github.com/lokher/ChibiOS-Contrib
+	url = https://github.com/SonixQMK/ChibiOS-Contrib
 	branch = sn32_develop
 [submodule "lib/googletest"]
 	path = lib/googletest
