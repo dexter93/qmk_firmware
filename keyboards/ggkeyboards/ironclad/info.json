@@ -5,7 +5,7 @@
     "processor": "SN32F248BF",
     "maintainer": "dexter93",
     "bootloader": "sn32-dfu",
-    "debounce": 5,
+    "debounce": 1,
     "diode_direction": "COL2ROW",
     "features": {
         "rgb_matrix": true,
