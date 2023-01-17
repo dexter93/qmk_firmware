@@ -1,0 +1,25 @@
+{
+  "usb": {
+    "vid": "0x0C45",
+    "pid": "0x8006",
+    "device_version": "0.0.1"
+  },
+  "processor": "SN32F248BF",
+  "matrix_pins": {
+      "rows": ["C15", "D11", "D10", "D9", "D8", "D7" ],
+      "cols": ["A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "NO_PIN"]
+  },
+  "split": {
+      "enabled": true,
+      "main": "left",
+      "transport": {
+        "protocol": "custom"
+      },
+      "matrix_pins": {
+          "right": {
+            "rows": ["NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN"],
+            "cols": ["NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN"]
+          }
+      }
+  }
+}
