@@ -18,6 +18,12 @@
 
 #include "config_common.h"
 
+/* Encoder Config*/
+#define ENCODERS_PAD_A { D4 }
+#define ENCODERS_PAD_B { D3 }
+#define ENCODER_DIRECTION_FLIP
+#define ENCODER_RESOLUTION 2
+
 /* RGB LED Config */
 #define LED_MATRIX_ROWS MATRIX_ROWS
 #define LED_MATRIX_ROW_CHANNELS 3

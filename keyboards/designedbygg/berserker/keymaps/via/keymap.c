@@ -52,3 +52,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______,                            _______,                            _______, _______, _______, _______,    RGB_SAI, RGB_HUI, RGB_SPI
     )
 };
+
+bool encoder_update_user(uint8_t index, bool clockwise) {
+    if (clockwise) {
+        tap_code_delay(KC_VOLU, 10);
+    } else {
+        tap_code_delay(KC_VOLD, 10);
+    }
+    return false;
+}
