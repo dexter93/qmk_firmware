@@ -88,10 +88,26 @@
 #    endif
 #endif
 
+#ifdef USE_HAL_I2C_FALLBACK
+#   ifndef I2C_CLOCK_FREQUENCY
+#       define I2C_CLOCK_FREQUENCY 400000
+#   endif
+#   ifndef SW_I2C_DELAY
+#      define SW_I2C_DELAY ceiling(CH_CFG_ST_FREQUENCY / I2C_CLOCK_FREQUENCY / 2)
+#   endif
+#   ifndef MY_I2C_ADDRESS
+#       define MY_I2C_ADDRESS (0x18 << 1)
+#endif
+
 static uint8_t i2c_address;
 
 static const I2CConfig i2cconfig = {
-#if defined(USE_I2CV1_CONTRIB)
+#if defined(USE_HAL_I2C_FALLBACK)
+    MY_I2C_ADDRESS,
+    I2C1_SCL_PIN,
+    I2C1_SDA_PIN,
+    SW_I2C_DELAY
+#elif defined(USE_I2CV1_CONTRIB)
     I2C1_CLOCK_SPEED,
 #elif defined(USE_I2CV1)
     I2C1_OPMODE,
