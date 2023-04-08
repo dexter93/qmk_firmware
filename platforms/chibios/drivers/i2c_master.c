@@ -106,7 +106,7 @@ static const I2CConfig i2cconfig = {
     MY_I2C_ADDRESS,
     I2C1_SCL_PIN,
     I2C1_SDA_PIN,
-    SW_I2C_DELAY
+    SW_I2C_DELAY,
 #elif defined(USE_I2CV1_CONTRIB)
     I2C1_CLOCK_SPEED,
 #elif defined(USE_I2CV1)
