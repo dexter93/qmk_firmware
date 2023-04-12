@@ -38,6 +38,10 @@
  * HAL driver system settings.
  */
 /*
+ * I2C driver system settings.
+ */
+#define SN32_HAS_I2C0 TRUE
+/*
  * CT driver system settings.
  */
 #define SN32_HAS_CT16B0 TRUE
