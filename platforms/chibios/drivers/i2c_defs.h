@@ -1,5 +1,5 @@
 #pragma once
-
+#include <math.h>
 #ifndef I2C1_SCL_PIN
 #    define I2C1_SCL_PIN B6
 #endif
@@ -75,12 +75,12 @@
 #    endif
 #endif
 
-#ifdef USE_HAL_I2C_FALLBACK
+#ifdef SW_I2C_USE_I2C1
 #   ifndef I2C_CLOCK_FREQUENCY
 #       define I2C_CLOCK_FREQUENCY 400000
 #   endif
 #   ifndef SW_I2C_DELAY
-#      define SW_I2C_DELAY ceiling(CH_CFG_ST_FREQUENCY / I2C_CLOCK_FREQUENCY / 2)
+#      define SW_I2C_DELAY ceil(CH_CFG_ST_FREQUENCY / I2C_CLOCK_FREQUENCY / 2)
 #   endif
 #   ifndef MY_I2C_ADDRESS
 #       define MY_I2C_ADDRESS (0x18 << 1)

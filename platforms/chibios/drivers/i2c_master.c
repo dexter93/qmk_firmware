@@ -33,7 +33,7 @@
 static uint8_t i2c_address;
 
 static const I2CConfig i2cconfig = {
-#if defined(USE_HAL_I2C_FALLBACK)
+#if defined(SW_I2C_USE_I2C1)
     MY_I2C_ADDRESS,
     I2C1_SCL_PIN,
     I2C1_SDA_PIN,

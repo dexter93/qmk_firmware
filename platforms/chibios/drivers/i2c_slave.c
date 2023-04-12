@@ -10,7 +10,12 @@
 volatile uint8_t i2c_slave_reg[I2C_SLAVE_REG_COUNT];
 
 static const I2CConfig slaveI2Cconfig = {
-#if defined(SN32F240B) || defined(SN32F260)
+#if defined(SW_I2C_USE_I2C1)
+    MY_I2C_ADDRESS,
+    I2C1_SCL_PIN,
+    I2C1_SDA_PIN,
+    SW_I2C_DELAY,
+#elif defined(SN32F240B) || defined(SN32F260)
     I2C1_SCLHT,
     I2C1_SCLLT,
     I2C1_TIMEOUT,
