@@ -7,7 +7,7 @@
 #    define I2C1_SDA_PIN B7
 #endif
 
-#ifdef SN32
+#ifdef SN32_I2C_USE_I2C0
 // The default timing values below configures the I2C clock to 400khz assuming a 48Mhz clock
 // For more info refer to the sn32 docs.
 #    ifndef I2C1_SCLHT
@@ -19,6 +19,9 @@
 #    ifndef I2C1_TIMEOUT
 #        define I2C1_TIMEOUT 0U /* hardware timeout control disabled */
 #    endif
+#	 ifndef I2C_DRIVER
+#    define I2C_DRIVER I2CD0
+#	 endif
 #endif
 
 #ifdef USE_I2CV1
