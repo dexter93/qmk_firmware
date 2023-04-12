@@ -25,6 +25,7 @@
 #pragma once
 
 #include <stdint.h>
+#include "i2c_defs.h"
 
 typedef int16_t i2c_status_t;
 
