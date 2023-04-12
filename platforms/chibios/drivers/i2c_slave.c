@@ -15,7 +15,7 @@ static const I2CConfig slaveI2Cconfig = {
     I2C1_SCL_PIN,
     I2C1_SDA_PIN,
     SW_I2C_DELAY,
-#elif defined(SN32F240B) || defined(SN32F260)
+#elif defined(SN32_I2C_USE_I2C0)
     I2C1_SCLHT,
     I2C1_SCLLT,
     I2C1_TIMEOUT,
@@ -95,7 +95,7 @@ void i2c_slave_init(uint8_t address) {
 #ifdef USE_I2CV1
   palSetLineMode(I2C1_SCL_PIN, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);
   palSetLineMode(I2C1_SDA_PIN, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);
-#elif !defined(SN32F240B) && !defined(SN32F260)
+#elif !defined(SN32_I2C_USE_I2C0)
   palSetLineMode(I2C1_SCL_PIN, PAL_MODE_ALTERNATE(I2C1_SCL_PAL_MODE) | PAL_STM32_OTYPE_OPENDRAIN);
   palSetLineMode(I2C1_SDA_PIN, PAL_MODE_ALTERNATE(I2C1_SDA_PAL_MODE) | PAL_STM32_OTYPE_OPENDRAIN);
 #endif
