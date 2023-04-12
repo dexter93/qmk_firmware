@@ -12,8 +12,9 @@
   "split": {
       "enabled": true,
       "main": "left",
+      "soft_serial_pin": "C12",
       "transport": {
-        "protocol": "custom"
+        "protocol": "i2c"
       },
       "matrix_pins": {
           "right": {
