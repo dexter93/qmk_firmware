@@ -17,7 +17,16 @@
 // default wait implementation cannot be called within interrupt
 //   this method seems to be more accurate than GPT timers
 #if PORT_SUPPORTS_RT == FALSE
-#    error "chSysPolledDelayX method not supported on this platform"
+// chSysPolledDelayX method not supported on this platform, using inaccurate delay method.
+#    undef wait_us
+#    define wait_us(us)                                  \
+        do {                                             \
+            if (us != 0) {                               \
+                chThdSleepMicroseconds((us + 999)/1000); \
+            } else {                                     \
+                chThdSleepMicroseconds(1);               \
+            }                                            \
+        } while (0)
 #else
 #    undef wait_us
 // Force usage of polled waiting - in case WAIT_US_TIMER is activated
