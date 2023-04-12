@@ -37,6 +37,20 @@
 #    define I2C1_SDA_PIN B7
 #endif
 
+#ifdef SN32
+// The default timing values below configures the I2C clock to 400khz assuming a 48Mhz clock
+// For more info refer to the sn32 docs.
+#    ifndef I2C1_SCLHT
+#        define I2C1_SCLHT 28U
+#    endif
+#    ifndef I2C1_SCLLT
+#        define I2C1_SCLLT 90U
+#    endif
+#    ifndef I2C1_TIMEOUT
+#        define I2C1_TIMEOUT 0U /* hardware timeout control disabled */
+#    endif
+#endif
+
 #ifdef USE_I2CV1
 #    ifndef I2C1_OPMODE
 #        define I2C1_OPMODE OPMODE_I2C
@@ -107,6 +121,10 @@ static const I2CConfig i2cconfig = {
     I2C1_SCL_PIN,
     I2C1_SDA_PIN,
     SW_I2C_DELAY,
+#elif defined(SN32F240B) || defined(SN32F260)
+    I2C1_SCLHT,
+    I2C1_SCLLT,
+    I2C1_TIMEOUT,
 #elif defined(USE_I2CV1_CONTRIB)
     I2C1_CLOCK_SPEED,
 #elif defined(USE_I2CV1)
