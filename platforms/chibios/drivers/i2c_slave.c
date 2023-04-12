@@ -2,7 +2,6 @@
 #include "quantum.h"
 #include <string.h>
 #include <hal.h>
-#include "hal_i2cslave.h"
 
 #ifndef I2C_SLAVE_TIMEOUT
   #define I2C_SLAVE_TIMEOUT 500
@@ -11,7 +10,11 @@
 volatile uint8_t i2c_slave_reg[I2C_SLAVE_REG_COUNT];
 
 static const I2CConfig slaveI2Cconfig = {
-#ifdef USE_I2CV1
+#if defined(SN32F240B) || defined(SN32F260)
+    I2C1_SCLHT,
+    I2C1_SCLLT,
+    I2C1_TIMEOUT,
+#elif defined (USE_I2CV1)
   I2C1_OPMODE,
   I2C1_CLOCK_SPEED,
   I2C1_DUTY_CYCLE,
@@ -59,20 +62,15 @@ void slave_clear_after_send(I2CDriver *i2cp) {
 }
 
 void slave_incoming_message_process(I2CDriver * i2cp) {
-  uint16_t len = i2cSlaveBytes(i2cp);
+
   uint8_t buffer_address = slave_incoming_body[0];
-  if((len == 0) || (buffer_address >= I2C_SLAVE_REG_COUNT)) {
-    // bad - we always expect at least an valid address within slave_incoming_body
-    return;
-  }
+  dprintf("i2c slave addr:%d\n", buffer_address);
 
-  dprintf("i2c slave addr:%d len:%d\n", buffer_address, len);
-
-  bool isWrite = len > 1;
+  bool isWrite = slave_incoming_body[1] > 0;
   if (isWrite) {
     uint8_t * addr =  (uint8_t*) &i2c_slave_reg[buffer_address];
     uint8_t * data =  (uint8_t*) &slave_incoming_body[1];
-    uint16_t length = len - 1;
+    uint16_t length = I2C_SLAVE_REG_COUNT - 1;
 
     memcpy(addr, data, length);
   } else {
@@ -99,7 +97,7 @@ void slave_incoming_message_process(I2CDriver * i2cp) {
     memcpy(slave_outgoing_body, data, length);
     slave_outgoing_message.size = length;
 
-    i2cSlaveReplyI(i2cp, &slave_outgoing_message);
+    i2cSlaveTransmitTimeout(i2cp, &slave_outgoing_message, length, I2C_SLAVE_TIMEOUT);
   }
 }
 
@@ -120,12 +118,10 @@ void i2c_slave_init(uint8_t address) {
 
   i2cStart(&I2CD1, &slaveI2Cconfig);
 
-  I2CD1.slaveTimeout = MS2ST(I2C_SLAVE_TIMEOUT);
-  i2cSlaveConfigure(&I2CD1, &slave_incoming_message, &slave_outgoing_message);
-  i2cMatchAddress(&I2CD1, (address >> 1));
+  i2cSlaveReceiveTimeout(&I2CD1, &slave_incoming_message, I2C_SLAVE_REG_COUNT, I2C_SLAVE_TIMEOUT);
+  i2cSlaveMatchAddress(&I2CD1, (address >> 1));
 }
 
 void i2c_slave_stop(void){
-  i2cUnmatchAll(&I2CD1);
   i2cStop(&I2CD1);
 }
