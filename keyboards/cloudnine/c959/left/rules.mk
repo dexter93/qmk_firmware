@@ -1,0 +1,1 @@
+USE_HAL_I2C_FALLBACK = yes
