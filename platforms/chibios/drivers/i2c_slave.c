@@ -30,35 +30,12 @@ static const I2CConfig slaveI2Cconfig = {
 uint8_t slave_incoming_body[I2C_SLAVE_REG_COUNT] = {0};
 uint8_t slave_outgoing_body[I2C_SLAVE_REG_COUNT] = {0};
 
-// Forward declare callback funcs
-void slave_catch_error(I2CDriver *i2cp);
-void slave_incoming_message_process(I2CDriver * i2cp);
-void slave_clear_after_send(I2CDriver *i2cp);
-
-// Response to received messages
-I2CSlaveMsg slave_outgoing_message = {
-  sizeof(slave_outgoing_body),
-  slave_outgoing_body,
-  NULL,
-  slave_clear_after_send,
-  slave_catch_error
-};
-
-// Response to received messages
-I2CSlaveMsg slave_incoming_message = {
-  sizeof(slave_incoming_body),
-  slave_incoming_body,
-  NULL,
-  slave_incoming_message_process,
-  slave_catch_error
-};
-
 void slave_catch_error(I2CDriver *i2cp) {
   dprintf("i2c slave error:%d\n", i2cp->errors);
 }
 
 void slave_clear_after_send(I2CDriver *i2cp) {
-  slave_outgoing_message.size = 0; // Clear receive message
+  memset(slave_outgoing_body, 0, sizeof(slave_outgoing_body)); // Clear outgoing message
 }
 
 void slave_incoming_message_process(I2CDriver * i2cp) {
@@ -95,33 +72,37 @@ void slave_incoming_message_process(I2CDriver * i2cp) {
     dprintf("i2c slave read len:%d\n", length);
 
     memcpy(slave_outgoing_body, data, length);
-    slave_outgoing_message.size = length;
+    //slave_outgoing_body.size = length;
 
-    i2cSlaveTransmitTimeout(i2cp, &slave_outgoing_message, length, I2C_SLAVE_TIMEOUT);
+    i2cSlaveTransmitTimeout(i2cp, &slave_outgoing_body, length, I2C_SLAVE_TIMEOUT);
+    slave_catch_error(i2cp);
+    slave_clear_after_send(i2cp);
   }
 }
 
 void i2c_slave_init(uint8_t address) {
   // Try releasing special pins for a short time
-  palSetPadMode(I2C1_SCL_BANK, I2C1_SCL, PAL_MODE_INPUT);
-  palSetPadMode(I2C1_SDA_BANK, I2C1_SDA, PAL_MODE_INPUT);
+  palSetLineMode(I2C1_SCL_PIN, PAL_MODE_INPUT);
+  palSetLineMode(I2C1_SDA_PIN, PAL_MODE_INPUT);
 
   chThdSleepMilliseconds(10);
 
 #ifdef USE_I2CV1
-  palSetPadMode(I2C1_SCL_BANK, I2C1_SCL, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);
-  palSetPadMode(I2C1_SDA_BANK, I2C1_SDA, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);
-#else
-  palSetPadMode(I2C1_SCL_BANK, I2C1_SCL, PAL_MODE_ALTERNATE(I2C1_SCL_PAL_MODE) | PAL_STM32_OTYPE_OPENDRAIN);
-  palSetPadMode(I2C1_SDA_BANK, I2C1_SDA, PAL_MODE_ALTERNATE(I2C1_SDA_PAL_MODE) | PAL_STM32_OTYPE_OPENDRAIN);
+  palSetLineMode(I2C1_SCL_PIN, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);
+  palSetLineMode(I2C1_SDA_PIN, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);
+#elif !defined(SN32F240B) && !defined(SN32F260)
+  palSetLineMode(I2C1_SCL_PIN, PAL_MODE_ALTERNATE(I2C1_SCL_PAL_MODE) | PAL_STM32_OTYPE_OPENDRAIN);
+  palSetLineMode(I2C1_SDA_PIN, PAL_MODE_ALTERNATE(I2C1_SDA_PAL_MODE) | PAL_STM32_OTYPE_OPENDRAIN);
 #endif
 
-  i2cStart(&I2CD1, &slaveI2Cconfig);
+  i2cStart(&I2C_DRIVER, &slaveI2Cconfig);
 
-  i2cSlaveReceiveTimeout(&I2CD1, &slave_incoming_message, I2C_SLAVE_REG_COUNT, I2C_SLAVE_TIMEOUT);
-  i2cSlaveMatchAddress(&I2CD1, (address >> 1));
+  i2cSlaveReceiveTimeout(&I2C_DRIVER, &slave_incoming_body, I2C_SLAVE_REG_COUNT, I2C_SLAVE_TIMEOUT);
+  slave_catch_error(&I2C_DRIVER);
+  slave_incoming_message_process(&I2C_DRIVER);
+  i2cSlaveMatchAddress(&I2C_DRIVER, (address >> 1));
 }
 
 void i2c_slave_stop(void){
-  i2cStop(&I2CD1);
+  i2cStop(&I2C_DRIVER);
 }
