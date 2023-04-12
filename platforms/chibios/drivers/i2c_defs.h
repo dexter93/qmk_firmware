@@ -81,4 +81,5 @@
 #   endif
 #   ifndef MY_I2C_ADDRESS
 #       define MY_I2C_ADDRESS (0x18 << 1)
+#	endif
 #endif
