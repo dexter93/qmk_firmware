@@ -92,7 +92,7 @@ __attribute__((weak)) void i2c_init(void) {
 #if defined(USE_GPIOV1)
         palSetLineMode(I2C1_SCL_PIN, I2C1_SCL_PAL_MODE);
         palSetLineMode(I2C1_SDA_PIN, I2C1_SDA_PAL_MODE);
-#elif !defined(SN32_I2C_USE_I2C0)
+#elif !defined(SN32F2xx)
         palSetLineMode(I2C1_SCL_PIN, PAL_MODE_ALTERNATE(I2C1_SCL_PAL_MODE) | PAL_OUTPUT_TYPE_OPENDRAIN);
         palSetLineMode(I2C1_SDA_PIN, PAL_MODE_ALTERNATE(I2C1_SDA_PAL_MODE) | PAL_OUTPUT_TYPE_OPENDRAIN);
 #endif
