@@ -32,31 +32,36 @@ static const I2CConfig slaveI2Cconfig = {
 #endif
 };
 
-uint8_t slave_incoming_body[I2C_SLAVE_REG_COUNT] = {0};
-uint8_t slave_outgoing_body[I2C_SLAVE_REG_COUNT] = {0};
+uint8_t slave_incoming_body= 0;
+uint8_t slave_outgoing_body= 0;
 
 void slave_catch_error(I2CDriver *i2cp) {
   dprintf("i2c slave error:%d\n", i2cp->errors);
 }
 
 void slave_clear_after_send(I2CDriver *i2cp) {
-  memset(slave_outgoing_body, 0, sizeof(slave_outgoing_body)); // Clear outgoing message
+  slave_outgoing_body = 0; // Clear outgoing message
 }
 
 void slave_incoming_message_process(I2CDriver * i2cp) {
 
-  uint8_t buffer_address = slave_incoming_body[0];
-  dprintf("i2c slave addr:%d\n", buffer_address);
+  size_t len = i2c_lld_get_rxbytes(i2cp);
+  uint8_t buffer_address = slave_incoming_body;
+  if((len == 0) || (buffer_address >= I2C_SLAVE_REG_COUNT)) {
+    return;
+  }
 
-  bool isWrite = slave_incoming_body[1] > 0;
+  dprintf("i2c slave addr:%d len:%d\n", buffer_address, len);
+
+  bool isWrite = len > 1;
   if (isWrite) {
     uint8_t * addr =  (uint8_t*) &i2c_slave_reg[buffer_address];
-    uint8_t * data =  (uint8_t*) &slave_incoming_body[1];
-    uint16_t length = I2C_SLAVE_REG_COUNT - 1;
+    uint8_t * data =  (uint8_t*) &slave_incoming_body;
+    uint16_t length = len - 1;
 
     memcpy(addr, data, length);
   } else {
-    uint8_t * data =  (uint8_t*) &i2c_slave_reg[buffer_address]; // TODO: casting away volitile is a bit nasty....
+    slave_outgoing_body =  i2c_slave_reg[buffer_address];
 
     // TODO: somehow get request size instead of the following hacks
 
@@ -76,7 +81,7 @@ void slave_incoming_message_process(I2CDriver * i2cp) {
 
     dprintf("i2c slave read len:%d\n", length);
 
-    memcpy(slave_outgoing_body, data, length);
+    //memcpy(slave_outgoing_body, data, length);
     //slave_outgoing_body.size = length;
 
     i2cSlaveTransmitTimeout(i2cp, &slave_outgoing_body, length, I2C_SLAVE_TIMEOUT);
