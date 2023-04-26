@@ -11,7 +11,7 @@ volatile uint8_t i2c_slave_reg[I2C_SLAVE_REG_COUNT];
 
 static const I2CConfig slaveI2Cconfig = {
 #if defined(SW_I2C_USE_I2C1)
-    MY_I2C_ADDRESS,
+    0,
     I2C1_SCL_PIN,
     I2C1_SDA_PIN,
     SW_I2C_DELAY,
@@ -100,8 +100,10 @@ void i2c_slave_init(uint8_t address) {
 #ifdef USE_I2CV1
   palSetLineMode(I2C1_SCL_PIN, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);
   palSetLineMode(I2C1_SDA_PIN, PAL_MODE_STM32_ALTERNATE_OPENDRAIN);
-#elif !defined(SN32F2xx)
-  palSetLineMode(I2C1_SCL_PIN, PAL_MODE_ALTERNATE(I2C1_SCL_PAL_MODE) | PAL_STM32_OTYPE_OPENDRAIN);
+#elif defined(SW_I2C_USE_I2C1)
+  palSetLineMode(I2C1_SCL_PIN, PAL_MODE_OUTPUT_PUSHPULL);
+  palSetLineMode(I2C1_SDA_PIN, PAL_MODE_OUTPUT_PUSHPULL);
+#elif !defined(SN32F2xx)  palSetLineMode(I2C1_SCL_PIN, PAL_MODE_ALTERNATE(I2C1_SCL_PAL_MODE) | PAL_STM32_OTYPE_OPENDRAIN);
   palSetLineMode(I2C1_SDA_PIN, PAL_MODE_ALTERNATE(I2C1_SDA_PAL_MODE) | PAL_STM32_OTYPE_OPENDRAIN);
 #endif
 
