@@ -84,7 +84,7 @@ void slave_incoming_message_process(I2CDriver * i2cp) {
     //memcpy(slave_outgoing_body, data, length);
     //slave_outgoing_body.size = length;
 
-    i2cSlaveTransmitTimeout(i2cp, &slave_outgoing_body, length, I2C_SLAVE_TIMEOUT);
+    i2cSlaveTransmitTimeout(i2cp, &slave_outgoing_body, length, TIME_MS2I(I2C_SLAVE_TIMEOUT));
     slave_catch_error(i2cp);
     slave_clear_after_send(i2cp);
   }
@@ -110,7 +110,7 @@ void i2c_slave_init(uint8_t address) {
 
   i2cStart(&I2C_DRIVER, &slaveI2Cconfig);
 
-  i2cSlaveReceiveTimeout(&I2C_DRIVER, &slave_incoming_body, I2C_SLAVE_REG_COUNT, I2C_SLAVE_TIMEOUT);
+  i2cSlaveReceiveTimeout(&I2C_DRIVER, &slave_incoming_body, I2C_SLAVE_REG_COUNT, TIME_MS2I(I2C_SLAVE_TIMEOUT));
   slave_catch_error(&I2C_DRIVER);
   slave_incoming_message_process(&I2C_DRIVER);
   i2cSlaveMatchAddress(&I2C_DRIVER, (address >> 1));
