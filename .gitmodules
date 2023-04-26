@@ -1,11 +1,11 @@
 [submodule "lib/chibios"]
 	path = lib/chibios
-	url = https://github.com/qmk/ChibiOS
-	branch = master
+	url = https://github.com/dexter93/ChibiOS
+	branch = stable_21.11.x
 [submodule "lib/chibios-contrib"]
 	path = lib/chibios-contrib
-	url = https://github.com/qmk/ChibiOS-Contrib
-	branch = master
+	url = https://github.com/dexter93/ChibiOS-Contrib
+	branch = sn32_i2c
 [submodule "lib/googletest"]
 	path = lib/googletest
 	url = https://github.com/qmk/googletest
