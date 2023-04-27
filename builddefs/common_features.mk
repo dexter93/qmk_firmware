@@ -510,7 +510,7 @@ endif
 
     ifeq ($(strip $(RGB_MATRIX_DRIVER)), SLED1734X)
         OPT_DEFS += -DSLED1734X -DHAL_USE_I2C=TRUE
-        COMMON_VPATH += $(DRIVER_PATH)/led
+        COMMON_VPATH += $(DRIVER_PATH)/led/sn32
         SRC += sled1734x.c
         QUANTUM_LIB_SRC += i2c_master.c
     endif
