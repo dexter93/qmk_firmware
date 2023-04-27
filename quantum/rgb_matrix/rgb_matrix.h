@@ -42,6 +42,8 @@
 #    include "ws2812.h"
 #elif defined(SN32F24xB)
 #    include "sn32f24xb.h"
+#elif defined(SLED1734X)
+#    include "sled1734x.h"
 #endif
 
 #ifndef RGB_MATRIX_LED_FLUSH_LIMIT
