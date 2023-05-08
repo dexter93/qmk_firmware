@@ -2,7 +2,10 @@
 #define HAL_USE_I2C TRUE
 #define PAL_USE_WAIT TRUE
 #define PAL_USE_CALLBACKS TRUE
+
+/* I2C fallback driver for RGB */
 #define SW_I2C_USE_I2C1 TRUE
+#define SW_I2C_USE_OSAL_DELAY FALSE
 /*
 Left side is using the ChibiOS fallback i2c driver. This driver does not have provisions for slave mode, but we are using it in master configuration.
 Fake mute the slave side calls
