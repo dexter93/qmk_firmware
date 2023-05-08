@@ -4,8 +4,8 @@
 //#define I2C1_SDA_PIN C12
 
 /* RGB Drivers I2C Connection */
-#define I2C1_SCL_PIN C10
-#define I2C1_SDA_PIN C11
+#define I2C1_SCL_PIN C9
+#define I2C1_SDA_PIN C10
 
 /* RGB Matrix Driver Configuration */
 #define DRIVER_COUNT 2
