@@ -76,6 +76,12 @@
 #endif
 
 #ifdef SW_I2C_USE_I2C1
+#    ifndef I2C1_SCL_PAL_MODE
+#        define I2C1_SCL_PAL_MODE PAL_MODE_OUTPUT_PUSHPULL
+#    endif
+#    ifndef I2C1_SDA_PAL_MODE
+#        define I2C1_SDA_PAL_MODE PAL_MODE_OUTPUT_PUSHPULL
+#    endif
 #   ifndef I2C_CLOCK_FREQUENCY
 #       define I2C_CLOCK_FREQUENCY 100000
 #   endif

@@ -32,12 +32,20 @@
 
 static uint8_t i2c_address;
 
+#if (SW_I2C_USE_OSAL_DELAY == FALSE)
+__attribute__((weak)) void i2c_sw_delay(void) {}
+#endif
+
 static const I2CConfig i2cconfig = {
 #if defined(SW_I2C_USE_I2C1)
     0,
     I2C1_SCL_PIN,
     I2C1_SDA_PIN,
+#if (SW_I2C_USE_OSAL_DELAY == FALSE)
+    &i2c_sw_delay,
+#else
     SW_I2C_DELAY,
+#endif
 #elif defined(SN32_I2C_USE_I2C0)
     I2C1_SCLHT,
     I2C1_SCLLT,
@@ -84,14 +92,12 @@ __attribute__((weak)) void i2c_init(void) {
     if (!is_initialised) {
         is_initialised = true;
 
-#if !defined(SW_I2C_USE_I2C1)
         // Try releasing special pins for a short time
         palSetLineMode(I2C1_SCL_PIN, PAL_MODE_INPUT);
         palSetLineMode(I2C1_SDA_PIN, PAL_MODE_INPUT);
 
         chThdSleepMilliseconds(10);
-#endif
-#if defined(USE_GPIOV1)
+#if (defined(USE_GPIOV1) || defined(SW_I2C_USE_I2C1))
         palSetLineMode(I2C1_SCL_PIN, I2C1_SCL_PAL_MODE);
         palSetLineMode(I2C1_SDA_PIN, I2C1_SDA_PAL_MODE);
 #elif !defined(SN32_I2C_USE_I2C0)
