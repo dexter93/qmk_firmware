@@ -84,18 +84,17 @@ __attribute__((weak)) void i2c_init(void) {
     if (!is_initialised) {
         is_initialised = true;
 
+#if !defined(SW_I2C_USE_I2C1)
         // Try releasing special pins for a short time
         palSetLineMode(I2C1_SCL_PIN, PAL_MODE_INPUT);
         palSetLineMode(I2C1_SDA_PIN, PAL_MODE_INPUT);
 
         chThdSleepMilliseconds(10);
+#endif
 #if defined(USE_GPIOV1)
         palSetLineMode(I2C1_SCL_PIN, I2C1_SCL_PAL_MODE);
         palSetLineMode(I2C1_SDA_PIN, I2C1_SDA_PAL_MODE);
-#elif defined(SW_I2C_USE_I2C1)
-        palSetLineMode(I2C1_SCL_PIN, PAL_MODE_OUTPUT_PUSHPULL);
-        palSetLineMode(I2C1_SDA_PIN, PAL_MODE_OUTPUT_PUSHPULL);
-#elif !defined(SN32F2xx)
+#elif !defined(SN32_I2C_USE_I2C0)
         palSetLineMode(I2C1_SCL_PIN, PAL_MODE_ALTERNATE(I2C1_SCL_PAL_MODE) | PAL_OUTPUT_TYPE_OPENDRAIN);
         palSetLineMode(I2C1_SDA_PIN, PAL_MODE_ALTERNATE(I2C1_SDA_PAL_MODE) | PAL_OUTPUT_TYPE_OPENDRAIN);
 #endif
