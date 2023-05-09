@@ -1,36 +1,10 @@
 #include "i2c_slave.h"
-#include "quantum.h"
-#include <string.h>
-#include <hal.h>
 
 #ifndef I2C_SLAVE_TIMEOUT
   #define I2C_SLAVE_TIMEOUT 500
 #endif
 
 volatile uint8_t i2c_slave_reg[I2C_SLAVE_REG_COUNT];
-
-static const I2CConfig slaveI2Cconfig = {
-#if defined(SW_I2C_USE_I2C1)
-    0,
-    I2C1_SCL_PIN,
-    I2C1_SDA_PIN,
-    SW_I2C_DELAY,
-#elif defined(SN32_I2C_USE_I2C0)
-    I2C1_SCLHT,
-    I2C1_SCLLT,
-    I2C1_TIMEOUT,
-#elif defined (USE_I2CV1)
-  I2C1_OPMODE,
-  I2C1_CLOCK_SPEED,
-  I2C1_DUTY_CYCLE,
-#else
-  STM32_TIMINGR_PRESC(I2C1_TIMINGR_PRESC) |
-  STM32_TIMINGR_SCLDEL(I2C1_TIMINGR_SCLDEL) | STM32_TIMINGR_SDADEL(I2C1_TIMINGR_SDADEL) |
-  STM32_TIMINGR_SCLH(I2C1_TIMINGR_SCLH)  | STM32_TIMINGR_SCLL(I2C1_TIMINGR_SCLL),
-  0,
-  0
-#endif
-};
 
 uint8_t slave_incoming_body= 0;
 uint8_t slave_outgoing_body= 0;

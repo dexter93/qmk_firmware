@@ -24,47 +24,9 @@
  * STM32_I2C_USE_I2C1 is TRUE in the mcuconf.h file. Pins B6 and B7 are used
  * but using any other I2C pins should be trivial.
  */
-#include "quantum.h"
 #include "i2c_master.h"
-#include <string.h>
-#include <ch.h>
-#include <hal.h>
 
 static uint8_t i2c_address;
-
-#if (SW_I2C_USE_OSAL_DELAY == FALSE)
-__attribute__((weak)) void i2c_sw_delay(void) {}
-#endif
-
-static const I2CConfig i2cconfig = {
-#if defined(SW_I2C_USE_I2C1)
-    0,
-    I2C1_SCL_PIN,
-    I2C1_SDA_PIN,
-#if (SW_I2C_USE_OSAL_DELAY == FALSE)
-    &i2c_sw_delay,
-#else
-    SW_I2C_DELAY,
-#endif
-#elif defined(SN32_I2C_USE_I2C0)
-    I2C1_SCLHT,
-    I2C1_SCLLT,
-    I2C1_TIMEOUT,
-#elif defined(USE_I2CV1_CONTRIB)
-    I2C1_CLOCK_SPEED,
-#elif defined(USE_I2CV1)
-    I2C1_OPMODE,
-    I2C1_CLOCK_SPEED,
-    I2C1_DUTY_CYCLE,
-#elif defined(WB32F3G71xx) || defined(WB32FQ95xx)
-    I2C1_OPMODE,
-    I2C1_CLOCK_SPEED,
-#else
-    // This configures the I2C clock to 400khz assuming a 72Mhz clock
-    // For more info : https://www.st.com/en/embedded-software/stsw-stm32126.html
-    STM32_TIMINGR_PRESC(I2C1_TIMINGR_PRESC) | STM32_TIMINGR_SCLDEL(I2C1_TIMINGR_SCLDEL) | STM32_TIMINGR_SDADEL(I2C1_TIMINGR_SDADEL) | STM32_TIMINGR_SCLH(I2C1_TIMINGR_SCLH) | STM32_TIMINGR_SCLL(I2C1_TIMINGR_SCLL), 0, 0
-#endif
-};
 
 /**
  * @brief Handles any I2C error condition by stopping the I2C peripheral and
