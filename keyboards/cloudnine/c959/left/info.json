@@ -12,6 +12,7 @@
   "rgb_matrix": {
       "driver": "SLED1734X",
   },
+  /*
   "split": {
       "enabled": false,
       "main": "left",
@@ -25,5 +26,5 @@
             "cols": ["NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN"]
           }
       }
-  }
+  }*/
 }
