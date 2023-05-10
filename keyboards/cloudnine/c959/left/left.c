@@ -113,6 +113,11 @@ const sled1734x_led PROGMEM g_sled1734x_leds[RGB_MATRIX_LED_COUNT] = {
     {1, CB5_O,    CB4_O,    CB6_O},
     {1, CB5_P,    CB4_P,    CB6_P},
 
+    //encoder
+    {0, CA4_K,    CA5_K,    CA6_K}, //BR
+    {0, CA4_L,    CA5_L,    CA6_L}, //TR
+    {0, CA4_M,    CA5_M,    CA6_M}, //TL
+    {0, CA4_N,    CA5_N,    CA6_N}, //BL
 };
 
 led_config_t g_led_config = {
