@@ -157,20 +157,20 @@ bool dip_switch_update_kb(uint8_t index, bool active) {
             case 0: // Lock
                 break;
             case 1: // Brightness
+                if(active) rgb_matrix_toggle();
                 break;
             case 2: // Encoder switch
+                if(active) tap_code_delay(KC_MUTE, 10);
                 break;
     }
     return true;
 }
 
 bool encoder_update_kb(uint8_t index, bool clockwise) {
-    if (index == 0) { /* First encoder */
-        if (clockwise) {
-            tap_code_delay(KC_VOLU, 10);
-        } else {
-            tap_code_delay(KC_VOLD, 10);
-        }
+    if (clockwise) {
+        tap_code_delay(KC_VOLU, 10);
+    } else {
+        tap_code_delay(KC_VOLD, 10);
     }
     return true;
 }
