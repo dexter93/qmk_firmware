@@ -157,7 +157,7 @@ void SLED1734X_write_register(uint8_t addr, uint8_t reg, uint8_t data) {
 #endif
 }
 
-void SLED1734X_write_pwm_buffer(uint8_t addr, uint8_t *pwm_buffer) {
+bool SLED1734X_write_pwm_buffer(uint8_t addr, uint8_t *pwm_buffer) {
 
     uint8_t page_frame_select[2];
     page_frame_select[0] = SLED_COMMANDREGISTER;
@@ -180,10 +180,10 @@ void SLED1734X_write_pwm_buffer(uint8_t addr, uint8_t *pwm_buffer) {
 
 #if SLED_PERSISTENCE > 0
         for (uint8_t i = 0; i < SLED_PERSISTENCE; i++) {
-            if (i2c_transmit(addr << 1, g_twi_transfer_buffer, 17, SLED_TIMEOUT) == 0) break;
+            if (i2c_transmit(addr << 1, g_twi_transfer_buffer, 17, SLED_TIMEOUT) != 0) return false;
         }
 #else
-        i2c_transmit(addr << 1, g_twi_transfer_buffer, 17, SLED_TIMEOUT);
+        if (i2c_transmit(addr << 1, g_twi_transfer_buffer, 17, SLED_TIMEOUT) != 0) return false;
 #endif
     }
     // select the second frame
@@ -205,12 +205,13 @@ void SLED1734X_write_pwm_buffer(uint8_t addr, uint8_t *pwm_buffer) {
 
 #if SLED_PERSISTENCE > 0
         for (uint8_t i = 0; i < SLED_PERSISTENCE; i++) {
-            if (i2c_transmit(addr << 1, g_twi_transfer_buffer, 17, SLED_TIMEOUT) == 0) break;
+            if (i2c_transmit(addr << 1, g_twi_transfer_buffer, 17, SLED_TIMEOUT) != 0) return false;
         }
 #else
-        i2c_transmit(addr << 1, g_twi_transfer_buffer, 17, SLED_TIMEOUT);
+        if( i2c_transmit(addr << 1, g_twi_transfer_buffer, 17, SLED_TIMEOUT) != 0) return false;
 #endif
     }
+    return true;
 }
 
 void SLED1734X_init(uint8_t addr) {
@@ -352,13 +353,15 @@ void SLED1734X_set_led_control_register(uint8_t index, bool red, bool green, boo
 
 void SLED1734X_update_pwm_buffers(uint8_t addr, uint8_t index) {
     if (g_pwm_buffer_update_required[index]) {
-        SLED1734X_write_pwm_buffer(addr, g_pwm_buffer[index]);
+        if (!SLED1734X_write_pwm_buffer(addr, g_pwm_buffer[index])){
+            g_led_control_registers_update_required[index] = true;
+        }
     }
     g_pwm_buffer_update_required[index] = false;
 }
 
 void SLED1734X_update_led_control_registers(uint8_t addr, uint8_t index) {
-    if (g_led_control_registers_update_required[index]) {<
+    if (g_led_control_registers_update_required[index]) {
         // select the first frame
         SLED1734X_write_register(addr, SLED_COMMANDREGISTER, SLED_PAGE_FRAME_1);
         for (int i = 0; i < 16; i++) {

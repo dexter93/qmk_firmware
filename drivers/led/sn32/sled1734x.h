@@ -31,7 +31,7 @@ extern const sled1734x_led PROGMEM g_sled1734x_leds[RGB_MATRIX_LED_COUNT];
 
 void SLED1734X_init(uint8_t addr);
 void SLED1734X_write_register(uint8_t addr, uint8_t reg, uint8_t data);
-void SLED1734X_write_pwm_buffer(uint8_t addr, uint8_t *pwm_buffer);
+bool SLED1734X_write_pwm_buffer(uint8_t addr, uint8_t *pwm_buffer);
 
 void SLED1734X_set_color(int index, uint8_t red, uint8_t green, uint8_t blue);
 void SLED1734X_set_color_all(uint8_t red, uint8_t green, uint8_t blue);
