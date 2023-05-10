@@ -151,3 +151,13 @@ led_config_t g_led_config = {
 };
 
 #endif // RGB_MATRIX_ENABLE
+
+bool dip_switch_update_kb(uint8_t index, bool active) {
+    switch (index) {
+            case 0:
+                break;
+            case 1:
+                break;
+    }
+    return true;
+}

@@ -15,3 +15,6 @@
 #define DRIVER_1_LED_TOTAL (41 + 4)
 #define DRIVER_2_LED_TOTAL 48
 #define RGB_MATRIX_LED_COUNT (DRIVER_1_LED_TOTAL + DRIVER_2_LED_TOTAL)
+
+// Connects each switch in the dip switch to the GPIO pin of the MCU
+#define DIP_SWITCH_PINS { B13, B14 }
