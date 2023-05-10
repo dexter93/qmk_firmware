@@ -117,7 +117,7 @@ uint8_t g_twi_transfer_buffer[17];
 uint8_t g_pwm_buffer[DRIVER_COUNT][256];
 bool    g_pwm_buffer_update_required[DRIVER_COUNT] = {false};
 
-uint8_t g_led_control_registers[DRIVER_COUNT][16]             = {{0}};
+uint8_t g_led_control_registers[DRIVER_COUNT][32]             = {{0}};
 bool    g_led_control_registers_update_required[DRIVER_COUNT] = {false};
 
 // This is the bit pattern in the LED control registers
@@ -326,10 +326,7 @@ void SLED1734X_set_led_control_register(uint8_t index, bool red, bool green, boo
     uint8_t control_register_r = (led.r - 0x20) / 8;
     uint8_t control_register_g = (led.g - 0x20) / 8;
     uint8_t control_register_b = (led.b - 0x20) / 8;
-    // check if led is in the 2nd frame
-    if(led.r >= 0xa0) led.r    = (led.r - 0x80);
-    if(led.g >= 0xa0) led.g    = (led.g - 0x80);
-    if(led.b >= 0xa0) led.b    = (led.b - 0x80);
+
     uint8_t bit_r              = (led.r - 0x20) % 8;
     uint8_t bit_g              = (led.g - 0x20) % 8;
     uint8_t bit_b              = (led.b - 0x20) % 8;
@@ -361,14 +358,16 @@ void SLED1734X_update_pwm_buffers(uint8_t addr, uint8_t index) {
 }
 
 void SLED1734X_update_led_control_registers(uint8_t addr, uint8_t index) {
-    if (g_led_control_registers_update_required[index]) {
-        for (int i = 0; i < 8; i++) {
-            SLED1734X_write_register(addr, SLED_COMMANDREGISTER, SLED_PAGE_FRAME_1);
+    if (g_led_control_registers_update_required[index]) {<
+        // select the first frame
+        SLED1734X_write_register(addr, SLED_COMMANDREGISTER, SLED_PAGE_FRAME_1);
+        for (int i = 0; i < 16; i++) {
             SLED1734X_write_register(addr, i, g_led_control_registers[index][i]);
         }
-        for (int i = 8; i < 16; i++) {
-            SLED1734X_write_register(addr, SLED_COMMANDREGISTER, SLED_PAGE_FRAME_2);
-            SLED1734X_write_register(addr, i, g_led_control_registers[index][i]);
+        // select the second frame
+        SLED1734X_write_register(addr, SLED_COMMANDREGISTER, SLED_PAGE_FRAME_2);
+        for (int i = 0; i < 16; i++) {
+            SLED1734X_write_register(addr, i, g_led_control_registers[index][i + 16]);
         }
     }
     g_led_control_registers_update_required[index] = false;
