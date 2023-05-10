@@ -18,3 +18,4 @@
 
 // Connects each switch in the dip switch to the GPIO pin of the MCU
 #define DIP_SWITCH_PINS { B13, B14, C8 }
+#define MATRIX_ROWS 7
