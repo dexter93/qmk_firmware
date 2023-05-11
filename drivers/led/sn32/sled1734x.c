@@ -168,9 +168,9 @@ bool SLED1734X_write_pwm_buffer(uint8_t addr, uint8_t *pwm_buffer) {
     // g_twi_transfer_buffer[] is 17 bytes
 
     // iterate over the pwm_buffer contents at 16 byte intervals
-    for (int i = 0; i < 128; i += 16) {
+    for (int i = 0; i < SLED_FRAME_OFFSET; i += 16) {
         // set the first register, e.g. 0x20, 0x30, 0x40, etc.
-        g_twi_transfer_buffer[0] = 0x20 + i;
+        g_twi_transfer_buffer[0] = SLED_OFFSET + i;
         // copy the data from i to i+15
         // device will auto-increment register for data after the first byte
         // thus this sets registers 0x20-0x2F, 0x30-0x3F, etc. in one transfer
@@ -193,14 +193,14 @@ bool SLED1734X_write_pwm_buffer(uint8_t addr, uint8_t *pwm_buffer) {
     // g_twi_transfer_buffer[] is 17 bytes
 
     // iterate over the pwm_buffer contents at 16 byte intervals
-    for (int i = 0; i < 128; i += 16) {
+    for (int i = 0; i < SLED_FRAME_OFFSET; i += 16) {
         // set the first register, e.g. 0x20, 0x30, 0x40, etc.
-        g_twi_transfer_buffer[0] = 0x20 + i;
+        g_twi_transfer_buffer[0] = SLED_OFFSET + i;
         // copy the data from i to i+15
         // device will auto-increment register for data after the first byte
         // thus this sets registers 0x20-0x2f, 0x30-0x3f, etc. in one transfer
         for (int j = 0; j < 16; j++) {
-            g_twi_transfer_buffer[1 + j] = pwm_buffer[128 + i + j];
+            g_twi_transfer_buffer[1 + j] = pwm_buffer[SLED_FRAME_OFFSET + i + j];
         }
 
 #if SLED_PERSISTENCE > 0
@@ -306,10 +306,9 @@ void SLED1734X_set_color(int index, uint8_t red, uint8_t green, uint8_t blue) {
     if (index >= 0 && index < RGB_MATRIX_LED_COUNT) {
         memcpy_P(&led, (&g_sled1734x_leds[index]), sizeof(led));
 
-        // Subtract 0x20 to get the second index of g_pwm_buffer
-        g_pwm_buffer[led.driver][led.r - 0x20]   = red;
-        g_pwm_buffer[led.driver][led.g - 0x20]   = green;
-        g_pwm_buffer[led.driver][led.b - 0x20]   = blue;
+        g_pwm_buffer[led.driver][led.r]   = red;
+        g_pwm_buffer[led.driver][led.g]   = green;
+        g_pwm_buffer[led.driver][led.b]   = blue;
         g_pwm_buffer_update_required[led.driver] = true;
     }
 }
@@ -324,13 +323,13 @@ void SLED1734X_set_led_control_register(uint8_t index, bool red, bool green, boo
     sled1734x_led led;
     memcpy_P(&led, (&g_sled1734x_leds[index]), sizeof(led));
 
-    uint8_t control_register_r = (led.r - 0x20) / 8;
-    uint8_t control_register_g = (led.g - 0x20) / 8;
-    uint8_t control_register_b = (led.b - 0x20) / 8;
+    uint8_t control_register_r = (led.r) / 8;
+    uint8_t control_register_g = (led.g) / 8;
+    uint8_t control_register_b = (led.b) / 8;
 
-    uint8_t bit_r              = (led.r - 0x20) % 8;
-    uint8_t bit_g              = (led.g - 0x20) % 8;
-    uint8_t bit_b              = (led.b - 0x20) % 8;
+    uint8_t bit_r              = (led.r) % 8;
+    uint8_t bit_g              = (led.g) % 8;
+    uint8_t bit_b              = (led.b) % 8;
 
     if (red) {
         g_led_control_registers[led.driver][control_register_r] |= (1 << bit_r);

@@ -22,9 +22,9 @@
 
 typedef struct sled1734x_led {
     uint8_t driver : 2;
-    uint16_t r;
-    uint16_t g;
-    uint16_t b;
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
 } __attribute__((packed)) sled1734x_led;
 
 extern const sled1734x_led PROGMEM g_sled1734x_leds[RGB_MATRIX_LED_COUNT];
@@ -45,275 +45,281 @@ void SLED1734X_set_led_control_register(uint8_t index, bool red, bool green, boo
 void SLED1734X_update_pwm_buffers(uint8_t addr, uint8_t index);
 void SLED1734X_update_led_control_registers(uint8_t addr, uint8_t index);
 
-#define CA1_A 0x20
-#define CA1_B 0x21
-#define CA1_C 0x22
-#define CA1_D 0x23
-#define CA1_E 0x24
-#define CA1_F 0x25
-#define CA1_G 0x26
-#define CA1_H 0x27
-#define CA1_I 0x28
-#define CA1_J 0x29
-#define CA1_K 0x2A
-#define CA1_L 0x2B
-#define CA1_M 0x2C
-#define CA1_N 0x2D
-#define CA1_O 0x2E
-#define CA1_P 0x2F
+#define SLED_OFFSET 0x20
+#define SLED_FRAME_OFFSET 0x80
 
-#define CA2_A 0x30
-#define CA2_B 0x31
-#define CA2_C 0x32
-#define CA2_D 0x33
-#define CA2_E 0x34
-#define CA2_F 0x35
-#define CA2_G 0x36
-#define CA2_H 0x37
-#define CA2_I 0x38
-#define CA2_J 0x39
-#define CA2_K 0x3A
-#define CA2_L 0x3B
-#define CA2_M 0x3C
-#define CA2_N 0x3D
-#define CA2_O 0x3E
-#define CA2_P 0x3F
+/* Adjust the register locations by an offset to fit in a byte */
 
-#define CA3_A 0x40
-#define CA3_B 0x41
-#define CA3_C 0x42
-#define CA3_D 0x43
-#define CA3_E 0x44
-#define CA3_F 0x45
-#define CA3_G 0x46
-#define CA3_H 0x47
-#define CA3_I 0x48
-#define CA3_J 0x49
-#define CA3_K 0x4A
-#define CA3_L 0x4B
-#define CA3_M 0x4C
-#define CA3_N 0x4D
-#define CA3_O 0x4E
-#define CA3_P 0x4F
+#define CA1_A ( 0x20 - SLED_OFFSET )
+#define CA1_B ( 0x21 - SLED_OFFSET )
+#define CA1_C ( 0x22 - SLED_OFFSET )
+#define CA1_D ( 0x23 - SLED_OFFSET )
+#define CA1_E ( 0x24 - SLED_OFFSET )
+#define CA1_F ( 0x25 - SLED_OFFSET )
+#define CA1_G ( 0x26 - SLED_OFFSET )
+#define CA1_H ( 0x27 - SLED_OFFSET )
+#define CA1_I ( 0x28 - SLED_OFFSET )
+#define CA1_J ( 0x29 - SLED_OFFSET )
+#define CA1_K ( 0x2A - SLED_OFFSET )
+#define CA1_L ( 0x2B - SLED_OFFSET )
+#define CA1_M ( 0x2C - SLED_OFFSET )
+#define CA1_N ( 0x2D - SLED_OFFSET )
+#define CA1_O ( 0x2E - SLED_OFFSET )
+#define CA1_P ( 0x2F - SLED_OFFSET )
 
-#define CA4_A 0x50
-#define CA4_B 0x51
-#define CA4_C 0x52
-#define CA4_D 0x53
-#define CA4_E 0x54
-#define CA4_F 0x55
-#define CA4_G 0x56
-#define CA4_H 0x57
-#define CA4_I 0x58
-#define CA4_J 0x59
-#define CA4_K 0x5A
-#define CA4_L 0x5B
-#define CA4_M 0x5C
-#define CA4_N 0x5D
-#define CA4_O 0x5E
-#define CA4_P 0x5F
+#define CA2_A ( 0x30 - SLED_OFFSET )
+#define CA2_B ( 0x31 - SLED_OFFSET )
+#define CA2_C ( 0x32 - SLED_OFFSET )
+#define CA2_D ( 0x33 - SLED_OFFSET )
+#define CA2_E ( 0x34 - SLED_OFFSET )
+#define CA2_F ( 0x35 - SLED_OFFSET )
+#define CA2_G ( 0x36 - SLED_OFFSET )
+#define CA2_H ( 0x37 - SLED_OFFSET )
+#define CA2_I ( 0x38 - SLED_OFFSET )
+#define CA2_J ( 0x39 - SLED_OFFSET )
+#define CA2_K ( 0x3A - SLED_OFFSET )
+#define CA2_L ( 0x3B - SLED_OFFSET )
+#define CA2_M ( 0x3C - SLED_OFFSET )
+#define CA2_N ( 0x3D - SLED_OFFSET )
+#define CA2_O ( 0x3E - SLED_OFFSET )
+#define CA2_P ( 0x3F - SLED_OFFSET )
 
-#define CA5_A 0x60
-#define CA5_B 0x61
-#define CA5_C 0x62
-#define CA5_D 0x63
-#define CA5_E 0x64
-#define CA5_F 0x65
-#define CA5_G 0x66
-#define CA5_H 0x67
-#define CA5_I 0x68
-#define CA5_J 0x69
-#define CA5_K 0x6A
-#define CA5_L 0x6B
-#define CA5_M 0x6C
-#define CA5_N 0x6D
-#define CA5_O 0x6E
-#define CA5_P 0x6F
+#define CA3_A ( 0x40 - SLED_OFFSET )
+#define CA3_B ( 0x41 - SLED_OFFSET )
+#define CA3_C ( 0x42 - SLED_OFFSET )
+#define CA3_D ( 0x43 - SLED_OFFSET )
+#define CA3_E ( 0x44 - SLED_OFFSET )
+#define CA3_F ( 0x45 - SLED_OFFSET )
+#define CA3_G ( 0x46 - SLED_OFFSET )
+#define CA3_H ( 0x47 - SLED_OFFSET )
+#define CA3_I ( 0x48 - SLED_OFFSET )
+#define CA3_J ( 0x49 - SLED_OFFSET )
+#define CA3_K ( 0x4A - SLED_OFFSET )
+#define CA3_L ( 0x4B - SLED_OFFSET )
+#define CA3_M ( 0x4C - SLED_OFFSET )
+#define CA3_N ( 0x4D - SLED_OFFSET )
+#define CA3_O ( 0x4E - SLED_OFFSET )
+#define CA3_P ( 0x4F - SLED_OFFSET )
 
-#define CA6_A 0x70
-#define CA6_B 0x71
-#define CA6_C 0x72
-#define CA6_D 0x73
-#define CA6_E 0x74
-#define CA6_F 0x75
-#define CA6_G 0x76
-#define CA6_H 0x77
-#define CA6_I 0x78
-#define CA6_J 0x79
-#define CA6_K 0x7A
-#define CA6_L 0x7B
-#define CA6_M 0x7C
-#define CA6_N 0x7D
-#define CA6_O 0x7E
-#define CA6_P 0x7F
+#define CA4_A ( 0x50 - SLED_OFFSET )
+#define CA4_B ( 0x51 - SLED_OFFSET )
+#define CA4_C ( 0x52 - SLED_OFFSET )
+#define CA4_D ( 0x53 - SLED_OFFSET )
+#define CA4_E ( 0x54 - SLED_OFFSET )
+#define CA4_F ( 0x55 - SLED_OFFSET )
+#define CA4_G ( 0x56 - SLED_OFFSET )
+#define CA4_H ( 0x57 - SLED_OFFSET )
+#define CA4_I ( 0x58 - SLED_OFFSET )
+#define CA4_J ( 0x59 - SLED_OFFSET )
+#define CA4_K ( 0x5A - SLED_OFFSET )
+#define CA4_L ( 0x5B - SLED_OFFSET )
+#define CA4_M ( 0x5C - SLED_OFFSET )
+#define CA4_N ( 0x5D - SLED_OFFSET )
+#define CA4_O ( 0x5E - SLED_OFFSET )
+#define CA4_P ( 0x5F - SLED_OFFSET )
 
-#define CA7_A 0x80
-#define CA7_B 0x81
-#define CA7_C 0x82
-#define CA7_D 0x83
-#define CA7_E 0x84
-#define CA7_F 0x85
-#define CA7_G 0x86
-#define CA7_H 0x87
-#define CA7_I 0x88
-#define CA7_J 0x89
-#define CA7_K 0x8A
-#define CA7_L 0x8B
-#define CA7_M 0x8C
-#define CA7_N 0x8D
-#define CA7_O 0x8E
-#define CA7_P 0x8F
+#define CA5_A ( 0x60 - SLED_OFFSET )
+#define CA5_B ( 0x61 - SLED_OFFSET )
+#define CA5_C ( 0x62 - SLED_OFFSET )
+#define CA5_D ( 0x63 - SLED_OFFSET )
+#define CA5_E ( 0x64 - SLED_OFFSET )
+#define CA5_F ( 0x65 - SLED_OFFSET )
+#define CA5_G ( 0x66 - SLED_OFFSET )
+#define CA5_H ( 0x67 - SLED_OFFSET )
+#define CA5_I ( 0x68 - SLED_OFFSET )
+#define CA5_J ( 0x69 - SLED_OFFSET )
+#define CA5_K ( 0x6A - SLED_OFFSET )
+#define CA5_L ( 0x6B - SLED_OFFSET )
+#define CA5_M ( 0x6C - SLED_OFFSET )
+#define CA5_N ( 0x6D - SLED_OFFSET )
+#define CA5_O ( 0x6E - SLED_OFFSET )
+#define CA5_P ( 0x6F - SLED_OFFSET )
 
-#define CA8_A 0x90
-#define CA8_B 0x91
-#define CA8_C 0x92
-#define CA8_D 0x93
-#define CA8_E 0x94
-#define CA8_F 0x95
-#define CA8_G 0x96
-#define CA8_H 0x97
-#define CA8_I 0x98
-#define CA8_J 0x99
-#define CA8_K 0x9A
-#define CA8_L 0x9B
-#define CA8_M 0x9C
-#define CA8_N 0x9D
-#define CA8_O 0x9E
-#define CA8_P 0x9F
+#define CA6_A ( 0x70 - SLED_OFFSET )
+#define CA6_B ( 0x71 - SLED_OFFSET )
+#define CA6_C ( 0x72 - SLED_OFFSET )
+#define CA6_D ( 0x73 - SLED_OFFSET )
+#define CA6_E ( 0x74 - SLED_OFFSET )
+#define CA6_F ( 0x75 - SLED_OFFSET )
+#define CA6_G ( 0x76 - SLED_OFFSET )
+#define CA6_H ( 0x77 - SLED_OFFSET )
+#define CA6_I ( 0x78 - SLED_OFFSET )
+#define CA6_J ( 0x79 - SLED_OFFSET )
+#define CA6_K ( 0x7A - SLED_OFFSET )
+#define CA6_L ( 0x7B - SLED_OFFSET )
+#define CA6_M ( 0x7C - SLED_OFFSET )
+#define CA6_N ( 0x7D - SLED_OFFSET )
+#define CA6_O ( 0x7E - SLED_OFFSET )
+#define CA6_P ( 0x7F - SLED_OFFSET )
+
+#define CA7_A ( 0x80 - SLED_OFFSET )
+#define CA7_B ( 0x81 - SLED_OFFSET )
+#define CA7_C ( 0x82 - SLED_OFFSET )
+#define CA7_D ( 0x83 - SLED_OFFSET )
+#define CA7_E ( 0x84 - SLED_OFFSET )
+#define CA7_F ( 0x85 - SLED_OFFSET )
+#define CA7_G ( 0x86 - SLED_OFFSET )
+#define CA7_H ( 0x87 - SLED_OFFSET )
+#define CA7_I ( 0x88 - SLED_OFFSET )
+#define CA7_J ( 0x89 - SLED_OFFSET )
+#define CA7_K ( 0x8A - SLED_OFFSET )
+#define CA7_L ( 0x8B - SLED_OFFSET )
+#define CA7_M ( 0x8C - SLED_OFFSET )
+#define CA7_N ( 0x8D - SLED_OFFSET )
+#define CA7_O ( 0x8E - SLED_OFFSET )
+#define CA7_P ( 0x8F - SLED_OFFSET )
+
+#define CA8_A ( 0x90 - SLED_OFFSET )
+#define CA8_B ( 0x91 - SLED_OFFSET )
+#define CA8_C ( 0x92 - SLED_OFFSET )
+#define CA8_D ( 0x93 - SLED_OFFSET )
+#define CA8_E ( 0x94 - SLED_OFFSET )
+#define CA8_F ( 0x95 - SLED_OFFSET )
+#define CA8_G ( 0x96 - SLED_OFFSET )
+#define CA8_H ( 0x97 - SLED_OFFSET )
+#define CA8_I ( 0x98 - SLED_OFFSET )
+#define CA8_J ( 0x99 - SLED_OFFSET )
+#define CA8_K ( 0x9A - SLED_OFFSET )
+#define CA8_L ( 0x9B - SLED_OFFSET )
+#define CA8_M ( 0x9C - SLED_OFFSET )
+#define CA8_N ( 0x9D - SLED_OFFSET )
+#define CA8_O ( 0x9E - SLED_OFFSET )
+#define CA8_P ( 0x9F - SLED_OFFSET )
 
 /* Fake the locations with an offset in software for B side */
-#define CA9_A (uint16_t)( CA1_A + 0x80 )
-#define CA9_B (uint16_t)( CA1_B + 0x80 )
-#define CA9_C (uint16_t)( CA1_C + 0x80 )
-#define CA9_D (uint16_t)( CA1_D + 0x80 )
-#define CA9_E (uint16_t)( CA1_E + 0x80 )
-#define CA9_F (uint16_t)( CA1_F + 0x80 )
-#define CA9_G (uint16_t)( CA1_G + 0x80 )
-#define CA9_H (uint16_t)( CA1_H + 0x80 )
-#define CA9_I (uint16_t)( CA1_I + 0x80 )
-#define CA9_J (uint16_t)( CA1_J + 0x80 )
-#define CA9_K (uint16_t)( CA1_K + 0x80 )
-#define CA9_L (uint16_t)( CA1_L + 0x80 )
-#define CA9_M (uint16_t)( CA1_M + 0x80 )
-#define CA9_N (uint16_t)( CA1_N + 0x80 )
-#define CA9_O (uint16_t)( CA1_O + 0x80 )
-#define CA9_P (uint16_t)( CA1_P + 0x80 )
 
-#define CB1_A (uint16_t)( CA2_A + 0x80 )
-#define CB1_B (uint16_t)( CA2_B + 0x80 )
-#define CB1_C (uint16_t)( CA2_C + 0x80 )
-#define CB1_D (uint16_t)( CA2_D + 0x80 )
-#define CB1_E (uint16_t)( CA2_E + 0x80 )
-#define CB1_F (uint16_t)( CA2_F + 0x80 )
-#define CB1_G (uint16_t)( CA2_G + 0x80 )
-#define CB1_H (uint16_t)( CA2_H + 0x80 )
-#define CB1_I (uint16_t)( CA2_I + 0x80 )
-#define CB1_J (uint16_t)( CA2_J + 0x80 )
-#define CB1_K (uint16_t)( CA2_K + 0x80 )
-#define CB1_L (uint16_t)( CA2_L + 0x80 )
-#define CB1_M (uint16_t)( CA2_M + 0x80 )
-#define CB1_N (uint16_t)( CA2_N + 0x80 )
-#define CB1_O (uint16_t)( CA2_O + 0x80 )
-#define CB1_P (uint16_t)( CA2_P + 0x80 )
+#define CA9_A ( CA1_A + SLED_FRAME_OFFSET )
+#define CA9_B ( CA1_B + SLED_FRAME_OFFSET )
+#define CA9_C ( CA1_C + SLED_FRAME_OFFSET )
+#define CA9_D ( CA1_D + SLED_FRAME_OFFSET )
+#define CA9_E ( CA1_E + SLED_FRAME_OFFSET )
+#define CA9_F ( CA1_F + SLED_FRAME_OFFSET )
+#define CA9_G ( CA1_G + SLED_FRAME_OFFSET )
+#define CA9_H ( CA1_H + SLED_FRAME_OFFSET )
+#define CA9_I ( CA1_I + SLED_FRAME_OFFSET )
+#define CA9_J ( CA1_J + SLED_FRAME_OFFSET )
+#define CA9_K ( CA1_K + SLED_FRAME_OFFSET )
+#define CA9_L ( CA1_L + SLED_FRAME_OFFSET )
+#define CA9_M ( CA1_M + SLED_FRAME_OFFSET )
+#define CA9_N ( CA1_N + SLED_FRAME_OFFSET )
+#define CA9_O ( CA1_O + SLED_FRAME_OFFSET )
+#define CA9_P ( CA1_P + SLED_FRAME_OFFSET )
 
-#define CB2_A (uint16_t)( CA3_A + 0x80 )
-#define CB2_B (uint16_t)( CA3_B + 0x80 )
-#define CB2_C (uint16_t)( CA3_C + 0x80 )
-#define CB2_D (uint16_t)( CA3_D + 0x80 )
-#define CB2_E (uint16_t)( CA3_E + 0x80 )
-#define CB2_F (uint16_t)( CA3_F + 0x80 )
-#define CB2_G (uint16_t)( CA3_G + 0x80 )
-#define CB2_H (uint16_t)( CA3_H + 0x80 )
-#define CB2_I (uint16_t)( CA3_I + 0x80 )
-#define CB2_J (uint16_t)( CA3_J + 0x80 )
-#define CB2_K (uint16_t)( CA3_K + 0x80 )
-#define CB2_L (uint16_t)( CA3_L + 0x80 )
-#define CB2_M (uint16_t)( CA3_M + 0x80 )
-#define CB2_N (uint16_t)( CA3_N + 0x80 )
-#define CB2_O (uint16_t)( CA3_O + 0x80 )
-#define CB2_P (uint16_t)( CA3_P + 0x80 )
+#define CB1_A ( CA2_A + SLED_FRAME_OFFSET )
+#define CB1_B ( CA2_B + SLED_FRAME_OFFSET )
+#define CB1_C ( CA2_C + SLED_FRAME_OFFSET )
+#define CB1_D ( CA2_D + SLED_FRAME_OFFSET )
+#define CB1_E ( CA2_E + SLED_FRAME_OFFSET )
+#define CB1_F ( CA2_F + SLED_FRAME_OFFSET )
+#define CB1_G ( CA2_G + SLED_FRAME_OFFSET )
+#define CB1_H ( CA2_H + SLED_FRAME_OFFSET )
+#define CB1_I ( CA2_I + SLED_FRAME_OFFSET )
+#define CB1_J ( CA2_J + SLED_FRAME_OFFSET )
+#define CB1_K ( CA2_K + SLED_FRAME_OFFSET )
+#define CB1_L ( CA2_L + SLED_FRAME_OFFSET )
+#define CB1_M ( CA2_M + SLED_FRAME_OFFSET )
+#define CB1_N ( CA2_N + SLED_FRAME_OFFSET )
+#define CB1_O ( CA2_O + SLED_FRAME_OFFSET )
+#define CB1_P ( CA2_P + SLED_FRAME_OFFSET )
 
-#define CB3_A (uint16_t)( CA4_A + 0x80 )
-#define CB3_B (uint16_t)( CA4_B + 0x80 )
-#define CB3_C (uint16_t)( CA4_C + 0x80 )
-#define CB3_D (uint16_t)( CA4_D + 0x80 )
-#define CB3_E (uint16_t)( CA4_E + 0x80 )
-#define CB3_F (uint16_t)( CA4_F + 0x80 )
-#define CB3_G (uint16_t)( CA4_G + 0x80 )
-#define CB3_H (uint16_t)( CA4_H + 0x80 )
-#define CB3_I (uint16_t)( CA4_I + 0x80 )
-#define CB3_J (uint16_t)( CA4_J + 0x80 )
-#define CB3_K (uint16_t)( CA4_K + 0x80 )
-#define CB3_L (uint16_t)( CA4_L + 0x80 )
-#define CB3_M (uint16_t)( CA4_M + 0x80 )
-#define CB3_N (uint16_t)( CA4_N + 0x80 )
-#define CB3_O (uint16_t)( CA4_O + 0x80 )
-#define CB3_P (uint16_t)( CA4_P + 0x80 )
+#define CB2_A ( CA3_A + SLED_FRAME_OFFSET )
+#define CB2_B ( CA3_B + SLED_FRAME_OFFSET )
+#define CB2_C ( CA3_C + SLED_FRAME_OFFSET )
+#define CB2_D ( CA3_D + SLED_FRAME_OFFSET )
+#define CB2_E ( CA3_E + SLED_FRAME_OFFSET )
+#define CB2_F ( CA3_F + SLED_FRAME_OFFSET )
+#define CB2_G ( CA3_G + SLED_FRAME_OFFSET )
+#define CB2_H ( CA3_H + SLED_FRAME_OFFSET )
+#define CB2_I ( CA3_I + SLED_FRAME_OFFSET )
+#define CB2_J ( CA3_J + SLED_FRAME_OFFSET )
+#define CB2_K ( CA3_K + SLED_FRAME_OFFSET )
+#define CB2_L ( CA3_L + SLED_FRAME_OFFSET )
+#define CB2_M ( CA3_M + SLED_FRAME_OFFSET )
+#define CB2_N ( CA3_N + SLED_FRAME_OFFSET )
+#define CB2_O ( CA3_O + SLED_FRAME_OFFSET )
+#define CB2_P ( CA3_P + SLED_FRAME_OFFSET )
 
-#define CB4_A (uint16_t)( CA5_A + 0x80 )
-#define CB4_B (uint16_t)( CA5_B + 0x80 )
-#define CB4_C (uint16_t)( CA5_C + 0x80 )
-#define CB4_D (uint16_t)( CA5_D + 0x80 )
-#define CB4_E (uint16_t)( CA5_E + 0x80 )
-#define CB4_F (uint16_t)( CA5_F + 0x80 )
-#define CB4_G (uint16_t)( CA5_G + 0x80 )
-#define CB4_H (uint16_t)( CA5_H + 0x80 )
-#define CB4_I (uint16_t)( CA5_I + 0x80 )
-#define CB4_J (uint16_t)( CA5_J + 0x80 )
-#define CB4_K (uint16_t)( CA5_K + 0x80 )
-#define CB4_L (uint16_t)( CA5_L + 0x80 )
-#define CB4_M (uint16_t)( CA5_M + 0x80 )
-#define CB4_N (uint16_t)( CA5_N + 0x80 )
-#define CB4_O (uint16_t)( CA5_O + 0x80 )
-#define CB4_P (uint16_t)( CA5_P + 0x80 )
+#define CB3_A ( CA4_A + SLED_FRAME_OFFSET )
+#define CB3_B ( CA4_B + SLED_FRAME_OFFSET )
+#define CB3_C ( CA4_C + SLED_FRAME_OFFSET )
+#define CB3_D ( CA4_D + SLED_FRAME_OFFSET )
+#define CB3_E ( CA4_E + SLED_FRAME_OFFSET )
+#define CB3_F ( CA4_F + SLED_FRAME_OFFSET )
+#define CB3_G ( CA4_G + SLED_FRAME_OFFSET )
+#define CB3_H ( CA4_H + SLED_FRAME_OFFSET )
+#define CB3_I ( CA4_I + SLED_FRAME_OFFSET )
+#define CB3_J ( CA4_J + SLED_FRAME_OFFSET )
+#define CB3_K ( CA4_K + SLED_FRAME_OFFSET )
+#define CB3_L ( CA4_L + SLED_FRAME_OFFSET )
+#define CB3_M ( CA4_M + SLED_FRAME_OFFSET )
+#define CB3_N ( CA4_N + SLED_FRAME_OFFSET )
+#define CB3_O ( CA4_O + SLED_FRAME_OFFSET )
+#define CB3_P ( CA4_P + SLED_FRAME_OFFSET )
 
-#define CB5_A (uint16_t)( CA6_A + 0x80 )
-#define CB5_B (uint16_t)( CA6_B + 0x80 )
-#define CB5_C (uint16_t)( CA6_C + 0x80 )
-#define CB5_D (uint16_t)( CA6_D + 0x80 )
-#define CB5_E (uint16_t)( CA6_E + 0x80 )
-#define CB5_F (uint16_t)( CA6_F + 0x80 )
-#define CB5_G (uint16_t)( CA6_G + 0x80 )
-#define CB5_H (uint16_t)( CA6_H + 0x80 )
-#define CB5_I (uint16_t)( CA6_I + 0x80 )
-#define CB5_J (uint16_t)( CA6_J + 0x80 )
-#define CB5_K (uint16_t)( CA6_K + 0x80 )
-#define CB5_L (uint16_t)( CA6_L + 0x80 )
-#define CB5_M (uint16_t)( CA6_M + 0x80 )
-#define CB5_N (uint16_t)( CA6_N + 0x80 )
-#define CB5_O (uint16_t)( CA6_O + 0x80 )
-#define CB5_P (uint16_t)( CA6_P + 0x80 )
+#define CB4_A ( CA5_A + SLED_FRAME_OFFSET )
+#define CB4_B ( CA5_B + SLED_FRAME_OFFSET )
+#define CB4_C ( CA5_C + SLED_FRAME_OFFSET )
+#define CB4_D ( CA5_D + SLED_FRAME_OFFSET )
+#define CB4_E ( CA5_E + SLED_FRAME_OFFSET )
+#define CB4_F ( CA5_F + SLED_FRAME_OFFSET )
+#define CB4_G ( CA5_G + SLED_FRAME_OFFSET )
+#define CB4_H ( CA5_H + SLED_FRAME_OFFSET )
+#define CB4_I ( CA5_I + SLED_FRAME_OFFSET )
+#define CB4_J ( CA5_J + SLED_FRAME_OFFSET )
+#define CB4_K ( CA5_K + SLED_FRAME_OFFSET )
+#define CB4_L ( CA5_L + SLED_FRAME_OFFSET )
+#define CB4_M ( CA5_M + SLED_FRAME_OFFSET )
+#define CB4_N ( CA5_N + SLED_FRAME_OFFSET )
+#define CB4_O ( CA5_O + SLED_FRAME_OFFSET )
+#define CB4_P ( CA5_P + SLED_FRAME_OFFSET )
 
-#define CB6_A (uint16_t)( CA7_A + 0x80 )
-#define CB6_B (uint16_t)( CA7_B + 0x80 )
-#define CB6_C (uint16_t)( CA7_C + 0x80 )
-#define CB6_D (uint16_t)( CA7_D + 0x80 )
-#define CB6_E (uint16_t)( CA7_E + 0x80 )
-#define CB6_F (uint16_t)( CA7_F + 0x80 )
-#define CB6_G (uint16_t)( CA7_G + 0x80 )
-#define CB6_H (uint16_t)( CA7_H + 0x80 )
-#define CB6_I (uint16_t)( CA7_I + 0x80 )
-#define CB6_J (uint16_t)( CA7_J + 0x80 )
-#define CB6_K (uint16_t)( CA7_K + 0x80 )
-#define CB6_L (uint16_t)( CA7_L + 0x80 )
-#define CB6_M (uint16_t)( CA7_M + 0x80 )
-#define CB6_N (uint16_t)( CA7_N + 0x80 )
-#define CB6_O (uint16_t)( CA7_O + 0x80 )
-#define CB6_P (uint16_t)( CA7_P + 0x80 )
+#define CB5_A ( CA6_A + SLED_FRAME_OFFSET )
+#define CB5_B ( CA6_B + SLED_FRAME_OFFSET )
+#define CB5_C ( CA6_C + SLED_FRAME_OFFSET )
+#define CB5_D ( CA6_D + SLED_FRAME_OFFSET )
+#define CB5_E ( CA6_E + SLED_FRAME_OFFSET )
+#define CB5_F ( CA6_F + SLED_FRAME_OFFSET )
+#define CB5_G ( CA6_G + SLED_FRAME_OFFSET )
+#define CB5_H ( CA6_H + SLED_FRAME_OFFSET )
+#define CB5_I ( CA6_I + SLED_FRAME_OFFSET )
+#define CB5_J ( CA6_J + SLED_FRAME_OFFSET )
+#define CB5_K ( CA6_K + SLED_FRAME_OFFSET )
+#define CB5_L ( CA6_L + SLED_FRAME_OFFSET )
+#define CB5_M ( CA6_M + SLED_FRAME_OFFSET )
+#define CB5_N ( CA6_N + SLED_FRAME_OFFSET )
+#define CB5_O ( CA6_O + SLED_FRAME_OFFSET )
+#define CB5_P ( CA6_P + SLED_FRAME_OFFSET )
 
-#define CB7_A (uint16_t)( CA8_A + 0x80 )
-#define CB7_B (uint16_t)( CA8_B + 0x80 )
-#define CB7_C (uint16_t)( CA8_C + 0x80 )
-#define CB7_D (uint16_t)( CA8_D + 0x80 )
-#define CB7_E (uint16_t)( CA8_E + 0x80 )
-#define CB7_F (uint16_t)( CA8_F + 0x80 )
-#define CB7_G (uint16_t)( CA8_G + 0x80 )
-#define CB7_H (uint16_t)( CA8_H + 0x80 )
-#define CB7_I (uint16_t)( CA8_I + 0x80 )
-#define CB7_J (uint16_t)( CA8_J + 0x80 )
-#define CB7_K (uint16_t)( CA8_K + 0x80 )
-#define CB7_L (uint16_t)( CA8_L + 0x80 )
-#define CB7_M (uint16_t)( CA8_M + 0x80 )
-#define CB7_N (uint16_t)( CA8_N + 0x80 )
-#define CB7_O (uint16_t)( CA8_O + 0x80 )
-#define CB7_P (uint16_t)( CA8_P + 0x80 )
+#define CB6_A ( CA7_A + SLED_FRAME_OFFSET )
+#define CB6_B ( CA7_B + SLED_FRAME_OFFSET )
+#define CB6_C ( CA7_C + SLED_FRAME_OFFSET )
+#define CB6_D ( CA7_D + SLED_FRAME_OFFSET )
+#define CB6_E ( CA7_E + SLED_FRAME_OFFSET )
+#define CB6_F ( CA7_F + SLED_FRAME_OFFSET )
+#define CB6_G ( CA7_G + SLED_FRAME_OFFSET )
+#define CB6_H ( CA7_H + SLED_FRAME_OFFSET )
+#define CB6_I ( CA7_I + SLED_FRAME_OFFSET )
+#define CB6_J ( CA7_J + SLED_FRAME_OFFSET )
+#define CB6_K ( CA7_K + SLED_FRAME_OFFSET )
+#define CB6_L ( CA7_L + SLED_FRAME_OFFSET )
+#define CB6_M ( CA7_M + SLED_FRAME_OFFSET )
+#define CB6_N ( CA7_N + SLED_FRAME_OFFSET )
+#define CB6_O ( CA7_O + SLED_FRAME_OFFSET )
+#define CB6_P ( CA7_P + SLED_FRAME_OFFSET )
+
+#define CB7_A ( CA8_A + SLED_FRAME_OFFSET )
+#define CB7_B ( CA8_B + SLED_FRAME_OFFSET )
+#define CB7_C ( CA8_C + SLED_FRAME_OFFSET )
+#define CB7_D ( CA8_D + SLED_FRAME_OFFSET )
+#define CB7_E ( CA8_E + SLED_FRAME_OFFSET )
+#define CB7_F ( CA8_F + SLED_FRAME_OFFSET )
+#define CB7_G ( CA8_G + SLED_FRAME_OFFSET )
+#define CB7_H ( CA8_H + SLED_FRAME_OFFSET )
+#define CB7_I ( CA8_I + SLED_FRAME_OFFSET )
+#define CB7_J ( CA8_J + SLED_FRAME_OFFSET )
+#define CB7_K ( CA8_K + SLED_FRAME_OFFSET )
+#define CB7_L ( CA8_L + SLED_FRAME_OFFSET )
+#define CB7_M ( CA8_M + SLED_FRAME_OFFSET )
+#define CB7_N ( CA8_N + SLED_FRAME_OFFSET )
+#define CB7_O ( CA8_O + SLED_FRAME_OFFSET )
+#define CB7_P ( CA8_P + SLED_FRAME_OFFSET )
