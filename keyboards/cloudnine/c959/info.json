@@ -6,6 +6,9 @@
   "bootloader": "sn32-dfu",
   "diode_direction": "COL2ROW",
   "debounce":5,
+  "build": {
+    "debounce_type": "sym_eager_pk",
+  },
   "features": {
       "rgb_matrix": true,
       "encoder": true,
