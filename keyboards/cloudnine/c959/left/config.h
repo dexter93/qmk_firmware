@@ -1,7 +1,7 @@
 #pragma once
 /* Master to Slave I2C Connection */
-//#define I2C1_SCL_PIN C13
-//#define I2C1_SDA_PIN C12
+#define I2C2_SCL_PIN C13
+#define I2C2_SDA_PIN C12
 
 /* RGB Drivers I2C Connection */
 #define I2C1_SCL_PIN C9

@@ -1,6 +1,7 @@
 // Copyright 2023 Dimitris Mantzouranis (@dexter93)
 // SPDX-License-Identifier: GPL-2.0-or-later
 #include "left.h"
+#include "i2c_master.h"
 #ifdef RGB_MATRIX_ENABLE
 
 // clang-format off
@@ -181,4 +182,86 @@ bool encoder_update_kb(uint8_t index, bool clockwise) {
         tap_code_delay(KC_VOLD, 10);
     }
     return true;
+}
+
+/* Master to Slave I2C Connection */
+static const I2CConfig slavei2cconfig = {
+    0,
+    I2C2_SCL_PIN,
+    I2C2_SDA_PIN,
+    &i2c_sw_delay,
+};
+
+void keyboard_pre_init_kb(void) {
+    // Try releasing special pins for a short time
+    palSetLineMode(I2C2_SCL_PIN, PAL_MODE_INPUT);
+    palSetLineMode(I2C2_SDA_PIN, PAL_MODE_INPUT);
+
+    chThdSleepMilliseconds(10);
+    palSetLineMode(I2C2_SCL_PIN, PAL_MODE_OUTPUT_PUSHPULL);
+    palSetLineMode(I2C2_SDA_PIN, PAL_MODE_OUTPUT_PUSHPULL);
+}
+/* matrix state(1:on, 0:off) */
+extern matrix_row_t raw_matrix[MATRIX_ROWS]; // raw values
+
+uint8_t scan_buf[10]= {0};
+uint8_t slave_row;
+uint8_t slave_col;
+
+bool slave_matrix_scan_update(void) {
+    bool update_request = false;
+    uint8_t buf[10];
+    uint8_t addr = SLAVE_I2C_ADDRESS;
+    i2cStart(&I2CD2, &slavei2cconfig);
+    i2c_status_t ret = i2cMasterReceiveTimeout(&I2CD2, (addr >> 1), buf, sizeof(buf), TIME_MS2I(100));
+    if (ret != I2C_STATUS_SUCCESS) {
+        uprintf("error: receive status: %d\n",ret);
+        i2cStop(&I2CD2);
+        update_request = false;
+        return update_request;
+    }
+    for(int i=0; i < sizeof(buf); i++) {
+        if( buf[i] != scan_buf[i]) {
+            scan_buf[i]=buf[i];
+            update_request = true;
+        }
+    }
+    return update_request;
+}
+
+bool slave_decode(void) {
+    uint8_t scan_row = -1, scan_col = -1;
+    for (int i = 0; i < sizeof(scan_buf); i++) {
+        if (scan_buf[i] == 0) continue;
+        int leftmost_bit_pos = 7;
+        while ((scan_buf[i] & (1 << leftmost_bit_pos)) == 0) leftmost_bit_pos--;
+        scan_row = leftmost_bit_pos;
+        scan_col = i;
+        break;
+    }
+    if( scan_row == -1 || scan_col == -1) return false; //key released
+    if( scan_col > (MATRIX_COLS / 2)) return false; //chatter
+    slave_row = scan_row;
+    slave_col = scan_col;
+    return true;
+}
+
+bool matrix_scan_custom(matrix_row_t current_matrix[]) {
+    matrix_row_t curr_matrix[MATRIX_ROWS] = {0};
+    // Set row, read cols
+    for (uint8_t current_row = 0; current_row < MATRIX_ROWS; current_row++) {
+        matrix_read_cols_on_row(curr_matrix, current_row);
+    }
+    // try to reset the previously registered keys
+    bool slave_decoded = !slave_decode();
+    raw_matrix[slave_row] |= slave_decoded ? 0 : (MATRIX_ROW_SHIFTER << ((MATRIX_COLS / 2) + slave_col));
+    // check for new slave data
+    bool slave_updated = slave_matrix_scan_update();
+    slave_updated = slave_decode();
+    curr_matrix[slave_row] |= slave_updated ? 0 : (MATRIX_ROW_SHIFTER << ((MATRIX_COLS / 2) + slave_col));
+
+    bool changed = memcmp(raw_matrix, curr_matrix, sizeof(curr_matrix)) != 0;
+    if (changed) memcpy(raw_matrix, curr_matrix, sizeof(curr_matrix));
+
+    return changed;
 }
