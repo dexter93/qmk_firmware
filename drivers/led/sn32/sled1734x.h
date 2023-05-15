@@ -38,6 +38,9 @@ void SLED1734X_set_color_all(uint8_t red, uint8_t green, uint8_t blue);
 
 void SLED1734X_set_led_control_register(uint8_t index, bool red, bool green, bool blue);
 
+void SLED1734X_sw_return_normal(uint8_t addr);
+void SLED1734X_sw_shutdown(uint8_t addr);
+
 // This should not be called from an interrupt
 // (eg. from a timer interrupt).
 // Call this while idle (in between matrix scans).

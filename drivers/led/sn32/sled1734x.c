@@ -57,6 +57,7 @@
 #define SLED_REG_SHUTDOWN 0x0A // Shutdown register
 // 0 - SW Shutdown Mode, 1 Normal Mode
 #define SLED_REG_SHUTDOWN_MODE 0x00
+#define SLED_REG_NORMAL_MODE 0x01
 
 #define SLED_REG_AGC 0x0B // AGC Control register
 // Audio Gain Control. Mode, Gain and Enable setting. Default to Disabled
@@ -298,7 +299,7 @@ void SLED1734X_init(uint8_t addr) {
     SLED1734X_write_register(addr, SLED_COMMANDREGISTER, SLED_PAGE_FUNCTION);
 
     // disable software shutdown
-    SLED1734X_write_register(addr, SLED_REG_SHUTDOWN, 0x01);
+    SLED1734X_write_register(addr, SLED_REG_SHUTDOWN, SLED_REG_NORMAL_MODE);
 }
 
 void SLED1734X_set_color(int index, uint8_t red, uint8_t green, uint8_t blue) {
@@ -373,4 +374,18 @@ void SLED1734X_update_led_control_registers(uint8_t addr, uint8_t index) {
         }
     }
     g_led_control_registers_update_required[index] = false;
+}
+
+void SLED1734X_sw_return_normal(uint8_t addr) {
+    // Select to function page
+    SLED1734X_write_register(addr, SLED_COMMANDREGISTER, SLED_PAGE_FUNCTION);
+    // Setting LED driver to normal mode
+    SLED1734X_write_register(addr, SLED_REG_SHUTDOWN, SLED_REG_NORMAL_MODE);
+}
+
+void SLED1734X_sw_shutdown(uint8_t addr) {
+    // Select to function page
+    SLED1734X_write_register(addr, SLED_COMMANDREGISTER, SLED_PAGE_FUNCTION);
+    // Setting LED driver to shutdown mode
+    SLED1734X_write_register(addr, SLED_REG_SHUTDOWN, SLED_REG_SHUTDOWN_MODE);
 }
