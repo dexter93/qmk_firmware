@@ -164,9 +164,11 @@ led_config_t g_led_config = {
 bool dip_switch_update_kb(uint8_t index, bool active) {
     switch (index) {
             case 0: // Lock
+                // Jump to bootloader for testing
+                if(active) reset_keyboard();
                 break;
-            case 1: // Brightness
-                if(active) rgb_matrix_toggle();
+            case 1: // RGB Control
+                if(active) rgb_matrix_step();
                 break;
             case 2: // Encoder switch
                 if(active) tap_code_delay(KC_MUTE, 10);
