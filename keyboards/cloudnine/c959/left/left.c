@@ -161,31 +161,6 @@ led_config_t g_led_config = {
 
 #endif // RGB_MATRIX_ENABLE
 
-bool dip_switch_update_kb(uint8_t index, bool active) {
-    switch (index) {
-            case 0: // Lock
-                // Jump to bootloader for testing
-                if(active) reset_keyboard();
-                break;
-            case 1: // RGB Control
-                if(active) rgb_matrix_step();
-                break;
-            case 2: // Encoder switch
-                if(active) tap_code_delay(KC_MUTE, 10);
-                break;
-    }
-    return true;
-}
-
-bool encoder_update_kb(uint8_t index, bool clockwise) {
-    if (clockwise) {
-        tap_code_delay(KC_VOLU, 10);
-    } else {
-        tap_code_delay(KC_VOLD, 10);
-    }
-    return true;
-}
-
 /* Master to Slave I2C Connection */
 static const I2CConfig slavei2cconfig = {
     0,
