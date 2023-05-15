@@ -254,3 +254,9 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
 
     return changed;
 }
+
+void shutdown_user(void) {
+    // Disable RGB on software shutdown
+    SLED1734X_sw_shutdown(DRIVER_ADDR_1);
+    SLED1734X_sw_shutdown(DRIVER_ADDR_2);
+}
