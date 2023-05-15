@@ -17,6 +17,11 @@
         { "pin_a": "B0", "pin_b": "B1", "resolution": 2 },
       ],
   },
+  "indicators": {
+      "caps_lock": "B11",
+      "scroll_lock": "B10",
+      "on_state": 1,
+  },
   /*
   "split": {
       "enabled": false,

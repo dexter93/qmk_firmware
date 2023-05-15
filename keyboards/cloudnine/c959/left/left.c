@@ -177,6 +177,14 @@ void keyboard_pre_init_kb(void) {
     chThdSleepMilliseconds(10);
     palSetLineMode(I2C2_SCL_PIN, PAL_MODE_OUTPUT_PUSHPULL);
     palSetLineMode(I2C2_SDA_PIN, PAL_MODE_OUTPUT_PUSHPULL);
+
+    /* Custom Indicator LEDs */
+    setPinOutput(LED_FN_PIN);
+    writePin(LED_FN_PIN, !LED_PIN_ON_STATE);
+    setPinOutput(LED_MACRO_PIN);
+    writePin(LED_MACRO_PIN, !LED_PIN_ON_STATE);
+    setPinOutput(LED_LOCK_PIN);
+    writePin(LED_LOCK_PIN, !LED_PIN_ON_STATE);
 }
 
 /* matrix state(1:on, 0:off) */
