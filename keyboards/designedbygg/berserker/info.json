@@ -19,7 +19,8 @@
     },
     "indicators": {
         "caps_lock": "B14",
-        "scroll_lock": "B15"
+        "scroll_lock": "B15",
+        "on_state": 0,
     },
     "encoder": {
         "rotary": [
