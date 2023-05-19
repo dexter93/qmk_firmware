@@ -179,12 +179,33 @@ void keyboard_pre_init_kb(void) {
     palSetLineMode(I2C2_SDA_PIN, PAL_MODE_OUTPUT_PUSHPULL);
 
     /* Custom Indicator LEDs */
-    setPinOutput(LED_FN_PIN);
-    writePin(LED_FN_PIN, !LED_PIN_ON_STATE);
-    setPinOutput(LED_MACRO_PIN);
-    writePin(LED_MACRO_PIN, !LED_PIN_ON_STATE);
-    setPinOutput(LED_LOCK_PIN);
-    writePin(LED_LOCK_PIN, !LED_PIN_ON_STATE);
+    #ifdef LED_FN_PIN
+        setPinOutput(LED_FN_PIN);
+        writePin(LED_FN_PIN, !LED_PIN_ON_STATE);
+    #endif
+    #ifdef LED_MACRO_PIN
+        setPinOutput(LED_MACRO_PIN);
+        writePin(LED_MACRO_PIN, !LED_PIN_ON_STATE);
+    #endif
+    #ifdef LED_WIN_LOCK_PIN
+        setPinOutput(LED_WIN_LOCK_PIN);
+        writePin(LED_WIN_LOCK_PIN, !LED_PIN_ON_STATE);
+    #endif
+
+}
+
+bool led_update_user(led_t led_state) {
+    extended_led_t extended_led_state = {
+                .fn_active = led_state.reserved & (1 << 0),
+                .macro = led_state.reserved & (1 << 1)
+        };
+    if(layer_state_is(_FN)) extended_led_state.fn_active = !extended_led_state.fn_active;
+
+    writePin(LED_FN_PIN, extended_led_state.fn_active);
+    writePin(LED_MACRO_PIN, extended_led_state.macro);
+    keymap_config.raw = eeconfig_read_keymap();
+    writePin(LED_WIN_LOCK_PIN, keymap_config.no_gui);
+    return true;
 }
 
 /* matrix state(1:on, 0:off) */

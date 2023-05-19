@@ -21,7 +21,7 @@
 #define DIP_SWITCH_PINS { B13, B14, C8 }
 #define LED_FN_PIN B12
 #define LED_MACRO_PIN B9
-#define LED_LOCK_PIN B8
+#define LED_WIN_LOCK_PIN B8
 #define MATRIX_ROWS 7
 
 /* Enable RGB Effects */
