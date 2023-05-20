@@ -17,12 +17,12 @@
 #define DRIVER_2_LED_TOTAL 48
 #define RGB_MATRIX_LED_COUNT (DRIVER_1_LED_TOTAL + DRIVER_2_LED_TOTAL)
 
-// Connects each switch in the dip switch to the GPIO pin of the MCU
-#define DIP_SWITCH_PINS { B13, B14, C8 }
+#define DIRECT_WIN_LOCK_PIN B13
+#define DIRECT_RGB_TOGG_PIN B14
+#define DIRECT_ENCODER_PUSH_PIN C8
 #define LED_FN_PIN B12
 #define LED_MACRO_PIN B9
 #define LED_WIN_LOCK_PIN B8
-#define MATRIX_ROWS 7
 
 /* Enable RGB Effects */
 #define ENABLE_RGB_MATRIX_ALPHAS_MODS

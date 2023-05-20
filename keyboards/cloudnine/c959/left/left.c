@@ -126,6 +126,7 @@ const sled1734x_led PROGMEM g_sled1734x_leds[RGB_MATRIX_LED_COUNT] = {
 led_config_t g_led_config = {
     {
         // Key Matrix to LED Index
+        { __, __, __, __, __, __, __, __,    __, __, __, __, __, __, __, __, __ },
         { __,  0,  1,  2,  3,  4,  5,  6,     7,  8,  9, 10, 11, 12, 13, 14, 15 },
         { 16, 17, 18, 19, 20, 21, 22, 23,    24, 25, 26, 27, 28, 29, __, 30, 31 },
         { 32, 33, 34, 35, 36, 37, 38, __,    39, 40, 41, 42, 43, 44, 45, 46, 47 },
@@ -133,7 +134,7 @@ led_config_t g_led_config = {
         { 63, 64, __, 65, 66, 67, 68, 69,    70, 71, 72, 73, 74, __, 75, 76, 77 },
         { 78, 79, 80, 81, __, 82, __, __,    __, 83, __, 84, __, 85, 86, 87, 88 },
         // encoder
-        { 89, 90, 91, 92, __, __, __, __,     __, __, __, __, __, __, __, __, __},
+        { __, __, __, __, 89, 90, 91, 92,    __, __, __, __, __, __, __, __, __ },
     },
     {
         // LED Index to Physical Position
@@ -191,20 +192,31 @@ void keyboard_pre_init_kb(void) {
         setPinOutput(LED_WIN_LOCK_PIN);
         writePin(LED_WIN_LOCK_PIN, !LED_PIN_ON_STATE);
     #endif
-
+    /* Direct Pin Switches */
+    setPinInputHigh(DIRECT_WIN_LOCK_PIN);
+    setPinInputHigh(DIRECT_RGB_TOGG_PIN);
+    setPinInputHigh(DIRECT_ENCODER_PUSH_PIN);
 }
 
 bool led_update_user(led_t led_state) {
+    keymap_config.raw = eeconfig_read_keymap();
+
     extended_led_t extended_led_state = {
                 .fn_active = led_state.reserved & (1 << 0),
-                .macro = led_state.reserved & (1 << 1)
+                .macro = led_state.reserved & (1 << 1),
+                .gui_lock = led_state.reserved & (1 << 2)
         };
     if(layer_state_is(_FN)) extended_led_state.fn_active = !extended_led_state.fn_active;
+    if(keymap_config.no_gui) extended_led_state.gui_lock = !extended_led_state.gui_lock;
 
+    /* Set the reserved bits in led_state */
+    led_state.reserved = (extended_led_state.fn_active ? 1 : 0) |
+                        (extended_led_state.macro ? 1 : 0) << 1 |
+                        (extended_led_state.gui_lock ? 1 : 0) << 2;
+    /* Write LED state to hardware */
     writePin(LED_FN_PIN, extended_led_state.fn_active);
     writePin(LED_MACRO_PIN, extended_led_state.macro);
-    keymap_config.raw = eeconfig_read_keymap();
-    writePin(LED_WIN_LOCK_PIN, keymap_config.no_gui);
+    writePin(LED_WIN_LOCK_PIN, extended_led_state.gui_lock);
     return true;
 }
 
@@ -214,19 +226,17 @@ extern matrix_row_t raw_matrix[MATRIX_ROWS]; // raw values
 uint8_t scan_buf[10]= {0};
 uint8_t slave_row;
 uint8_t slave_col;
-bool update_request = false;
 bool key_level = false;
 bool slave_matrix_scan_update(void) {
+    bool update_request = false;
     uint8_t buf[10];
     uint8_t addr = SLAVE_I2C_ADDRESS;
     i2cStart(&I2CD2, &slavei2cconfig);
     i2c_status_t ret = i2cMasterReceiveTimeout(&I2CD2, (addr >> 1), buf, sizeof(buf), TIME_MS2I(100));
     if (ret != I2C_STATUS_SUCCESS) {
         i2cStop(&I2CD2);
-        update_request = false;
         return update_request;
     }
-    update_request = false;
     for(int i=0; i < sizeof(buf); i++) {
         if( buf[i] != scan_buf[i]) {
             scan_buf[i]=buf[i];
@@ -251,12 +261,20 @@ void slave_decode(void) {
         return; //key released
     }
     if( scan_col <= (MATRIX_COLS / 2)) {
-        slave_row = scan_row;
+        slave_row = scan_row + 1;
         slave_col = scan_col;
         key_level = true;
         return; //key pressed
     }
     // something went wrong here - unhandled
+}
+
+static inline uint8_t readMatrixPin(pin_t pin) {
+    if (pin != NO_PIN) {
+        return (readPin(pin) == 0) ? 0 : 1;
+    } else {
+        return 1;
+    }
 }
 
 bool matrix_scan_custom(matrix_row_t current_matrix[]) {
@@ -265,11 +283,15 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     for (uint8_t current_row = 0; current_row < MATRIX_ROWS; current_row++) {
         matrix_read_cols_on_row(curr_matrix, current_row);
     }
+    // Update the top left direct pins as part of the matrix
+    curr_matrix[0] |= readMatrixPin(DIRECT_WIN_LOCK_PIN) ? 0 : MATRIX_ROW_SHIFTER;
+    curr_matrix[1] |= readMatrixPin(DIRECT_RGB_TOGG_PIN) ? 0 : MATRIX_ROW_SHIFTER;
+    // Update the encoder switch as part of the matrix
+    curr_matrix[7] |= readMatrixPin(DIRECT_ENCODER_PUSH_PIN) ? 0 : (MATRIX_ROW_SHIFTER << 7);
     // Check the slave side
     if(slave_matrix_scan_update()) slave_decode();
-    if(update_request) {
-    curr_matrix[slave_row] |= key_level ? 0 : (MATRIX_ROW_SHIFTER << ((MATRIX_COLS / 2) + slave_col));
-    }
+    curr_matrix[slave_row] |= !key_level ? 0 : (MATRIX_ROW_SHIFTER << ((MATRIX_COLS / 2) + slave_col));
+
     bool changed = memcmp(raw_matrix, curr_matrix, sizeof(curr_matrix)) != 0;
     if (changed) memcpy(raw_matrix, curr_matrix, sizeof(curr_matrix));
 

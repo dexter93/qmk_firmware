@@ -10,4 +10,5 @@ enum layers{
 typedef struct {
     bool fn_active;
     bool macro;
+    bool gui_lock;
 } extended_led_t;

@@ -6,7 +6,7 @@
   },
   "processor": "SN32F248BF",
   "matrix_pins": {
-      "rows": ["C15", "D11", "D10", "D9", "D8", "D7" ],
+      "rows": ["NO_PIN", "C15", "D11", "D10", "D9", "D8", "D7", "NO_PIN"],
       "cols": ["A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "NO_PIN","NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN"]
   },
   "rgb_matrix": {
