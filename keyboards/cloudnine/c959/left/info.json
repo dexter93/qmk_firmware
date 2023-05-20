@@ -22,19 +22,4 @@
       "scroll_lock": "B10",
       "on_state": 1,
   },
-  /*
-  "split": {
-      "enabled": false,
-      "main": "left",
-      "soft_serial_pin": "C12",
-      "transport": {
-        "protocol": "i2c"
-      },
-      "matrix_pins": {
-          "right": {
-            "rows": ["NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN"],
-            "cols": ["NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN"]
-          }
-      }
-  }*/
 }
