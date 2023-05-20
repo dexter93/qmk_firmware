@@ -184,13 +184,12 @@ static const I2CConfig slavei2cconfig = {
 };
 
 void keyboard_pre_init_kb(void) {
-    // Try releasing special pins for a short time
-    palSetLineMode(I2C2_SCL_PIN, PAL_MODE_INPUT);
-    palSetLineMode(I2C2_SDA_PIN, PAL_MODE_INPUT);
-
-    chThdSleepMilliseconds(10);
-    palSetLineMode(I2C2_SCL_PIN, PAL_MODE_OUTPUT_PUSHPULL);
-    palSetLineMode(I2C2_SDA_PIN, PAL_MODE_OUTPUT_PUSHPULL);
+    /* Init Slave side I2C */
+    setPinInput(I2C2_SCL_PIN);
+    setPinInput(I2C2_SDA_PIN);
+    wait_ms(10);
+    setPinOutput(I2C2_SCL_PIN);
+    setPinOutput(I2C2_SDA_PIN);
 
     /* Custom Indicator LEDs */
     #ifdef LED_FN_PIN
