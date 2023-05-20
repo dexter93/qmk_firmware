@@ -192,18 +192,13 @@ void keyboard_pre_init_kb(void) {
     setPinOutput(I2C2_SDA_PIN);
 
     /* Custom Indicator LEDs */
-    #ifdef LED_FN_PIN
-        setPinOutput(LED_FN_PIN);
-        writePin(LED_FN_PIN, !LED_PIN_ON_STATE);
-    #endif
-    #ifdef LED_MACRO_PIN
-        setPinOutput(LED_MACRO_PIN);
-        writePin(LED_MACRO_PIN, !LED_PIN_ON_STATE);
-    #endif
-    #ifdef LED_WIN_LOCK_PIN
-        setPinOutput(LED_WIN_LOCK_PIN);
-        writePin(LED_WIN_LOCK_PIN, !LED_PIN_ON_STATE);
-    #endif
+    setPinOutput(LED_FN_PIN);
+    writePin(LED_FN_PIN, !LED_PIN_ON_STATE);
+    setPinOutput(LED_MACRO_PIN);
+    writePin(LED_MACRO_PIN, !LED_PIN_ON_STATE);
+    setPinOutput(LED_WIN_LOCK_PIN);
+    writePin(LED_WIN_LOCK_PIN, !LED_PIN_ON_STATE);
+
     /* Direct Pin Switches */
     setPinInputHigh(DIRECT_WIN_LOCK_PIN);
     setPinInputHigh(DIRECT_RGB_TOGG_PIN);
@@ -310,8 +305,10 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     return changed;
 }
 
+#ifdef RGB_MATRIX_ENABLE
 void shutdown_user(void) {
     // Disable RGB on software shutdown
     SLED1734X_sw_shutdown(DRIVER_ADDR_1);
     SLED1734X_sw_shutdown(DRIVER_ADDR_2);
 }
+#endif // RGB_MATRIX_ENABLE
