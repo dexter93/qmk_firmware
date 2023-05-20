@@ -237,9 +237,8 @@ bool key_level = false;
 bool slave_matrix_scan_update(void) {
     bool update_request = false;
     uint8_t buf[10];
-    uint8_t addr = SLAVE_I2C_ADDRESS;
     i2cStart(&I2CD2, &slavei2cconfig);
-    i2c_status_t ret = i2cMasterReceiveTimeout(&I2CD2, (addr >> 1), buf, sizeof(buf), TIME_MS2I(100));
+    i2c_status_t ret = i2cMasterReceiveTimeout(&I2CD2, (SLAVE_I2C_ADDRESS >> 1), buf, sizeof(buf), TIME_MS2I(100));
     if (ret != I2C_STATUS_SUCCESS) {
         i2cStop(&I2CD2);
         return update_request;
