@@ -251,6 +251,7 @@ void slave_decode(void) {
         break;
     }
     if( scan_row == 255 || scan_col == 255) {
+        uprintf("keyrelease detected! row %d, col %d\n",slave_row,slave_col);
         key_level = false;
         return; //key released
     }
@@ -258,6 +259,7 @@ void slave_decode(void) {
         slave_row = scan_row + 1;
         slave_col = scan_col;
         key_level = true;
+        uprintf("keypress detected! row %d, col %d\n",slave_row,slave_col);
         return; //key pressed
     }
     // something went wrong here - unhandled
