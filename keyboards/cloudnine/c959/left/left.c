@@ -205,26 +205,14 @@ void keyboard_pre_init_kb(void) {
     setPinInputHigh(DIRECT_ENCODER_PUSH_PIN);
 }
 
-bool led_update_user(led_t led_state) {
-    keymap_config.raw = eeconfig_read_keymap();
-
-    extended_led_t extended_led_state = {
-                .fn_active = led_state.reserved & (1 << 0),
-                .macro = led_state.reserved & (1 << 1),
-                .gui_lock = led_state.reserved & (1 << 2)
-        };
+void housekeeping_task_kb(void) {
+    extended_led_t extended_led_state = {0};
     if(layer_state_is(_FN)) extended_led_state.fn_active = !extended_led_state.fn_active;
     if(keymap_config.no_gui) extended_led_state.gui_lock = !extended_led_state.gui_lock;
-
-    /* Set the reserved bits in led_state */
-    led_state.reserved = (extended_led_state.fn_active ? 1 : 0) |
-                        (extended_led_state.macro ? 1 : 0) << 1 |
-                        (extended_led_state.gui_lock ? 1 : 0) << 2;
     /* Write LED state to hardware */
     writePin(LED_FN_PIN, extended_led_state.fn_active);
     writePin(LED_MACRO_PIN, extended_led_state.macro);
     writePin(LED_WIN_LOCK_PIN, extended_led_state.gui_lock);
-    return true;
 }
 
 /* matrix state(1:on, 0:off) */
