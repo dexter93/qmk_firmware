@@ -265,6 +265,30 @@ void slave_decode(void) {
     // something went wrong here - unhandled
 }
 
+static pin_t row_pins[MATRIX_ROWS] = MATRIX_ROW_PINS;
+
+static pin_t col_pins[MATRIX_COLS]   = MATRIX_COL_PINS;
+
+static inline void setPinOutput_writeLow(pin_t pin) {
+    ATOMIC_BLOCK_FORCEON {
+        setPinOutput(pin);
+        writePinLow(pin);
+    }
+}
+
+static inline void setPinOutput_writeHigh(pin_t pin) {
+    ATOMIC_BLOCK_FORCEON {
+        setPinOutput(pin);
+        writePinHigh(pin);
+    }
+}
+
+static inline void setPinInputHigh_atomic(pin_t pin) {
+    ATOMIC_BLOCK_FORCEON {
+        setPinInputHigh(pin);
+    }
+}
+
 static inline uint8_t readMatrixPin(pin_t pin) {
     if (pin != NO_PIN) {
         return (readPin(pin) == 0) ? 0 : 1;
@@ -273,10 +297,56 @@ static inline uint8_t readMatrixPin(pin_t pin) {
     }
 }
 
+static bool select_row(uint8_t row) {
+    pin_t pin = row_pins[row];
+    if (pin != NO_PIN) {
+        setPinOutput_writeLow(pin);
+        return true;
+    }
+    return false;
+}
+
+static void unselect_row(uint8_t row) {
+    pin_t pin = row_pins[row];
+    if (pin != NO_PIN) {
+#            ifdef MATRIX_UNSELECT_DRIVE_HIGH
+        setPinOutput_writeHigh(pin);
+#            else
+        setPinInputHigh_atomic(pin);
+#            endif
+    }
+}
+
+void matrix_read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row) {
+    // Start with a clear matrix row
+    matrix_row_t current_row_value = 0;
+
+    if (!select_row(current_row)) { // Select row
+        return;                     // skip NO_PIN row
+    }
+    matrix_output_select_delay();
+
+    // For each col...
+    matrix_row_t row_shifter = MATRIX_ROW_SHIFTER;
+    for (uint8_t col_index = 0; col_index < (MATRIX_COLS / 2); col_index++, row_shifter <<= 1) {
+        uint8_t pin_state = readMatrixPin(col_pins[col_index]);
+
+        // Populate the matrix row with the state of the col pin
+        current_row_value |= pin_state ? 0 : row_shifter;
+    }
+
+    // Unselect row
+    unselect_row(current_row);
+    matrix_output_unselect_delay(current_row, current_row_value != 0); // wait for all Col signals to go HIGH
+
+    // Update the matrix
+    current_matrix[current_row] = current_row_value;
+}
+
 bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     matrix_row_t curr_matrix[MATRIX_ROWS] = {0};
     // Set row, read cols
-    for (uint8_t current_row = 0; current_row < MATRIX_ROWS; current_row++) {
+    for (uint8_t current_row = 1; current_row < (MATRIX_ROWS -1); current_row++) {
         matrix_read_cols_on_row(curr_matrix, current_row);
     }
     // Update the top left direct pins as part of the matrix

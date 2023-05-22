@@ -14,6 +14,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #pragma once
+/* Board and GPIO setup */
+#define WAIT_US_TIMER GPTD2
+#define MATRIX_UNSELECT_DRIVE_HIGH
+#define GPIO_INPUT_PIN_DELAY 0
+
 /* Master to Slave I2C Connection */
 #define I2C2_SCL_PIN C13
 #define I2C2_SDA_PIN C12
@@ -27,7 +32,6 @@
 #define DRIVER_ADDR_1 0b1110100
 #define DRIVER_ADDR_2 0b1110111
 #define SLED_PERSISTENCE 2
-#define GPIO_INPUT_PIN_DELAY 0
 #define DRIVER_1_LED_TOTAL (41 + 4)
 #define DRIVER_2_LED_TOTAL 48
 #define RGB_MATRIX_LED_COUNT (DRIVER_1_LED_TOTAL + DRIVER_2_LED_TOTAL)
