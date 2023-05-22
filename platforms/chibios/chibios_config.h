@@ -153,4 +153,5 @@
 
 #if defined(SN32F2)
 #    define CPU_CLOCK SN32_HCLK
+#    define PAL_OUTPUT_TYPE_OPENDRAIN _Static_assert(0, "SN32 has no Open Drain GPIO configuration, setting this is not possible");
 #endif
