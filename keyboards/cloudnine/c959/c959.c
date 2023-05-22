@@ -17,7 +17,7 @@
 
 /* Custom delay function to achieve Fast Mode I2C */
 void sw_i2c_delay(void) {
-    for(uint8_t i=0; i<13; i++) __NOP();
+    // done.
 }
 
 /* Debug */
