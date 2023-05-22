@@ -214,7 +214,9 @@ void housekeeping_task_kb(void) {
     writePin(LED_MACRO_PIN, extended_led_state.macro);
     writePin(LED_WIN_LOCK_PIN, extended_led_state.gui_lock);
 }
-
+void encoder_wait_pullup_charge(void) {
+    // done
+}
 /* matrix state(1:on, 0:off) */
 extern matrix_row_t raw_matrix[MATRIX_ROWS]; // raw values
 
@@ -251,7 +253,6 @@ void slave_decode(void) {
         break;
     }
     if( scan_row == 255 || scan_col == 255) {
-        uprintf("keyrelease detected! row %d, col %d\n",slave_row,slave_col);
         key_level = false;
         return; //key released
     }
@@ -259,7 +260,6 @@ void slave_decode(void) {
         slave_row = scan_row + 1;
         slave_col = scan_col;
         key_level = true;
-        uprintf("keypress detected! row %d, col %d\n",slave_row,slave_col);
         return; //key pressed
     }
     // something went wrong here - unhandled
