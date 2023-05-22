@@ -85,6 +85,13 @@
         ]
       }
     ],
+    "customKeycodes": [
+      {
+        "name": "Select All",
+        "title": "Select all",
+        "shortName": "SlctAll"
+      }
+    ],
     "matrix":{ "rows":8, "cols":17 },
     "layouts":{
         "keymap":[
