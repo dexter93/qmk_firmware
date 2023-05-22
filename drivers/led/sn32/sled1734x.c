@@ -222,8 +222,8 @@ void SLED1734X_init(uint8_t addr) {
     setPinOutput(SLED_SDB_PIN);
     writePinHigh(SLED_SDB_PIN);
 #endif
-    // Hardware powerup requires 180us. Play it safe with 1ms for now.
-    wait_ms(1);
+    // Hardware powerup requires 180us.
+    wait_us(180);
     // In order to avoid the LEDs being driven with garbage data
     // in the LED driver's PWM registers, first enable software shutdown,
     // then set up the mode and other settings, clear the PWM registers,
