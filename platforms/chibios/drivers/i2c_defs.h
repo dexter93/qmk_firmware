@@ -95,7 +95,7 @@
 #      define SW_I2C_DELAY ceil((CH_CFG_ST_FREQUENCY / I2C_CLOCK_FREQUENCY) / 2)
 #   endif
 #	ifndef SW_I2C_USE_OSAL_DELAY
-#		define SW_I2C_USE_OSAL_DELAY
+#		define SW_I2C_USE_OSAL_DELAY TRUE
 #	endif
 #endif
 
