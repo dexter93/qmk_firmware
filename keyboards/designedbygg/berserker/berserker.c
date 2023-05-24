@@ -16,16 +16,14 @@
 
 #include "quantum.h"
 
+#ifdef LED_WIN_LOCK_PIN
 /* Handle the Win Lock LED */
 void keyboard_pre_init_kb(void) {
-#ifdef LED_WIN_LOCK_PIN
 	setPinOutput(LED_WIN_LOCK_PIN);
 	writePin(LED_WIN_LOCK_PIN, !LED_PIN_ON_STATE);
-#endif
 }
 
-bool led_update_user(led_t led_state) {
-	keymap_config.raw = eeconfig_read_keymap();
+void housekeeping_task_kb(void) {
 	writePin(LED_WIN_LOCK_PIN,!keymap_config.no_gui);
-    return true;
 }
+#endif
