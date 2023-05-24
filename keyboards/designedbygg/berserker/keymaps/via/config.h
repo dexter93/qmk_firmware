@@ -17,5 +17,3 @@
 #pragma once
 
 #define WEAR_LEVELING_SN32_EMULATION_PAGE_COUNT 32
-// Enable RGB Matrix
-#define VIA_QMK_RGBLIGHT_ENABLE
