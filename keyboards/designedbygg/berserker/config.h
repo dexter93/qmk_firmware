@@ -17,10 +17,13 @@
 #pragma once
 
 #include "config_common.h"
-
+#define DEBUG_MATRIX_SCAN_RATE
 /* Win Lock LED Indicator */
 #define LED_WIN_LOCK_PIN B12
-
+/* Board and GPIO setup */
+#define WAIT_US_TIMER GPTD2
+#define MATRIX_UNSELECT_DRIVE_HIGH
+#define GPIO_INPUT_PIN_DELAY 0
 /* RGB LED Config */
 #define LED_MATRIX_ROWS MATRIX_ROWS
 #define LED_MATRIX_ROW_CHANNELS 3
