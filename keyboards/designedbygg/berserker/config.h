@@ -18,6 +18,12 @@
 
 #include "config_common.h"
 
+/* Board and GPIO setup */
+#define WAIT_US_TIMER GPTD2
+#define MATRIX_UNSELECT_DRIVE_HIGH
+#define MATRIX_IO_DELAY 15
+#define GPIO_INPUT_PIN_DELAY 0
+
 /* Debug options */
 #define DEBUG_MATRIX_SCAN_RATE
 
