@@ -18,6 +18,9 @@
 
 #include "config_common.h"
 
+/* Debug options */
+#define DEBUG_MATRIX_SCAN_RATE
+
 /* Win Lock LED Indicator */
 #define LED_WIN_LOCK_PIN B12
 

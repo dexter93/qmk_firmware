@@ -14,7 +14,7 @@
         "rgb_matrix": true,
         "bootmagic": true,
         "command": false,
-        "console": false,
+        "console": true,
         "extrakey": true,
         "mousekey": false,
         "encoder": true,
