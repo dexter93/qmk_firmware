@@ -11,7 +11,7 @@
     },
     "diode_direction": "COL2ROW",
     "features": {
-        "rgb_matrix": true,
+        "rgb_matrix": false,
         "bootmagic": true,
         "command": false,
         "console": true,
