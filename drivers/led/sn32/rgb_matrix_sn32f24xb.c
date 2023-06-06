@@ -107,7 +107,8 @@ static const pin_t    led_row_pins[LED_MATRIX_ROWS_HW] = LED_MATRIX_ROW_PINS; //
 static const pin_t    led_col_pins[LED_MATRIX_COLS]    = LED_MATRIX_COL_PINS;
 static RGB            led_state[RGB_MATRIX_LED_COUNT];     // led state buffer
 static RGB            led_state_buf[RGB_MATRIX_LED_COUNT]; // led state buffer
-#ifdef UNDERGLOW_RBG                                       // handle underglow with flipped B,G channels
+bool                  updateLEDs = false;
+#ifdef UNDERGLOW_RBG // handle underglow with flipped B,G channels
 static const uint8_t underglow_leds[UNDERGLOW_LEDS] = UNDERGLOW_IDX;
 #endif
 
@@ -221,7 +222,7 @@ static void update_pwm_channels(PWMDriver *pwmp) {
             first_scanned_row = current_key_row;
         } else {
             if ((last_key_row != current_key_row) && (current_key_row == first_scanned_row)) {
-                matrix_locked  = false;
+                matrix_locked = false;
             }
         }
         if (matrix_locked) {
@@ -313,7 +314,7 @@ static void update_pwm_channels(PWMDriver *pwmp) {
             first_scanned_col = current_key_col;
         } else {
             if ((last_key_col != current_key_col) && (current_key_col == first_scanned_col)) {
-                matrix_locked  = false;
+                matrix_locked = false;
             }
         }
         if (matrix_locked) {
@@ -423,12 +424,16 @@ void SN32F24xB_init(void) {
     for (uint8_t i = 0; i < MATRIX_ROWS; i++) {
         shared_matrix[i] = 0;
     }
+    updateLEDs = false;
     pwmStart(&PWMD1, &pwmcfg);
     shared_matrix_rgb_enable();
 }
 
 void SN32F24xB_flush(void) {
-    memcpy(led_state, led_state_buf, sizeof(RGB) * RGB_MATRIX_LED_COUNT);
+    if (updateLEDs) {
+        memcpy(led_state, led_state_buf, sizeof(RGB) * RGB_MATRIX_LED_COUNT);
+        updateLEDs = false;
+    }
 }
 
 void SN32F24xB_set_color(int index, uint8_t r, uint8_t g, uint8_t b) {
@@ -440,11 +445,19 @@ void SN32F24xB_set_color(int index, uint8_t r, uint8_t g, uint8_t b) {
         }
     }
     if (flip_gb) {
+        if (led_state_buf[index].r == r && led_state_buf[index].b == g && led_state_buf[index].g == b) {
+            return;
+        }
+        updateLEDs             = true;
         led_state_buf[index].r = r;
         led_state_buf[index].b = g;
         led_state_buf[index].g = b;
     } else {
 #endif // UNDERGLOW_RBG
+        if (led_state_buf[index].r == r && led_state_buf[index].b == b && led_state_buf[index].g == g) {
+            return;
+        }
+        updateLEDs             = true;
         led_state_buf[index].r = r;
         led_state_buf[index].b = b;
         led_state_buf[index].g = g;
