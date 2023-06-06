@@ -14,8 +14,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+#ifndef RGB_MATRIX_ENABLE
 #define HAL_USE_GPT TRUE
 #define SN32_GPT_USE_CT16B1 TRUE
 #include_next <halconf.h>
 #undef HAL_USE_PWM
 #define HAL_USE_PWM FALSE
+#else
+#include_next <halconf.h>
+#endif

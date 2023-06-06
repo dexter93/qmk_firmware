@@ -14,22 +14,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "quantum.h"
-#ifndef RGB_MATRIX_ENABLE
-void matrix_output_unselect_delay(uint8_t line, bool key_pressed) {
-    for (int i = 0; i < TIME_US2I(MATRIX_IO_DELAY); ++i) {
-        __asm__ volatile("" ::: "memory");
-    }
-}
-#endif
-#ifdef LED_WIN_LOCK_PIN
-/* Handle the Win Lock LED */
-void keyboard_pre_init_kb(void) {
-	setPinOutput(LED_WIN_LOCK_PIN);
-	writePin(LED_WIN_LOCK_PIN, !LED_PIN_ON_STATE);
-}
+#pragma once
 
-void housekeeping_task_kb(void) {
-	writePin(LED_WIN_LOCK_PIN,!keymap_config.no_gui);
-}
-#endif
+#include_next <chconf.h>
+
+//#undef CH_CFG_ST_FREQUENCY
+//#define CH_CFG_ST_FREQUENCY (187500 *2)

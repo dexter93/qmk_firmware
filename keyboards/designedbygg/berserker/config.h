@@ -19,9 +19,11 @@
 #include "config_common.h"
 
 /* Board and GPIO setup */
+#ifndef RGB_MATRIX_ENABLE
 #define WAIT_US_TIMER GPTD2
+#endif
 #define MATRIX_UNSELECT_DRIVE_HIGH
-#define MATRIX_IO_DELAY 15
+#define MATRIX_IO_DELAY 1
 #define GPIO_INPUT_PIN_DELAY 0
 
 /* Debug options */
