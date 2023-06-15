@@ -298,6 +298,14 @@ __attribute__((weak)) void matrix_init_custom(void) {
 
     // initialize key pins
     matrix_init_pins();
+
+    // initialize matrix state: all keys off
+    memset(matrix, 0, sizeof(matrix));
+    memset(raw_matrix, 0, sizeof(raw_matrix));
+
+    debounce_init(ROWS_PER_HAND);
+
+    matrix_init_kb();
 }
 
 #ifdef SPLIT_KEYBOARD
@@ -325,5 +333,11 @@ __attribute__((weak)) bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     bool changed = memcmp(raw_matrix, curr_matrix, sizeof(curr_matrix)) != 0;
     if (changed) memcpy(raw_matrix, curr_matrix, sizeof(curr_matrix));
 
-    return changed;
+#ifdef SPLIT_KEYBOARD
+    changed = debounce(raw_matrix, matrix + thisHand, ROWS_PER_HAND, changed) | matrix_post_scan();
+#else
+    changed = debounce(raw_matrix, matrix, ROWS_PER_HAND, changed);
+    matrix_scan_kb();
+#endif
+    return (uint8_t)changed;
 }

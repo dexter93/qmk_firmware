@@ -19,11 +19,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #pragma once
 
-#define SOFT_SERIAL_PIN D2
-
-/* ws2812 RGB LED */
-#define RGB_DI_PIN      D3
-
 #ifdef RGBLIGHT_ENABLE
 
 #   define RGBLIGHT_EFFECT_BREATHING
@@ -38,8 +33,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #   define RGBLIGHT_EFFECT_TWINKLE
 
 #   define RGBLED_NUM 54
-#   define RGBLED_SPLIT \
-        { 27, 27 }
 #endif
 
 #ifdef RGB_MATRIX_ENABLE
@@ -70,8 +63,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #   define ENABLE_RGB_MATRIX_SPLASH
 #   define ENABLE_RGB_MATRIX_SOLID_SPLASH
 #endif
-
-#define DIODE_DIRECTION COL2ROW
 
 #define SPLIT_USB_DETECT
 
