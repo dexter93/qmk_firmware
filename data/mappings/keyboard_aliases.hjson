@@ -140,6 +140,9 @@
     "daisy": {
         "target": "ktec/daisy"
     },
+    "designedbygg/ironclad/icl01": {
+        "target": "designedbygg/ironclad/icl02"
+    },
     "doro67/multi": {
         "layouts": {
             "LAYOUT_ansi": "LAYOUT_65_ansi_blocker"
