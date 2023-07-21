@@ -19,8 +19,7 @@
 /* Define layer names */
 enum layers{
   _BASE,
-  _FN,
-  _LTRM
+  _FN
 };
 
 typedef struct {

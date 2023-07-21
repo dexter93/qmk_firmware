@@ -16,6 +16,5 @@
 #pragma once
 
 // Enable RGB Matrix
-#undef ENCODER_MAP_ENABLE
+#define VIA_QMK_RGBLIGHT_ENABLE
 #define WEAR_LEVELING_SN32_EMULATION_PAGE_COUNT 39
-#define MIDI_BASIC
