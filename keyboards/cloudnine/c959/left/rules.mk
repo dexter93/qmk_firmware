@@ -1,0 +1,5 @@
+USE_HAL_I2C_FALLBACK = yes
+ENCODER_MAP_ENABLE = yes
+EEPROM_DRIVER = wear_leveling
+WEAR_LEVELING_DRIVER = sn32_flash
+SRC += matrix.c

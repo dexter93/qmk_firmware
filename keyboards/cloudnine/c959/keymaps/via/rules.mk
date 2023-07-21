@@ -1,0 +1,3 @@
+VIA_ENABLE = no
+MIDI_ENABLE = yes
+TAP_DANCE_ENABLE = no

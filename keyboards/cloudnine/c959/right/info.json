@@ -1,0 +1,26 @@
+{
+  "usb": {
+    "vid": "0x0C45",
+    "pid": "0x8008",
+    "device_version": "0.0.1"
+  },
+  "processor": "SN32F268F",
+  "matrix_pins": {
+      "rows": ["NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN"],
+      "cols": ["NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN", "NO_PIN"]
+  },
+  "split": {
+      "enabled": true,
+      "main": "left",
+      "soft_serial_pin": "A4",
+      "transport": {
+        "protocol": "i2c"
+      },
+      "matrix_pins": {
+          "right": {
+            "rows": ["C3", "C4", "C5", "C6", "C7", "C8" ],
+            "cols": ["A0", "A1", "A2", "A3", "A6", "A7", "A8", "A9", "A10"]
+          }
+      }
+  }
+}

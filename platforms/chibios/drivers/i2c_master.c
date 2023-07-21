@@ -106,9 +106,6 @@
 #    ifndef SW_I2C_USE_OSAL_DELAY
 #        define SW_I2C_USE_OSAL_DELAY TRUE
 #    endif
-#    if (SW_I2C_USE_OSAL_DELAY == FALSE)
-__attribute__((weak)) void i2c_sw_delay(void) {}
-#    endif
 #endif
 static uint8_t i2c_address;
 
