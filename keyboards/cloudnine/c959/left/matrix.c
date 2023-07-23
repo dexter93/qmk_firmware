@@ -138,6 +138,12 @@ static void unselect_rows(void) {
     }
 }
 
+void matrix_output_unselect_delay(uint8_t line, bool key_pressed) {
+    for (int i = 0; i < TIME_US2I(MATRIX_IO_DELAY); ++i) {
+        __asm__ volatile("" ::: "memory");
+    }
+}
+
 void matrix_init_custom(void) {
     unselect_rows();
     for (uint8_t x = 0; x < MATRIX_COLS; x++) {

@@ -16,7 +16,8 @@
 #include QMK_KEYBOARD_H
 
 enum custom_keycodes {
-    SLCT_A = SAFE_RANGE
+    SLCT_A = SAFE_RANGE,
+    PRNT_ID
 };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -37,7 +38,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______,  _______, _______, _______, _______, _______,  _______,                 _______, _______, _______, _______,  _______, _______, _______, _______, _______,
         _______,  _______, _______, _______, _______, _______,  _______,                 _______, _______, _______, _______,  _______, _______,          _______, _______,
         _______,  _______,          _______, _______, _______,  _______, _______,        _______, _______, _______, _______,  _______,          _______, _______, _______,
-        _______,  _______, _______, _______,          _______,                                    _______,          _______,  _______,          _______, _______, _______,
+        _______,  PRNT_ID, _______, _______,          _______,                                    _______,          _______,  _______,          _______, _______, _______,
                                                                          _______
     )
 };
@@ -50,6 +51,14 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         return false;
       }
       break;
+      case PRNT_ID:
+        if (record->event.pressed) {
+          uprintf("Device Serial number: %08lx%08lx \n", SN_UC->H4BYTE, SN_UC->L4BYTE);
+          uprintf("Device Serial lower 4 bytes: %08lx \n", SN_UC->L4BYTE);
+          uprintf("Device Serial higher 4 bytes: %08lx \n", SN_UC->H4BYTE);
+          return false;
+        }
+        break;
   }
   return true;
 }

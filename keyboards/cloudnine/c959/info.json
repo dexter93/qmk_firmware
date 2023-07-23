@@ -5,7 +5,7 @@
   "maintainer": "dexter93",
   "bootloader": "sn32-dfu",
   "diode_direction": "COL2ROW",
-  "debounce":0,
+  "debounce":2,
   "build": {
     "debounce_type": "sym_eager_pk",
   },

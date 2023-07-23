@@ -212,7 +212,11 @@ void housekeeping_task_kb(void) {
     writePin(LED_MACRO_PIN, extended_led_state.macro);
     writePin(LED_WIN_LOCK_PIN, extended_led_state.gui_lock);
 }
-
+/*
 void encoder_wait_pullup_charge(void) {
     // done
+}
+*/
+void i2c_init(void) {
+    // done.
 }
