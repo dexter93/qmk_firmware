@@ -60,3 +60,13 @@ const uint16_t PROGMEM encoder_map[][1][2] = {
     [_FN]   = {ENCODER_CCW_CW(RGB_VAD, RGB_VAI) },
 };
 #endif
+
+void housekeeping_task_user(void) {
+    extended_led_t extended_led_state = {0};
+    if(layer_state_is(_FN)) extended_led_state.fn_active = !extended_led_state.fn_active;
+    if(keymap_config.no_gui) extended_led_state.gui_lock = !extended_led_state.gui_lock;
+    /* Write LED state to hardware */
+    writePin(LED_FN_PIN, extended_led_state.fn_active);
+    writePin(LED_MACRO_PIN, extended_led_state.macro);
+    writePin(LED_WIN_LOCK_PIN, extended_led_state.gui_lock);
+}

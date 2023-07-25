@@ -14,4 +14,45 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #pragma once
+
+/* Board and GPIO setup */
+#define WAIT_US_TIMER GPTD2
+#define MATRIX_UNSELECT_DRIVE_HIGH
+#define MATRIX_IO_DELAY 1
+#define GPIO_INPUT_PIN_DELAY 0
+
+/* Debug */
+#define DEBUG_MATRIX_SCAN_RATE
+#define RGB_MATRIX_LED_PROCESS_LIMIT ((RGB_MATRIX_LED_COUNT + (MATRIX_ROWS -1)) / MATRIX_ROWS)
+
+/* Master to Slave I2C Connection */
+#define I2C2_SCL_PIN C13
+#define I2C2_SDA_PIN C12
 #define SLAVE_I2C_ADDRESS 0x4f
+
+/* RGB Drivers I2C Connection */
+#define I2C1_SCL_PIN C9
+#define I2C1_SDA_PIN C10
+#define I2C1_SCL_PAL_MODE PAL_MODE_OUTPUT_PUSHPULL
+#define I2C1_SDA_PAL_MODE PAL_MODE_OUTPUT_PUSHPULL
+#define USE_GPIOV1
+/* RGB Matrix Driver Configuration */
+#define DRIVER_COUNT 2
+#define DRIVER_ADDR_1 0b1110100
+#define DRIVER_ADDR_2 0b1110111
+//#define SLED_PERSISTENCE 2
+#define DRIVER_1_LED_TOTAL (41 + 4)
+#define DRIVER_2_LED_TOTAL 48
+#define RGB_MATRIX_LED_COUNT (DRIVER_1_LED_TOTAL + DRIVER_2_LED_TOTAL)
+
+#define DIRECT_WIN_LOCK_PIN B13
+#define DIRECT_RGB_TOGG_PIN B14
+#define DIRECT_ENCODER_PUSH_PIN C8
+#define LED_FN_PIN B12
+#define LED_MACRO_PIN B9
+#define LED_WIN_LOCK_PIN B8
+
+/* Enable RGB Framebuffer Effects */
+#define RGB_MATRIX_FRAMEBUFFER_EFFECTS
+/* Enable RGB Reactive Effects */
+#define RGB_MATRIX_KEYPRESSES

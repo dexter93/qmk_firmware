@@ -14,6 +14,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #pragma once
-#include_next <chconf.h>
-#undef CH_CFG_USE_MUTEXES
-#define CH_CFG_USE_MUTEXES TRUE
+
+#include "keyboard.h"
+/* Define layer names */
+enum layers{
+  _BASE,
+  _FN
+};
+
+typedef struct {
+    bool fn_active;
+    bool macro;
+    bool gui_lock;
+} extended_led_t;

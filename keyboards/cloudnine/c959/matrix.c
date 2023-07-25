@@ -15,9 +15,8 @@
  */
  #include "i2c_master.h"
  #include "matrix.h"
-#include <ch.h>
-#include <hal.h>
-#include "print.h"
+ #include <ch.h>
+ #include <hal.h>
  #include <string.h>
  #include "atomic_util.h"
  #include "chibios_config.h"
