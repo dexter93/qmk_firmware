@@ -13,13 +13,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- #include "i2c_master.h"
- #include "matrix.h"
- #include <ch.h>
- #include <hal.h>
- #include <string.h>
- #include "atomic_util.h"
- #include "chibios_config.h"
+#include "i2c_master.h"
+#include "matrix.h"
+#include <ch.h>
+#include <hal.h>
+#include <string.h>
+#include "atomic_util.h"
+#include "chibios_config.h"
 
 /* Master to Slave I2C Connection */
 static const I2CConfig slavei2cconfig = {
@@ -34,14 +34,14 @@ extern matrix_row_t raw_matrix[MATRIX_ROWS]; // raw values
 
 static pin_t row_pins[MATRIX_ROWS] = MATRIX_ROW_PINS;
 
-static pin_t col_pins[MATRIX_COLS]   = MATRIX_COL_PINS;
+static pin_t col_pins[MATRIX_COLS] = MATRIX_COL_PINS;
 
-uint8_t scan_buf[10]= {0};
+uint8_t scan_buf[10] = {0};
 uint8_t slave_row;
 uint8_t slave_col;
-bool key_level = false;
-bool slave_matrix_scan_update(void) {
-    bool update_request = false;
+bool    key_level = false;
+bool    slave_matrix_scan_update(void) {
+    bool    update_request = false;
     uint8_t buf[10];
     i2cStart(&I2CD2, &slavei2cconfig);
     i2c_status_t ret = i2cMasterReceiveTimeout(&I2CD2, (SLAVE_I2C_ADDRESS >> 1), buf, sizeof(buf), TIME_MS2I(100));
@@ -49,9 +49,9 @@ bool slave_matrix_scan_update(void) {
         i2cStop(&I2CD2);
         return update_request;
     }
-    for(int i=0; i < sizeof(buf); i++) {
-        if( buf[i] != scan_buf[i]) {
-            scan_buf[i]=buf[i];
+    for (int i = 0; i < sizeof(buf); i++) {
+        if (buf[i] != scan_buf[i]) {
+            scan_buf[i]    = buf[i];
             update_request = true;
         }
     }
@@ -63,24 +63,24 @@ void slave_decode(void) {
     for (int i = 0; i < sizeof(scan_buf); i++) {
         if (scan_buf[i] == 0) continue;
         int leftmost_bit_pos = 7;
-        while ((scan_buf[i] & (1 << leftmost_bit_pos)) == 0) leftmost_bit_pos--;
+        while ((scan_buf[i] & (1 << leftmost_bit_pos)) == 0)
+            leftmost_bit_pos--;
         scan_row = leftmost_bit_pos;
         scan_col = i;
         break;
     }
-    if( scan_row == 255 || scan_col == 255) {
+    if (scan_row == 255 || scan_col == 255) {
         key_level = false;
-        return; //key released
+        return; // key released
     }
-    if( scan_col <= (MATRIX_COLS / 2)) {
+    if (scan_col <= (MATRIX_COLS / 2)) {
         slave_row = scan_row + 1;
         slave_col = scan_col;
         key_level = true;
-        return; //key pressed
+        return; // key pressed
     }
     // something went wrong here - unhandled
 }
-
 
 static inline void setPinOutput_writeLow(pin_t pin) {
     ATOMIC_BLOCK_FORCEON {
@@ -122,14 +122,13 @@ static bool select_row(uint8_t row) {
 static void unselect_row(uint8_t row) {
     pin_t pin = row_pins[row];
     if (pin != NO_PIN) {
-#            ifdef MATRIX_UNSELECT_DRIVE_HIGH
+#ifdef MATRIX_UNSELECT_DRIVE_HIGH
         setPinOutput_writeHigh(pin);
-#            else
+#else
         setPinInputHigh_atomic(pin);
-#            endif
+#endif
     }
 }
-
 
 static void unselect_rows(void) {
     for (uint8_t x = 0; x < MATRIX_ROWS; x++) {
@@ -180,7 +179,7 @@ void matrix_read_cols_on_row(matrix_row_t current_matrix[], uint8_t current_row)
 bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     matrix_row_t curr_matrix[MATRIX_ROWS] = {0};
     // Set row, read cols
-    for (uint8_t current_row = 1; current_row < (MATRIX_ROWS -1); current_row++) {
+    for (uint8_t current_row = 1; current_row < (MATRIX_ROWS - 1); current_row++) {
         matrix_read_cols_on_row(curr_matrix, current_row);
     }
     // Update the top left direct pins as part of the matrix
@@ -189,7 +188,7 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     // Update the encoder switch as part of the matrix
     curr_matrix[7] |= readMatrixPin(DIRECT_ENCODER_PUSH_PIN) ? 0 : (MATRIX_ROW_SHIFTER << 7);
     // Check the slave side
-    if(slave_matrix_scan_update()) slave_decode();
+    if (slave_matrix_scan_update()) slave_decode();
     curr_matrix[slave_row] |= !key_level ? 0 : (MATRIX_ROW_SHIFTER << ((MATRIX_COLS / 2) + slave_col));
 
     bool changed = memcmp(raw_matrix, curr_matrix, sizeof(curr_matrix)) != 0;

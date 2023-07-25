@@ -141,7 +141,7 @@ const sled1734x_led PROGMEM g_sled1734x_leds[RGB_MATRIX_LED_COUNT] = {
 };
 
 void shutdown_user(void) {
-    // Disable RGB on software shutdown
+    /* Disable RGB on suspend */
     SLED1734X_sw_shutdown(DRIVER_ADDR_1);
     SLED1734X_sw_shutdown(DRIVER_ADDR_2);
 }
@@ -152,6 +152,7 @@ void shutdown_user(void) {
 void sw_i2c_delay(void) {
     // done.
 }
+/* Custom init function for I2C */
 void i2c_init(void) {
     // done.
 }
@@ -176,6 +177,7 @@ void keyboard_pre_init_kb(void) {
     setPinInputHigh(DIRECT_RGB_TOGG_PIN);
     setPinInputHigh(DIRECT_ENCODER_PUSH_PIN);
 }
+
 /* Debug */
 void keyboard_post_init_kb(void) {
     debug_enable = true;

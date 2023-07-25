@@ -17,10 +17,7 @@
 
 #include "keyboard.h"
 /* Define layer names */
-enum layers{
-  _BASE,
-  _FN
-};
+enum layers { _BASE, _FN };
 
 typedef struct {
     bool fn_active;
