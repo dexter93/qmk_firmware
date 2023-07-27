@@ -20,7 +20,7 @@
 #include <string.h>
 #include "atomic_util.h"
 #include "chibios_config.h"
-
+#include "rgb_matrix.h"
 /* Master to Slave I2C Connection */
 static const I2CConfig slavei2cconfig = {
     0,
@@ -42,6 +42,7 @@ uint8_t slave_col;
 bool    key_level = false;
 bool    slave_matrix_scan_update(void) {
     bool    update_request = false;
+    if(!readPin(SLAVE_I2C_CONNECTED_PIN)) return update_request;
     uint8_t buf[10];
     i2cStart(&I2CD2, &slavei2cconfig);
     i2c_status_t ret = i2cMasterReceiveTimeout(&I2CD2, (SLAVE_I2C_ADDRESS >> 1), buf, sizeof(buf), TIME_MS2I(100));
@@ -49,10 +50,10 @@ bool    slave_matrix_scan_update(void) {
         i2cStop(&I2CD2);
         return update_request;
     }
+    update_request = true;
     for (int i = 0; i < sizeof(buf); i++) {
         if (buf[i] != scan_buf[i]) {
             scan_buf[i]    = buf[i];
-            update_request = true;
         }
     }
     return update_request;
@@ -188,8 +189,10 @@ bool matrix_scan_custom(matrix_row_t current_matrix[]) {
     // Update the encoder switch as part of the matrix
     curr_matrix[7] |= readMatrixPin(DIRECT_ENCODER_PUSH_PIN) ? 0 : (MATRIX_ROW_SHIFTER << 7);
     // Check the slave side
-    if (slave_matrix_scan_update()) slave_decode();
-    curr_matrix[slave_row] |= !key_level ? 0 : (MATRIX_ROW_SHIFTER << ((MATRIX_COLS / 2) + slave_col));
+    if (slave_matrix_scan_update()) {
+        slave_decode();
+        curr_matrix[slave_row] |= !key_level ? 0 : (MATRIX_ROW_SHIFTER << ((MATRIX_COLS / 2) + slave_col));
+    }
 
     bool changed = memcmp(raw_matrix, curr_matrix, sizeof(curr_matrix)) != 0;
     if (changed) memcpy(raw_matrix, curr_matrix, sizeof(curr_matrix));

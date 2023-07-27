@@ -54,8 +54,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       case PRNT_ID:
         if (record->event.pressed) {
           uprintf("Device Serial number: %08lx%08lx \n", SN_UC->H4BYTE, SN_UC->L4BYTE);
-          uprintf("Device Serial lower 4 bytes: %08lx \n", SN_UC->L4BYTE);
-          uprintf("Device Serial higher 4 bytes: %08lx \n", SN_UC->H4BYTE);
           return false;
         }
         break;

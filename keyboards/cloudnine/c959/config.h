@@ -26,6 +26,7 @@
 #define I2C2_SCL_PIN C13
 #define I2C2_SDA_PIN C12
 #define SLAVE_I2C_ADDRESS 0x4f
+#define SLAVE_I2C_CONNECTED_PIN C14
 /* RGB Drivers I2C Connection */
 #define I2C1_SCL_PIN C9
 #define I2C1_SDA_PIN C10
