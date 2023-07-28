@@ -18,7 +18,7 @@
 #include "keyboard.h"
 /* Define layer names */
 enum layers { _BASE, _FN };
-bool slave_connected;
+
 typedef struct {
     bool fn_active;
     bool macro;

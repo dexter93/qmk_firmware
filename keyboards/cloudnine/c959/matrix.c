@@ -21,7 +21,6 @@
 #include "atomic_util.h"
 #include "chibios_config.h"
 #include "rgb_matrix.h"
-#include "c959.h"
 /* Master to Slave I2C Connection */
 static const I2CConfig slavei2cconfig = {
     0,
@@ -37,26 +36,13 @@ static pin_t row_pins[MATRIX_ROWS] = MATRIX_ROW_PINS;
 
 static pin_t col_pins[MATRIX_COLS] = MATRIX_COL_PINS;
 
-bool is_slave_connected(void) {
-    return (readPin(SLAVE_I2C_CONNECTED_PIN) == 1);
-}
-void housekeeping_task_kb(void) {
-    bool current_connection = is_slave_connected();
-    if(current_connection !=slave_connected) {
-        if(current_connection){
-            rgb_matrix_init();
-        }
-        slave_connected = current_connection;
-    }
-}
-
 uint8_t scan_buf[10] = {0};
 uint8_t slave_row;
 uint8_t slave_col;
 bool    key_level = false;
 bool    slave_matrix_scan_update(void) {
     bool    update_request = false;
-    if(!slave_connected) return update_request;
+    if(!readPin(SLAVE_I2C_CONNECTED_PIN)) return update_request;
     uint8_t buf[10];
     i2cStart(&I2CD2, &slavei2cconfig);
     i2c_status_t ret = i2cMasterReceiveTimeout(&I2CD2, (SLAVE_I2C_ADDRESS >> 1), buf, sizeof(buf), TIME_MS2I(100));
