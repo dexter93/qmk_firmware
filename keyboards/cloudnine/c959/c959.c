@@ -157,6 +157,7 @@ void i2c_init(void) {
     // done.
 }
 void keyboard_pre_init_kb(void) {
+    slave_connected = false;
     /* Init Slave side I2C */
     setPinInput(I2C2_SCL_PIN);
     setPinInput(I2C2_SDA_PIN);
