@@ -266,7 +266,7 @@ void is31fl3729_update_led_control_registers(uint8_t addr, uint8_t index) {
             for (int i =CS1_SW1; i <=CS15_SW1; i++) {
                 is31fl3729_write_register(addr, (ISSI_REG_SCALING + i - 1), g_scaling_registers[index][i -1]);
             }
-        else {
+        } else {
             for (int i =CS1_SW1; i <=0x10; i++) {
                 is31fl3729_write_register(addr, (ISSI_REG_SCALING + i - 1), g_scaling_registers[index][i -1]);
             }
