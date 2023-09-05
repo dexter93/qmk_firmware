@@ -221,21 +221,22 @@ void is31fl3729_set_led_control_register(uint8_t index, bool red, bool green, bo
     is31_led led;
     memcpy_P(&led, (&g_is31_leds[index]), sizeof(led));
 
-    // need to do a bit of checking here since 3729 scaling is per CS pin.
-    // not the usual per RGB key as per other ISSI drivers
-    // only enable them, since they should be default disabled
-    int cs_red   = (led.r & 0x0F) - 1;
-    int cs_green = (led.g & 0x0F) - 1;
-    int cs_blue  = (led.b & 0x0F) - 1;
-
     if (red) {
-        g_scaling_registers[led.driver][cs_red] = 0xFF;
+        g_scaling_registers[led.driver][led.r] = 0xFF;
+    } else {
+        g_scaling_registers[led.driver][led.r] = 0x00;
     }
+
     if (green) {
-        g_scaling_registers[led.driver][cs_green] = 0xFF;
+        g_scaling_registers[led.driver][led.g] = 0xFF;
+    } else {
+        g_scaling_registers[led.driver][led.g] = 0x00;
     }
+
     if (blue) {
-        g_scaling_registers[led.driver][cs_blue] = 0xFF;
+        g_scaling_registers[led.driver][led.b] = 0xFF;
+    } else {
+        g_scaling_registers[led.driver][led.b] = 0x00;
     }
 
     g_scaling_registers_update_required[led.driver] = true;
@@ -259,8 +260,16 @@ void is31fl3729_set_pwm_buffer(const is31_led *pled, uint8_t red, uint8_t green,
 
 void is31fl3729_update_led_control_registers(uint8_t addr, uint8_t index) {
     if (g_scaling_registers_update_required[index]) {
-        for (int i = 0; i < 16; i++) {
-            is31fl3729_write_register(addr, ISSI_REG_SCALING + i, g_scaling_registers[index][i]);
+        // is31fl3729 SL register does not follow PWM register addressing for CSx banks
+        // but is offset by 1. Fix that in addressing
+        if (config_15x9) {
+            for (int i =CS1_SW1; i <=CS15_SW1; i++) {
+                is31fl3729_write_register(addr, (ISSI_REG_SCALING + i - 1), g_scaling_registers[index][i -1]);
+            }
+        else {
+            for (int i =CS1_SW1; i <=0x10; i++) {
+                is31fl3729_write_register(addr, (ISSI_REG_SCALING + i - 1), g_scaling_registers[index][i -1]);
+            }
         }
 
         g_scaling_registers_update_required[index] = false;
