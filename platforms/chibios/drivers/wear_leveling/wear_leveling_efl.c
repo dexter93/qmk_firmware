@@ -69,10 +69,14 @@ bool backing_store_init(void) {
 
 #else // defined(WEAR_LEVELING_EFL_FIRST_SECTOR)
 
-    // Work out how many sectors we want to use, working backwards from the end of the flash
+        // Work out how many sectors we want to use, working backwards from the end of the flash
+#    if defined(WEAR_LEVELING_PROTECT_LAST_SECTORS)
+    flash_sector_t last_sector = desc->sectors_count - WEAR_LEVELING_PROTECT_LAST_SECTORS;
+#    else
     flash_sector_t last_sector = desc->sectors_count;
-    for (flash_sector_t i = 0; i < desc->sectors_count; ++i) {
-        first_sector = desc->sectors_count - i - 1;
+#    endif
+    for (flash_sector_t i = 0; i < last_sector; ++i) {
+        first_sector = last_sector - i - 1;
         if (flashGetSectorOffset(flash, first_sector) >= flash_size) {
             last_sector = first_sector;
             continue;
