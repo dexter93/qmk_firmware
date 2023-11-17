@@ -15,8 +15,8 @@ static flash_sector_t first_sector = UINT16_MAX;
 #endif // defined(WEAR_LEVELING_EFL_FIRST_SECTOR)
 
 static flash_sector_t sector_count = UINT16_MAX;
-static BaseFlash *    flash;
-
+static BaseFlash     *flash;
+static bool           flash_erased_is_one;
 // "Automatic" detection of the flash size -- ideally ChibiOS would have this already, but alas, it doesn't.
 static inline uint32_t detect_flash_size(void) {
 #if defined(WEAR_LEVELING_EFL_FLASH_SIZE)
@@ -47,6 +47,9 @@ bool backing_store_init(void) {
     const flash_descriptor_t *desc       = flashGetDescriptor(flash);
     uint32_t                  counter    = 0;
     uint32_t                  flash_size = detect_flash_size();
+
+    // Check if the hardware erase is logic 1
+    if (desc->attributes & FLASH_ATTR_ERASED_IS_ONE) flash_erased_is_one = true;
 
 #if defined(WEAR_LEVELING_EFL_FIRST_SECTOR)
 
@@ -121,7 +124,7 @@ bool backing_store_write(uint32_t address, backing_store_int_t value) {
     uint32_t offset = (base_offset + address);
     bs_dprintf("Write ");
     wl_dump(offset, &value, sizeof(value));
-    value = ~value;
+    if (flash_erased_is_one) value = ~value;
     return flashProgram(flash, offset, sizeof(value), (const uint8_t *)&value) == FLASH_NO_ERROR;
 }
 
@@ -134,7 +137,11 @@ bool backing_store_lock(void) {
 bool backing_store_read(uint32_t address, backing_store_int_t *value) {
     uint32_t             offset = (base_offset + address);
     backing_store_int_t *loc    = (backing_store_int_t *)flashGetOffsetAddress(flash, offset);
-    *value                      = ~(*loc);
+    if (flash_erased_is_one) {
+        *value = ~(*loc);
+    } else {
+        *value = (*loc);
+    }
     bs_dprintf("Read  ");
     wl_dump(offset, value, sizeof(backing_store_int_t));
     return true;
