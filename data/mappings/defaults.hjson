@@ -84,6 +84,11 @@
             "board": "STEMCELL",
             "bootloader": "tinyuf2",
             "processor": "STM32F411"
+        },
+        "sn32f240b_shared_matrix": {
+            "board": "SN_SN32F240B_PWM",
+            "bootloader": "sn32-dfu",
+            "processor": "SN32F248BF"
         }
     }
 }
