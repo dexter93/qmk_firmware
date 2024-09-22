@@ -26,6 +26,7 @@ RGB Matrix is an abstraction layer on top of an underlying LED driver API. The l
 |[IS31FL3746A](../drivers/is31fl3746a)|24      |
 |[SNLED27351](../drivers/snled27351)  |64      |
 |[SLED1734X](../drivers/sled1734x)    |70      |
+|[SN32F2XX](../drivers/sn32f2xx)      |?       |
 |[WS2812](../drivers/ws2812)          |?       |
 
 To assign the RGB Matrix driver, add the following to your `rules.mk`, for example:
