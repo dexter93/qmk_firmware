@@ -3,12 +3,11 @@
     "manufacturer": "Ozone",
     "maintainer": "elpekenin",
     "url": "",
-    "processor": "SN32F248BF",
-    "bootloader": "sn32-dfu",
     "bootloader_instructions": "",
     "build": {
         "lto": false
     },
+    "development_board": "sn32f240b_shared_matrix",
     "diode_direction": "COL2ROW",
     "features": {
         "audio": false,

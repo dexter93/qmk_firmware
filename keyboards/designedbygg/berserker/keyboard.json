@@ -2,13 +2,12 @@
     "keyboard_name": "Berserker",
     "manufacturer": "DesignedbyGG",
     "url": "https://designedby.gg/product/berserker/",
-    "processor": "SN32F248BF",
     "maintainer": "dexter93",
-    "bootloader": "sn32-dfu",
     "debounce": 20,
     "build": {
         "debounce_type": "sym_eager_pk",
     },
+    "development_board": "sn32f240b_shared_matrix",
     "diode_direction": "COL2ROW",
     "features": {
         "rgb_matrix": true,

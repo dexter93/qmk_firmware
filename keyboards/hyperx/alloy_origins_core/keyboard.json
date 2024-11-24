@@ -2,7 +2,7 @@
     "manufacturer": "HyperX",
     "keyboard_name": "Alloy Origins Core",
     "maintainer": "nekomancer834",
-    "bootloader": "sn32-dfu",
+    "development_board": "sn32f240b_shared_matrix",
     "diode_direction": "ROW2COL",
     "features": {
         "bootmagic": true,
@@ -20,7 +20,6 @@
         "cols": ["B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12", "B13", "D7"],
         "rows": ["C3", "C4", "C5", "C6", "C7", "C8", "C10", "C9"]
     },
-    "processor": "SN32F248BF",
     "eeprom:": {
         "driver": "wear_leveling",
         "wear_leveling": {

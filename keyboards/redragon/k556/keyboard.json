@@ -3,9 +3,6 @@
     "manufacturer": "Redragon",
     "url": "https://www.redragonzone.com/products/redragonk556",
     "maintainer": "Xinayder",
-    "bootloader": "sn32-dfu",
-    
-    "processor": "SN32F248BF",
     "usb": {
         "vid": "0x0C45",
         "pid": "0x5004",
@@ -25,6 +22,7 @@
     },
 
     "debounce": 5,
+    "development_board": "sn32f240b_shared_matrix",
     "diode_direction": "ROW2COL",
     "matrix_pins": {
         "cols": [ "A0",  "A1",  "A2",  "A3", "A4", "A5",  "A6",  "A7",  "A8", "A9", "A10", "A11", "A12", "A13", "A14", "B0", "B1", "B2", "B3", "B4", "B5" ],

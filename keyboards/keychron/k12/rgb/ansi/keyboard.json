@@ -2,10 +2,9 @@
     "keyboard_name": "Keychron K12",
     "manufacturer": "Keychron",
     "url": "https://www.keychron.com/products/keychron-k12-wireless-mechanical-keyboard",
-    "processor": "SN32F248BF",
     "maintainer": "turai",
-    "bootloader": "sn32-dfu",
     "debounce": 5,
+    "development_board": "sn32f240b_shared_matrix",
     "diode_direction": "COL2ROW",
     "features": {
         "rgb_matrix": true,

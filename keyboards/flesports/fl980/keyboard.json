@@ -8,8 +8,7 @@
         "pid": "0x5004",
         "device_version": "1.0.0"
     },
-    "processor": "SN32F248BF",
-    "bootloader": "sn32-dfu",
+    "development_board": "sn32f240b_shared_matrix",
     "diode_direction": "ROW2COL",
     "features": {
         "bootmagic": true,

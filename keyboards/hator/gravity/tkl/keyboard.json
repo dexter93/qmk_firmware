@@ -3,13 +3,12 @@
     "keyboard_name": "HATOR Gravity TKL",
     "url": "https://hator.com",
     "maintainer": "AlexHtr",
-    "bootloader": "sn32-dfu",
     "usb": {
         "device_version": "1.0.0",
         "pid": "0x0606",
         "vid": "0x379A"
     },
-    "processor": "SN32F248BF",
+    "development_board": "sn32f240b_shared_matrix",
     "diode_direction": "COL2ROW",
     "features": {
         "bootmagic": true,

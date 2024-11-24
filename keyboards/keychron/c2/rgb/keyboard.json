@@ -2,7 +2,6 @@
     "manufacturer": "Keychron",
     "keyboard_name": "Keychron C2 RGB",
     "maintainer": "SiphonedAnomaly",
-    "bootloader": "sn32-dfu",
     "diode_direction": "ROW2COL",
     "features": {
         "bootmagic": true,
@@ -24,12 +23,12 @@
         "pins": ["D6"]
     },
     "matrix_pins": {
-		"rows": ["C15", "D11", "D10", "D9", "D8", "D7"]
+		"rows": ["C15", "D11", "D10", "D9", "D8", "D7"],
         "cols": ["A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10", "A11", "A12", "A13", "A14", "B0", "B1", "B2", "B3", "B4", "B5"],
     },
     "debounce": 1,
-    "processor": "SN32F248BF",
-	"url": "https://www.keychron.com/products/keychron-c2-wired-mechanical-keyboard?variant=32294075170905"
+    "development_board": "sn32f240b_shared_matrix",
+	"url": "https://www.keychron.com/products/keychron-c2-wired-mechanical-keyboard?variant=32294075170905",
     "usb": {
         "device_version": "1.0.0",
         "pid": "0xFE22",

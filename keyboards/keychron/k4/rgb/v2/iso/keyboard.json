@@ -2,7 +2,7 @@
     "manufacturer": "Keychron",
     "keyboard_name": "K4v2 RGB",
     "maintainer": "ephb",
-    "bootloader": "sn32-dfu",
+    "development_board": "sn32f240b_shared_matrix",
     "diode_direction": "COL2ROW",
     "features": {
         "rgb_matrix": true,
@@ -19,7 +19,6 @@
         "cols": ["A8", "A9", "A10", "A11", "A12", "A13", "A14", "A15", "B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10"],
         "rows": ["C15", "D11", "D10", "D9", "D8", "D7"]
     },
-    "processor": "SN32F248BF",
     "usb": {
         "device_version": "1.0.0",
         "pid": "0xFE07",
