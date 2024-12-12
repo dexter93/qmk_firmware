@@ -1,0 +1,7 @@
+#pragma once
+#define SERIAL_USART_FULL_DUPLEX
+#define SOFT_SERIAL_PIN A10
+#define SERIAL_USART_RX_PIN A11
+#define SERIAL_USART_DRIVER SD0
+
+
