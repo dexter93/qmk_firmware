@@ -137,6 +137,9 @@ ifeq ($(strip $(BOOTLOADER)), sn32-dfu)
     ifeq ($(strip $(MCU_SERIES)), SN32F260)
         DFU_ARGS ?= -v 0c45/7010 -o 0x200
     endif
+    ifeq ($(strip $(MCU_SERIES)), SN32F290)
+        DFU_ARGS ?= -v 0c45/7140
+    endif
 
 endif
 
