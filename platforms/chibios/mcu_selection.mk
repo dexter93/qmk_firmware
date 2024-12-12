@@ -917,6 +917,38 @@ ifneq ($(findstring SN32F248BF, $(MCU)),)
   SN32_BOOTLOADER_ADDRESS = 0x1FFF0301
 endif
 
+ifneq ($(findstring SN32F248CF, $(MCU)),)
+  # Cortex version
+  MCU = cortex-m0
+
+  # ARM version, CORTEX-M0/M1 are 6, CORTEX-M3/M4/M7 are 7
+  ARMV = 6
+
+  ## chip/board settings
+  # - the next two should match the directories in
+  #   <chibios>/os/hal/ports/$(MCU_FAMILY)/$(MCU_SERIES)
+  MCU_FAMILY = SN32
+  MCU_SERIES = SN32F240C
+
+  # Linker script to use
+  # - it should exist either in <chibios>/os/common/ports/ARMCMx/compilers/GCC/ld/
+  #   or <keyboard_dir>/ld/
+  MCU_LDSCRIPT ?= SN32F240C
+
+  # Startup code to use
+  #  - it should exist in <chibios>/os/common/startup/ARMCMx/compilers/GCC/mk/
+  MCU_STARTUP ?= sn32f24xc
+
+  # Board: it should exist either in <chibios>/os/hal/boards/,
+  # <keyboard_dir>/boards/, or drivers/boards/
+  BOARD ?= SN_SN32F240C
+
+  USE_FPU ?= no
+
+  # Bootloader address for SN32 DFU
+  SN32_BOOTLOADER_ADDRESS = 0x1FFF0301
+endif
+
 ifneq ($(findstring SN32F268F, $(MCU)),)
   # Cortex version
   MCU = cortex-m0
