@@ -43,8 +43,7 @@
 /*
  * PWM driver system settings.
  */
-#define SN32_PWM_USE_CT16B1 TRUE
-#define SN32_PWM_NO_RESET TRUE
+// Defaults are correct
 /*
  * USB driver system settings.
  */
