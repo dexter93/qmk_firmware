@@ -18,7 +18,7 @@
 #define MCUCONF_H
 
 /*
- * SN32F24xB drivers configuration.
+ * SN32F24xC drivers configuration.
  * The following settings override the default settings present in
  * the various device driver implementation headers.
  * Note that the settings for each driver only have effect if the whole
@@ -31,7 +31,7 @@
  * 0...3        Lowest...Highest.
  */
 
-#define SN32F24xB_MCUCONF
+#define SN32F24xC_MCUCONF
 #define PLATFORM_MCUCONF
 /*
  * HAL driver system settings.
@@ -43,8 +43,7 @@
 /*
  * PWM driver system settings.
  */
-#define SN32_PWM_USE_CT16B1 TRUE
-#define SN32_PWM_NO_RESET TRUE
+// Defaults are correct
 /*
  * USB driver system settings.
  */
