@@ -9,5 +9,3 @@
 //#define PAL_USE_WAIT TRUE
 //#define PAL_USE_CALLBACKS TRUE
 #include_next <halconf.h>
-#undef HAL_USE_PWM
-#define HAL_USE_PWM FALSE
