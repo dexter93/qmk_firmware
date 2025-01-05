@@ -9,7 +9,7 @@
         "command": false,
         "console": true,
         "extrakey": true,
-        "encoder": true,
+        "encoder": false,
         "nkro": true
     },
     "indicators": {
@@ -32,15 +32,18 @@
                 ]
             },
         },
+        "handedness": {
+            "matrix_grid": ["C12", "B8"]
+        },
         "matrix_pins": {
             "right": {
                 "cols": ["C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9", "C10", "C11", "C12", "C13", "C14"],
                 "rows": ["B4", "B5", "B6", "B7", "B8", "B9"]
             },
         },
-        "transport": {
-            "protocol": "serial"
-        }
+        "serial": {
+            "driver": "usart"
+        },
     },
     "url": "",
     "usb": {
