@@ -10,6 +10,48 @@ const sled1734x_led_t PROGMEM g_sled1734x_leds[SLED1734X_LED_COUNT] = {
     {0, CA3_H,  CA1_H,  CA2_H},
     {0, CA3_I,  CA1_I,  CA2_I},
 
+    {0, CA5_A,  CA4_A,  CA6_A},
+    {0, CA5_B,  CA4_B,  CA6_B},
+    {0, CA5_C,  CA4_C,  CA6_C},
+    {0, CA5_F,  CA4_F,  CA6_F},
+    {0, CA5_G,  CA4_G,  CA6_G},
+    {0, CA5_H,  CA4_H,  CA6_H},
+    {0, CA5_I,  CA4_I,  CA6_I},
+    {0, CA5_J,  CA4_J,  CA6_J},
+
+    {0, CA8_A,  CA7_A,  CA9_A},
+    {0, CA8_B,  CA7_B,  CA9_B},
+    {0, CA8_C,  CA7_C,  CA9_C},
+    {0, CA8_D,  CA7_D,  CA9_D},
+    {0, CA8_E,  CA7_E,  CA9_E},
+    {0, CA8_F,  CA7_F,  CA9_F},
+    {0, CA8_I,  CA7_I,  CA9_I},
+
+    {0, CB2_A,  CB1_A,  CB3_A},
+    {0, CB2_B,  CB1_B,  CB3_B},
+    {0, CB2_C,  CB1_C,  CB3_C},
+    {0, CB2_D,  CB1_D,  CB3_D},
+    {0, CB2_E,  CB1_E,  CB3_E},
+    {0, CB2_F,  CB1_F,  CB3_F},
+    {0, CB2_G,  CB1_G,  CB3_G},
+
+    {0, CB5_A,  CB4_A,  CB6_A},
+    {0, CB5_B,  CB4_B,  CB6_B},
+    {0, CB5_D,  CB4_D,  CB6_D},
+    {0, CB5_E,  CB4_E,  CB6_E},
+    {0, CB5_F,  CB4_F,  CB6_F},
+    {0, CB5_G,  CB4_G,  CB6_G},
+    {0, CB5_H,  CB4_H,  CB6_H},
+
+    {0, CB5_I,  CB4_I,  CB6_I},
+    {0, CB5_J,  CB4_J,  CB6_J},
+    {0, CB5_K,  CB4_K,  CB6_K},
+    {0, CB5_L,  CB4_L,  CB6_L},
+    {0, CB5_O,  CB4_O,  CB6_O},
+
+
+
+
     {0, CA3_C,  CA1_C,  CA2_C},
     {0, CA3_D,  CA1_D,  CA2_D},
     {0, CA3_E,  CA1_E,  CA2_E},
@@ -21,14 +63,6 @@ const sled1734x_led_t PROGMEM g_sled1734x_leds[SLED1734X_LED_COUNT] = {
     {0, CA3_J,  CA1_J,  CA2_J},
     {0, CA3_K,  CA1_K,  CA2_K},
 
-    {0, CA5_A,  CA4_A,  CA6_A},
-    {0, CA5_B,  CA4_B,  CA6_B},
-    {0, CA5_C,  CA4_C,  CA6_C},
-    {0, CA5_F,  CA4_F,  CA6_F},
-    {0, CA5_G,  CA4_G,  CA6_G},
-    {0, CA5_H,  CA4_H,  CA6_H},
-    {0, CA5_I,  CA4_I,  CA6_I},
-    {0, CA5_J,  CA4_J,  CA6_J},
 
     {0, CA5_A,  CA4_A,  CA6_A},
     {0, CA5_B,  CA4_B,  CA6_B},
@@ -45,13 +79,6 @@ const sled1734x_led_t PROGMEM g_sled1734x_leds[SLED1734X_LED_COUNT] = {
     {0, CA5_O,  CA4_O,  CA6_O},
     {0, CA5_P,  CA4_P,  CA6_P},
 
-    {0, CA8_A,  CA7_A,  CA9_A},
-    {0, CA8_B,  CA7_B,  CA9_B},
-    {0, CA8_C,  CA7_C,  CA9_C},
-    {0, CA8_D,  CA7_D,  CA9_D},
-    {0, CA8_E,  CA7_E,  CA9_E},
-    {0, CA8_F,  CA7_F,  CA9_F},
-    {0, CA8_I,  CA7_I,  CA9_I},
 
     {0, CA8_A,  CA7_A,  CA9_A},
     {0, CA8_B,  CA7_B,  CA9_B},
@@ -69,13 +96,6 @@ const sled1734x_led_t PROGMEM g_sled1734x_leds[SLED1734X_LED_COUNT] = {
     {0, CA8_P,  CA7_P,  CA9_P},
     {0, CB2_I,  CB1_I,  CB3_I},
 
-    {0, CB2_A,  CB1_A,  CB3_A},
-    {0, CB2_B,  CB1_B,  CB3_B},
-    {0, CB2_C,  CB1_C,  CB3_C},
-    {0, CB2_D,  CB1_D,  CB3_D},
-    {0, CB2_E,  CB1_E,  CB3_E},
-    {0, CB2_F,  CB1_F,  CB3_F},
-    {0, CB2_G,  CB1_G,  CB3_G},
 
     {0, CB2_A,  CB1_A,  CB3_A},
     {0, CB2_B,  CB1_B,  CB3_B},
@@ -88,13 +108,6 @@ const sled1734x_led_t PROGMEM g_sled1734x_leds[SLED1734X_LED_COUNT] = {
     {0, CB2_O,  CB1_O,  CB3_O},
     {0, CB2_P,  CB1_P,  CB3_P},
 
-    {0, CB5_A,  CB4_A,  CB6_A},
-    {0, CB5_B,  CB4_B,  CB6_B},
-    {0, CB5_D,  CB4_D,  CB6_D},
-    {0, CB5_E,  CB4_E,  CB6_E},
-    {0, CB5_F,  CB4_F,  CB6_F},
-    {0, CB5_G,  CB4_G,  CB6_G},
-    {0, CB5_H,  CB4_H,  CB6_H},
 
     {0, CB5_A,  CB4_A,  CB6_A},
     {0, CB5_B,  CB4_B,  CB6_B},
@@ -108,11 +121,6 @@ const sled1734x_led_t PROGMEM g_sled1734x_leds[SLED1734X_LED_COUNT] = {
     {0, CB5_P,  CB4_P,  CB6_P},
     {0, CB5_K,  CB4_K,  CB6_K},
 
-    {0, CB5_I,  CB4_I,  CB6_I},
-    {0, CB5_J,  CB4_J,  CB6_J},
-    {0, CB5_K,  CB4_K,  CB6_K},
-    {0, CB5_L,  CB4_L,  CB6_L},
-    {0, CB5_O,  CB4_O,  CB6_O},
 
     {0, CA3_L,  CA1_L,  CA2_L},
     {0, CA3_M,  CA1_M,  CA2_M},
