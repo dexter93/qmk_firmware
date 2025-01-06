@@ -123,10 +123,10 @@ void sled1734x_write_pwm_buffer(uint8_t index) {
     for (int i = 0; i < SLED1734X_FRAME_OFFSET; i += 16) {
 #if SLED1734X_I2C_PERSISTENCE > 0
         for (uint8_t j = 0; j < SLED1734X_I2C_PERSISTENCE; j++) {
-            if (i2c_write_register(i2c_addresses[index] << 1, SLED1734X_OFFSET + i, driver_buffers[index].pwm_buffer + i, 16, SLED1734X_I2C_TIMEOUT) == I2C_STATUS_SUCCESS) break;
+            if (i2c_write_register(i2c_addresses[index] << 1, SLED1734X_OFFSET + i, driver_buffers[index].pwm_buffer + SLED1734X_FRAME_OFFSET + i, 16, SLED1734X_I2C_TIMEOUT) == I2C_STATUS_SUCCESS) break;
         }
 #else
-        i2c_write_register(i2c_addresses[index] << 1, SLED1734X_OFFSET + i, driver_buffers[index].pwm_buffer + i, 16, SLED1734X_I2C_TIMEOUT);
+        i2c_write_register(i2c_addresses[index] << 1, SLED1734X_OFFSET + i, driver_buffers[index].pwm_buffer + SLED1734X_FRAME_OFFSET + i, 16, SLED1734X_I2C_TIMEOUT);
 #endif
     }
 }
