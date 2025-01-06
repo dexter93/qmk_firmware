@@ -1015,5 +1015,5 @@ ifneq ($(findstring SN32F299F, $(MCU)),)
   USE_FPU ?= no
 
   # Bootloader address for SN32 DFU
-  SN32_BOOTLOADER_ADDRESS = 0x1FFF0009
+  SN32_BOOTLOADER_ADDRESS = 0x1FFF0301
 endif
