@@ -51,10 +51,10 @@ const sled1734x_led_t PROGMEM g_sled1734x_leds[SLED1734X_LED_COUNT] = {
     {0, CB4_J,  CB5_J,  CB6_J},
     {0, CB4_K,  CB5_K,  CB6_K},
     {0, CB4_L,  CB5_L,  CB6_L},
-    {0, CB4_O,  CB5_O,  CB6_O},
+    {0, CB4_O,  CB5_O,  CB6_O}
 
 
-
+/*
 
     {0, CA1_C,  CA3_C,  CA2_C},
     {0, CA1_D,  CA3_D,  CA2_D},
@@ -135,7 +135,7 @@ const sled1734x_led_t PROGMEM g_sled1734x_leds[SLED1734X_LED_COUNT] = {
     {0, CB4_I,  CB5_I,  CB6_I},
     {0, CB4_J,  CB5_J,  CB6_J},
     {0, CB1_L,  CB2_L,  CB3_L},
-    {0, CB1_M,  CB2_M,  CB3_M}
+    {0, CB1_M,  CB2_M,  CB3_M}*/
 };
 #endif
 //bool is_keyboard_left_impl(void) {
