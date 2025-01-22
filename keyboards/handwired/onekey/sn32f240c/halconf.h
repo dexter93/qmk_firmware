@@ -1,4 +1,4 @@
-/* Copyright 2024 Dimitris Mantzouranis <d3xter93@gmail.com>
+/* Copyright 2025 Dimitris Mantzouranis <d3xter93@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -13,14 +13,9 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
 #pragma once
 
-#define ADC_PIN C0
-#define ADC_RESOLUTION 12
+#define HAL_USE_ADC TRUE
+#define HAL_USE_I2C TRUE
 
-#define I2C_DRIVER I2CD0
-#define I2C1_SCL_PIN A6
-#define I2C1_SDA_PIN A7
-#define I2C1_OPMODE OPMODE_I2C
-#define I2C1_CLOCK_SPEED 400000
+#include_next <halconf.h>

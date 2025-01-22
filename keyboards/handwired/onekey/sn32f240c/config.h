@@ -16,6 +16,9 @@
  
 #pragma once
 
+#define ADC_PIN C0
+#define ADC_RESOLUTION 12
+
 #define I2C_DRIVER I2CD0
 #define I2C1_SCL_PIN A6
 #define I2C1_SDA_PIN A7
