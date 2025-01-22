@@ -15,5 +15,7 @@
  */
 #pragma once
 
+#define SN32_ADC_USE_ADC1 TRUE
+
 #define SN32_I2C_USE_I2C0 TRUE
 #include_next <mcuconf.h>
