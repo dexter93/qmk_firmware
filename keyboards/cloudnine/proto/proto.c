@@ -72,7 +72,7 @@ const sled1734x_led_t PROGMEM g_sled1734x_leds[SLED1734X_LED_COUNT] = {
     {0, CA4_B,  CA5_B,  CA6_B},
     {0, CA4_C,  CA5_C,  CA6_C},
     {0, CA4_F,  CA5_F,  CA6_F},
-    {0, CA4_P,  CA5_P,  CA6_P},
+    {0, CA4_G,  CA5_G,  CA6_G},
     {0, CA4_H,  CA5_H,  CA6_H},
     {0, CA4_I,  CA5_I,  CA6_I},
     {0, CA4_J,  CA5_J,  CA6_J},
@@ -137,11 +137,12 @@ const sled1734x_led_t PROGMEM g_sled1734x_leds[SLED1734X_LED_COUNT] = {
     {0, CB1_L,  CB2_L,  CB3_L},
     {0, CB1_M,  CB2_M,  CB3_M}
 };
+
 #endif
 //bool is_keyboard_left_impl(void) {
   // return false;
 //}
-/*
+
 #include <stdint.h>
 #include <string.h>
 #include <ch.h>
@@ -163,6 +164,41 @@ typedef enum {
     Reset      = 1,
     NMI        = 2,
     HardFault  = 3,
+    SVCCalll   = 11,
+    PendSV     = 14,
+    SysTickI   = 15,
+    IRQ0       = 16,
+    IRQ1       = 17,
+    IRQ2       = 18,
+    IRQ3       = 19,
+    IRQ4       = 20,
+    IRQ5       = 21,
+    IRQ6       = 22,
+    IRQ7       = 23,
+    IRQ8       = 24,
+    IRQ9       = 25,
+    IRQ10      = 26,
+    IRQ11      = 27,
+    IRQ12      = 28,
+    IRQ13      = 29,
+    IRQ14      = 30,
+    IRQ15      = 31,
+    IRQ16      = 32,
+    IRQ17      = 33,
+    IRQ18      = 34,
+    IRQ19      = 35,
+    IRQ20      = 36,
+    IRQ21      = 37,
+    IRQ22      = 38,
+    IRQ23      = 39,
+    IRQ24      = 40,
+    IRQ25      = 41,
+    IRQ26      = 42,
+    IRQ27      = 43,
+    IRQ28      = 44,
+    IRQ29      = 45,
+    IRQ30      = 46,
+    IRQ31      = 47
 } FaultType;
 
 static uint16_t debug_buffer_location = 0;
@@ -191,6 +227,9 @@ static void faulttype(FaultType type) {
 
         case HardFault:
             exception_dump("Hard Fault");
+            break;
+        default:
+            exception_dump("type");
             break;
     }
 }
@@ -264,7 +303,9 @@ void HardFault_Handler(void) {
     exception_dump("\r\n");
 
     exception_dump("Fault Type: ");
-    faulttype((FaultType)__get_IPSR());
+    volatile uint32_t ipsr = __get_IPSR();
+    printf("IPSR: %lx\n", ipsr);
+    faulttype((FaultType)ipsr);
     exception_dump("\r\n");
 
     bkpt();
@@ -274,4 +315,4 @@ void HardFault_Handler(void) {
 void BusFault_Handler(void) __attribute__((alias("HardFault_Handler")));
 void UsageFault_Handler(void) __attribute__((alias("HardFault_Handler")));
 void MemManage_Handler(void) __attribute__((alias("HardFault_Handler")));
-*/
+void _unhandled_exception(void) __attribute__((alias("HardFault_Handler")));

@@ -13,7 +13,7 @@
         "rgb_matrix": true,
         "nkro": true
     },
-    "debounce": 10,
+    "debounce": 15,
     "build": {
         "debounce_type": "sym_eager_pk",
     },
@@ -38,8 +38,8 @@
             },
         },
         "handedness": {
-         //   "matrix_grid": ["C6", "B9"]
-        //    "pin":"B0"
+        //    "matrix_grid": ["C6", "B9"]
+            "pin":"B19"
         },
         "matrix_pins": {
             "right": {
