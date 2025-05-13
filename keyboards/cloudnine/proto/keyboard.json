@@ -39,7 +39,7 @@
         },
         "handedness": {
         //    "matrix_grid": ["C6", "B9"]
-            "pin":"B19"
+            "pin":"A4"
         },
         "matrix_pins": {
             "right": {
@@ -111,6 +111,7 @@
             "splash" : true,
             "typing_heatmap" : true
         },
+      //  "sleep": true,
         "split_count": [40, 70],
         "layout": [
                 {"matrix": [0, 2], "flags": 1, "x": 12, "y": 0},
