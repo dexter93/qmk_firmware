@@ -147,172 +147,108 @@ const sled1734x_led_t PROGMEM g_sled1734x_leds[SLED1734X_LED_COUNT] = {
 #include <string.h>
 #include <ch.h>
 
-///
- // Executes the BKPT instruction that causes the debugger to stop.
- // If no debugger is attached, this will be ignored.
- ///
 #define bkpt() __asm volatile("BKPT #0\n")
-//void NMI_Handler(void) __attribute__((weak));
 
-//void NMI_Handler(void) {
-  //  while (1)
-    //    ;
-//}
-
-// Basic fault type for Cortex-M0
+// Fault type decoder for ARM Cortex-M0
 typedef enum {
-    Reset      = 1,
-    NMI        = 2,
-    HardFault  = 3,
-    SVCCalll   = 11,
-    PendSV     = 14,
-    SysTickI   = 15,
-    IRQ0       = 16,
-    IRQ1       = 17,
-    IRQ2       = 18,
-    IRQ3       = 19,
-    IRQ4       = 20,
-    IRQ5       = 21,
-    IRQ6       = 22,
-    IRQ7       = 23,
-    IRQ8       = 24,
-    IRQ9       = 25,
-    IRQ10      = 26,
-    IRQ11      = 27,
-    IRQ12      = 28,
-    IRQ13      = 29,
-    IRQ14      = 30,
-    IRQ15      = 31,
-    IRQ16      = 32,
-    IRQ17      = 33,
-    IRQ18      = 34,
-    IRQ19      = 35,
-    IRQ20      = 36,
-    IRQ21      = 37,
-    IRQ22      = 38,
-    IRQ23      = 39,
-    IRQ24      = 40,
-    IRQ25      = 41,
-    IRQ26      = 42,
-    IRQ27      = 43,
-    IRQ28      = 44,
-    IRQ29      = 45,
-    IRQ30      = 46,
-    IRQ31      = 47
+    FAULT_RESET     = 1,
+    FAULT_NMI       = 2,
+    FAULT_HARDFAULT = 3,
 } FaultType;
 
-static uint16_t debug_buffer_location = 0;
-static char     debug_buffer[512]     = {0};
+static volatile char debug_buffer[512] = {0};
+static volatile uint16_t debug_buffer_index = 0;
 
 static void append_debug_char(char c) {
-    debug_buffer[debug_buffer_location] = c;
-    debug_buffer_location               = (debug_buffer_location + 1) % sizeof(debug_buffer);
+    if (debug_buffer_index < sizeof(debug_buffer) - 1) {
+        debug_buffer[debug_buffer_index++] = c;
+    }
 }
 
-static void exception_dump(char *s) {
-    do {
-        append_debug_char(*s);
-    } while (*s++);
+static void append_string(const char *s) {
+    while (*s) append_debug_char(*s++);
 }
 
-static void faulttype(FaultType type) {
-    switch (type) {
-        case NMI:
-            exception_dump("NMI");
-            break;
+static void append_hex32(uint32_t value) {
+    append_string("0x");
+    for (int i = 7; i >= 0; i--) {
+        uint8_t nibble = (value >> (i * 4)) & 0xF;
+        append_debug_char(nibble < 10 ? '0' + nibble : 'A' + nibble - 10);
+    }
+}
 
-        case Reset:
-            exception_dump("Reset");
-            break;
+static void append_reg_line(const char *label, uint32_t value) {
+    append_string(label);
+    append_string(": ");
+    append_hex32(value);
+    append_string("\r\n");
+}
 
-        case HardFault:
-            exception_dump("Hard Fault");
+static void append_fault_type(uint32_t ipsr) {
+    append_string("Fault Type: ");
+    switch (ipsr) {
+        case FAULT_RESET:
+            append_string("Reset");
+            break;
+        case FAULT_NMI:
+            append_string("NMI");
+            break;
+        case FAULT_HARDFAULT:
+            append_string("HardFault");
             break;
         default:
-            exception_dump("type");
+            append_string("IRQ ");
+            append_hex32(ipsr);
             break;
     }
+    append_string("\r\n");
 }
 
-static void hex2string(uint32_t hex) {
-    uint8_t  i;
-    char     ascii   = 0x0;
-    uint32_t divider = 0x10000000;
-
-    exception_dump("0x");
-
-    for (i = 0; i < 8; i++) {
-        ascii = hex / divider;
-        hex -= (ascii * divider);
-        divider /= 0x10;
-
-        if (ascii >= 0xA) {
-            append_debug_char('A' + (ascii - 0xA));
-        } else {
-            append_debug_char('0' + ascii);
-        }
-    }
-}
-
+// Cortex-M0 only supports PSP/MSP, no fault status registers.
+// __attribute__((naked)) not used to keep this portable with ChibiOS
 void HardFault_Handler(void) {
-    uint32_t stacked_r0, stacked_r1, stacked_r2, stacked_r3, stacked_r12, stacked_lr, stacked_pc, stacked_psr;
-    uint32_t *stacked_frame = (uint32_t *)__get_PSP();
+    uint32_t *sp;
 
-    // Retrieve stacked registers
-    stacked_r0  = stacked_frame[0];
-    stacked_r1  = stacked_frame[1];
-    stacked_r2  = stacked_frame[2];
-    stacked_r3  = stacked_frame[3];
-    stacked_r12 = stacked_frame[4];
-    stacked_lr  = stacked_frame[5];
-    stacked_pc  = stacked_frame[6];
-    stacked_psr = stacked_frame[7];
+    // Try to determine active stack pointer (MSP or PSP)
+    __asm volatile (
+        "mrs %[result], msp"
+        : [result] "=r" (sp)
+    );
 
-    exception_dump("********** Exception Dump **********\r\n");
+    uint32_t r0  = sp[0];
+    uint32_t r1  = sp[1];
+    uint32_t r2  = sp[2];
+    uint32_t r3  = sp[3];
+    uint32_t r12 = sp[4];
+    uint32_t lr  = sp[5];
+    uint32_t pc  = sp[6];
+    uint32_t psr = sp[7];
 
-    exception_dump("R0: ");
-    hex2string(stacked_r0);
-    exception_dump("\r\n");
+    append_string("********* EXCEPTION DUMP *********\r\n");
 
-    exception_dump("R1: ");
-    hex2string(stacked_r1);
-    exception_dump("\r\n");
+    append_reg_line("R0", r0);
+    append_reg_line("R1", r1);
+    append_reg_line("R2", r2);
+    append_reg_line("R3", r3);
+    append_reg_line("R12", r12);
+    append_reg_line("LR", lr);   // Link Register (return address)
+    append_reg_line("PC", pc);   // Program Counter (where it faulted)
+    append_reg_line("PSR", psr); // Program Status Register
 
-    exception_dump("R2: ");
-    hex2string(stacked_r2);
-    exception_dump("\r\n");
+    uint32_t ipsr;
+    __asm volatile ("mrs %0, ipsr" : "=r"(ipsr));
+    append_fault_type(ipsr);
 
-    exception_dump("R3: ");
-    hex2string(stacked_r3);
-    exception_dump("\r\n");
+    append_string("**********************************\r\n");
 
-    exception_dump("R12: ");
-    hex2string(stacked_r12);
-    exception_dump("\r\n");
+    //signal_fault(); // Optional LED or pin signaling
 
-    exception_dump("LR: ");
-    hex2string(stacked_lr);
-    exception_dump("\r\n");
-
-    exception_dump("PC: ");
-    hex2string(stacked_pc);
-    exception_dump("\r\n");
-
-    exception_dump("PSR: ");
-    hex2string(stacked_psr);
-    exception_dump("\r\n");
-
-    exception_dump("Fault Type: ");
-    volatile uint32_t ipsr = __get_IPSR();
-    printf("IPSR: %lx\n", ipsr);
-    faulttype((FaultType)ipsr);
-    exception_dump("\r\n");
-
-    bkpt();
-    NVIC_SystemReset();
+    bkpt(); // Wait for debugger if attached
+    NVIC_SystemReset(); // Reboot
 }
 
+// Aliases for M0 (only HardFault exists, no MemManage, BusFault, UsageFault)
+void MemManage_Handler(void) __attribute__((alias("HardFault_Handler")));
 void BusFault_Handler(void) __attribute__((alias("HardFault_Handler")));
 void UsageFault_Handler(void) __attribute__((alias("HardFault_Handler")));
-void MemManage_Handler(void) __attribute__((alias("HardFault_Handler")));
 void _unhandled_exception(void) __attribute__((alias("HardFault_Handler")));
