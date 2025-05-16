@@ -25,3 +25,12 @@
 
 #include_next <chconf.h>
 
+#undef CH_CFG_IDLE_ENTER_HOOK
+#define CH_CFG_IDLE_ENTER_HOOK() {                                          \
+    SN_PMU->CTRL = 4;                                                       \
+}
+
+#undef CH_CFG_IDLE_LEAVE_HOOK
+#define CH_CFG_IDLE_LEAVE_HOOK() {                                          \
+    SN_PMU->CTRL = 0;                                                       \
+}
