@@ -273,7 +273,7 @@ void sled1734x_set_led_control_register(uint8_t index, bool red, bool green, boo
         driver_buffers[led.driver].led_control_buffer[control_register_b] &= ~(1 << bit_b);
     }
 
-    driver_buffers[led.driver].pwm_buffer_dirty = true;
+    driver_buffers[led.driver].led_control_buffer_dirty = true;
 }
 
 void sled1734x_update_pwm_buffers(uint8_t index) {
@@ -284,7 +284,7 @@ void sled1734x_update_pwm_buffers(uint8_t index) {
 }
 
 void sled1734x_update_led_control_registers(uint8_t index) {
-    if (driver_buffers[index].pwm_buffer_dirty) {
+    if (driver_buffers[index].led_control_buffer_dirty) {
         // select the first frame
         sled1734x_select_page(index, SLED1734X_COMMAND_FRAME_1);
         for (int i = 0; i < 16; i++) {
@@ -296,7 +296,7 @@ void sled1734x_update_led_control_registers(uint8_t index) {
             sled1734x_write_register(index, i, driver_buffers[index].led_control_buffer[i + 16]);
         }
     }
-    driver_buffers[index].pwm_buffer_dirty = false;
+    driver_buffers[index].led_control_buffer_dirty = false;
 }
 
 void sled1734x_flush(void) {
