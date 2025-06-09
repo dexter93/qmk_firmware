@@ -5,7 +5,7 @@
     "maintainer": "Wallvon",
     "usb": {
         "vid": "0x0C45",
-        "pid": "0x5004",
+        "pid": "0x50D4",
         "device_version": "1.0.0"
     },
     "features": {

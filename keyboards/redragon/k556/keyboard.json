@@ -5,7 +5,7 @@
     "maintainer": "Xinayder",
     "usb": {
         "vid": "0x0C45",
-        "pid": "0x5004",
+        "pid": "0x50E4",
         "device_version": "1.0.0"
     },
 
