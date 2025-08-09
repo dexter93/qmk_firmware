@@ -73,6 +73,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 void keyboard_post_init_user(void) {
+    default_layer_set(1UL << MAC_BASE);
     if(!is_keyboard_left()) {
         gpio_set_pin_output(LED_FN_PIN);
         gpio_set_pin_output(LED_MAC_PIN);
