@@ -563,7 +563,7 @@ static void rgb_callback(PWMDriver *pwmp) {
     }
 #endif
     // Scan the rgb and key matrix
-    update_pwm_channels(pwmp);
+    if (EFLD1.state != FLASH_PGM) update_pwm_channels(pwmp);
     chSysLockFromISR();
     // Advance the timer to just before the wrap-around, that will start a new PWM cycle
     pwm_lld_change_counter(pwmp, UINT16_MAX);
