@@ -122,7 +122,7 @@ static void rgb_callback(PWMDriver *pwmp);
 #    error Driver is MCU specific to the Sonix SN32F2 family.
 #endif // !defined(SN32F2)
 
-#if defined(SN32F240B)
+#if (defined(SN32F240B) || defined(SN32F240C))
 /* PWM configuration structure. We use timer CT16B1 with 24 channels. */
 static PWMConfig pwmcfg = {
     freq,        /* PWM clock frequency. */
@@ -583,7 +583,7 @@ void sn32f2xx_init(void) {
     }
 
     // Determine which PWM channels we need to control
-#if defined(SN32F240B)
+#if (defined(SN32F240B) || defined(SN32F240C))
     rgb_ch_ctrl(&pwmcfg);
 #elif defined(SN32F260)
     rgb_ch_ctrl();
