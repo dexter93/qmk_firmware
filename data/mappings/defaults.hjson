@@ -94,6 +94,11 @@
             "board": "SN_SN32F240B_PWM",
             "bootloader": "sn32-dfu",
             "processor": "SN32F248BF"
+        },
+        "sn32f240c_shared_matrix": {
+            "board": "SN_SN32F240C_PWM",
+            "bootloader": "sn32-dfu",
+            "processor": "SN32F248CF"
         }
     }
 }
