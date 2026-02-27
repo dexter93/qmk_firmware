@@ -184,34 +184,34 @@ static const PWMConfig pwmcfg = {
             [0 ... PWM_CHANNELS - 1] = {.mode = PWM_OUTPUT_DISABLED},
 /* Enable selected channels */
 #    if defined(SN32F2XX_ACTIVATE_PWM_CHAN_0)
-            [0]  = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
+            [0] = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
 #    endif // SN32F2XX_ACTIVATE_PWM_CHAN_0
 #    if defined(SN32F2XX_ACTIVATE_PWM_CHAN_1)
-            [1]  = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
+            [1] = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
 #    endif // SN32F2XX_ACTIVATE_PWM_CHAN_1
 #    if defined(SN32F2XX_ACTIVATE_PWM_CHAN_2)
-            [2]  = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
+            [2] = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
 #    endif // SN32F2XX_ACTIVATE_PWM_CHAN_2
 #    if defined(SN32F2XX_ACTIVATE_PWM_CHAN_3)
-            [3]  = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
+            [3] = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
 #    endif // SN32F2XX_ACTIVATE_PWM_CHAN_3
 #    if defined(SN32F2XX_ACTIVATE_PWM_CHAN_4)
-            [4]  = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
+            [4] = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
 #    endif // SN32F2XX_ACTIVATE_PWM_CHAN_4
 #    if defined(SN32F2XX_ACTIVATE_PWM_CHAN_5)
-            [5]  = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
+            [5] = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
 #    endif // SN32F2XX_ACTIVATE_PWM_CHAN_5
 #    if defined(SN32F2XX_ACTIVATE_PWM_CHAN_6)
-            [6]  = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
+            [6] = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
 #    endif // SN32F2XX_ACTIVATE_PWM_CHAN_6
 #    if defined(SN32F2XX_ACTIVATE_PWM_CHAN_7)
-            [7]  = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
+            [7] = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
 #    endif // SN32F2XX_ACTIVATE_PWM_CHAN_7
 #    if defined(SN32F2XX_ACTIVATE_PWM_CHAN_8)
-            [8]  = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
+            [8] = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
 #    endif // SN32F2XX_ACTIVATE_PWM_CHAN_8
 #    if defined(SN32F2XX_ACTIVATE_PWM_CHAN_9)
-            [9]  = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
+            [9] = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
 #    endif // SN32F2XX_ACTIVATE_PWM_CHAN_9
 #    if defined(SN32F2XX_ACTIVATE_PWM_CHAN_10)
             [10] = {.mode = SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL},
@@ -393,7 +393,7 @@ static void update_pwm_channels(PWMDriver *pwmp) {
         if (led_state[led_index].b > 0) enable_pwm_output |= true;
         if (led_state[led_index].g > 0) enable_pwm_output |= true;
         if (led_state[led_index].r > 0) enable_pwm_output |= true;
-            // Update matching RGB channel PWM configuration
+        // Update matching RGB channel PWM configuration
 #    if (SN32F2XX_PWM_CONTROL == HARDWARE_PWM)
         switch (current_row % SN32F2XX_RGB_MATRIX_ROW_CHANNELS) {
             case 0:
@@ -490,7 +490,7 @@ static void update_pwm_channels(PWMDriver *pwmp) {
         if (led_state[led_index].b > 0) enable_pwm_output |= true;
         if (led_state[led_index].g > 0) enable_pwm_output |= true;
         if (led_state[led_index].r > 0) enable_pwm_output |= true;
-            // Update matching RGB channel PWM configuration
+        // Update matching RGB channel PWM configuration
 #    if (SN32F2XX_PWM_CONTROL == HARDWARE_PWM)
         pwmEnableChannelI(pwmp, chan_row_order[(led_row_id + 0)], led_state[led_index].r);
         pwmEnableChannelI(pwmp, chan_row_order[(led_row_id + 1)], led_state[led_index].b);
@@ -529,7 +529,7 @@ static void rgb_callback(PWMDriver *pwmp) {
 #if ((SN32F2XX_PWM_CONTROL == SOFTWARE_PWM) && (SN32F2XX_PWM_DIRECTION == COL2ROW))
     for (uint8_t pwm_cnt = 0; pwm_cnt < (SN32F2XX_RGB_MATRIX_COLS * RGB_MATRIX_HUE_STEP); pwm_cnt++) {
         uint8_t pwm_index = (pwm_cnt % SN32F2XX_RGB_MATRIX_COLS);
-        if (((uint16_t)(pwmp->ct->TC) < ((uint16_t)(led_duty_cycle[pwm_index] + periodticks))) && (led_duty_cycle[pwm_index] > 0)) {
+        if (((uint16_t)SN32_CT_PWM_GET(pwmp, config.TC) < ((uint16_t)(led_duty_cycle[pwm_index] + periodticks))) && (led_duty_cycle[pwm_index] > 0)) {
             gpio_set_pin_output_push_pull(led_col_pins[pwm_index]);
 #    if (SN32F2XX_PWM_OUTPUT_ACTIVE_LEVEL == SN32F2XX_PWM_OUTPUT_ACTIVE_LOW)
             gpio_write_pin_low(led_col_pins[pwm_index]);
@@ -545,7 +545,7 @@ static void rgb_callback(PWMDriver *pwmp) {
 #elif ((SN32F2XX_PWM_CONTROL == SOFTWARE_PWM) && (SN32F2XX_PWM_DIRECTION == ROW2COL))
     for (uint8_t pwm_cnt = 0; pwm_cnt < (SN32F2XX_RGB_MATRIX_ROWS_HW * RGB_MATRIX_HUE_STEP); pwm_cnt++) {
         uint8_t pwm_index = (pwm_cnt % SN32F2XX_RGB_MATRIX_ROWS_HW);
-        if (((uint16_t)(pwmp->ct->TC) < ((uint16_t)(led_duty_cycle[pwm_index] + periodticks))) && (led_duty_cycle[pwm_index] > 0)) {
+        if (((uint16_t)SN32_CT_PWM_GET(pwmp, config.TC) < ((uint16_t)(led_duty_cycle[pwm_index] + periodticks))) && (led_duty_cycle[pwm_index] > 0)) {
 #    if (DIODE_DIRECTION != SN32F2XX_PWM_DIRECTION)
             gpio_set_pin_output_push_pull(led_row_pins[pwm_index]);
 #    endif // DIODE_DIRECTION != SN32F2XX_PWM_DIRECTION
