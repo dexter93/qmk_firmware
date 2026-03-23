@@ -54,3 +54,17 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         _______, _______, _______,                            _______,                            _______, _______, _______, _______,    RM_SATU, RM_HUEU, RM_SPDU,    _______,          _______
     ),
 };
+
+void keyboard_pre_init_user(void) {
+    gpio_set_pin_output(LED_FN_PIN);
+    gpio_write_pin_high(LED_FN_PIN);
+}
+
+layer_state_t layer_state_set_user(layer_state_t state) {
+    if (layer_state_cmp(state, 1)) {
+        gpio_write_pin_low(LED_FN_PIN);
+    } else {
+        gpio_write_pin_high(LED_FN_PIN);
+    }
+    return state;
+}

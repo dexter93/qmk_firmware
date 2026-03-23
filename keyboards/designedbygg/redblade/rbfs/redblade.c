@@ -22,14 +22,3 @@ void matrix_output_unselect_delay(uint8_t line, bool key_pressed) {
     }
 }
 #endif
-#ifdef LED_WIN_LOCK_PIN
-/* Handle the Win Lock LED */
-void keyboard_pre_init_kb(void) {
-	setPinOutput(LED_WIN_LOCK_PIN);
-	writePin(LED_WIN_LOCK_PIN, !LED_PIN_ON_STATE);
-}
-
-void housekeeping_task_kb(void) {
-	writePin(LED_WIN_LOCK_PIN,!keymap_config.no_gui);
-}
-#endif

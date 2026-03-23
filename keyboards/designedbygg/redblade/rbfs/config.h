@@ -27,8 +27,8 @@
 /* Debug options */
 #define DEBUG_MATRIX_SCAN_RATE
 
-/* Win Lock LED Indicator */
-#define LED_WIN_LOCK_PIN B12
+/* Fn LED Indicator */
+#define LED_FN_PIN B12
 
 /* RGB LED Config */
 #define SN32F2XX_RGB_MATRIX_ROW_PINS \
